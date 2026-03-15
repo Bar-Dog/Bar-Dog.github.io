@@ -130,6 +130,7 @@ body.mobile-quiz-mode .test-banner{flex-direction:column;align-items:flex-start}
 .ans-sel:focus{outline:none;border-color:var(--dark)}
 .ans-chk-row{display:flex;align-items:center;gap:.5rem}
 .ans-chk-row label{font-size:.88rem;cursor:pointer}
+.ans-num.calc-active{border-color:#0f172a;box-shadow:0 0 0 3px rgba(15,23,42,.12);background:#fffbeb}
 .actrow{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;margin-top:.2rem}
 .btn-reveal{padding:.38rem .85rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;cursor:pointer}
 .btn-cmp{padding:.38rem .85rem;border-radius:8px;border:1.5px solid #a5f3fc;background:#ecfeff;color:#155e75;font-size:.82rem;font-weight:700;cursor:pointer}
@@ -208,6 +209,178 @@ body.mobile-quiz-mode .test-banner{flex-direction:column;align-items:flex-start}
 .ed-transfer-msg{font-size:.74rem;line-height:1.45;color:#475569;min-height:1.15rem}
 .ed-transfer-msg.ok{color:#166534}
 .ed-transfer-msg.err{color:#9f1239}
+
+/* ── BUILT-IN CALCULATOR ── */
+.calc-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.28);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:1190}
+.calc-backdrop.open{opacity:1;pointer-events:auto}
+.calc-shell{position:fixed;right:20px;bottom:20px;width:min(390px,calc(100vw - 32px));max-height:calc(100vh - 40px);display:flex;flex-direction:column;gap:.55rem;background:#1f2524;border:1px solid #394241;border-radius:20px;box-shadow:0 22px 56px rgba(0,0,0,.42);padding:1rem;z-index:1200;opacity:0;pointer-events:none;transform:translateY(18px) scale(.98);transition:transform .2s ease,opacity .2s ease,color .2s ease;color:#eef4f3;overflow:auto;overscroll-behavior:contain}
+.calc-shell.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.calc-shell.dragging{transition:none !important}
+.calc-grab{display:none;position:relative;width:min(100%,96px);height:22px;margin:0 auto .1rem;touch-action:none;cursor:grab}
+.calc-grab::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:5px;border-radius:999px;background:#5d6665}
+.calc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}
+.calc-head-copy{display:flex;flex-direction:column;gap:.16rem;min-width:0}
+.calc-kicker{font-size:.72rem;font-weight:800;color:#b9c5c4;text-transform:uppercase;letter-spacing:.05em}
+.calc-target{font-size:.95rem;font-weight:700;color:#f8fbfb;line-height:1.35}
+.calc-subtarget{font-size:.76rem;color:#9cabaa;line-height:1.45}
+.calc-head-actions{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end}
+.calc-mini-btn{padding:.36rem .68rem;border-radius:10px;border:1px solid #4b5655;background:#2f3635;color:#f1f6f6;font-size:.75rem;font-weight:700;cursor:pointer}
+.calc-mini-btn:hover{background:#3a4443}
+.calc-mobile-toggle{display:none;background:#365871;border-color:#4d7a99;color:#f7fbff}
+.calc-mobile-toggle:hover{background:#416987}
+.calc-screen{order:2;border:1px solid #394241;border-radius:14px;background:#202726;padding:.72rem .82rem;display:flex;flex-direction:column;gap:.35rem}
+.calc-screen{display:none}
+.calc-entry{display:flex;align-items:stretch;overflow:hidden;border-radius:12px;background:#2b3231;border:1px solid #3c4645}
+.calc-entry-icon{display:flex;align-items:center;justify-content:center;min-width:42px;padding:0 .45rem;background:#8f9291;color:#f5f5f5;font-size:1.15rem;font-family:Georgia,"Times New Roman",serif}
+.calc-expression-input{flex:1;border:none;background:transparent;color:#f7fbfb;padding:.72rem .8rem;font-size:.92rem;outline:none}
+.calc-expression-input::placeholder{color:#a7b3b2}
+.calc-label{font-size:.7rem;font-weight:800;color:#b9c5c4;text-transform:uppercase;letter-spacing:.05em}
+.calc-expression{min-height:1.3rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;color:#9cabaa;line-height:1.45;word-break:break-word}
+.calc-result{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.45rem;font-weight:800;color:#57c2ff;line-height:1.2;word-break:break-word}
+.calc-notes-wrap,.calc-values-wrap,.calc-solve-wrap,.calc-tape-wrap{display:flex;flex-direction:column;gap:.35rem}
+.calc-values-wrap{order:1;display:none}
+.calc-modebar{order:3;display:flex;gap:.32rem;overflow:auto hidden;padding-bottom:.05rem}
+.calc-mode-tab{padding:.28rem .62rem;border-radius:999px;border:1px solid #404948;background:#2b3231;color:#d7e1e0;font-size:.72rem;font-weight:800;cursor:pointer;white-space:nowrap}
+.calc-mode-tab.active{background:#365871;border-color:#4d7a99;color:#f7fbff}
+.calc-mode-tab:hover{background:#34403f}
+.calc-panel{display:none}
+.calc-panel.on{display:flex}
+.calc-notes-wrap{order:4}
+.calc-solve-wrap{order:4}
+.calc-notes{width:100%;min-height:88px;border:1px solid #394241;border-radius:12px;background:#202726;padding:.65rem .75rem;font-size:.82rem;line-height:1.45;color:#eef4f3;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.calc-notes:focus{outline:none;border-color:#57c2ff;box-shadow:0 0 0 3px rgba(87,194,255,.16)}
+.calc-notes{display:none}
+.calc-notes-editor{width:100%;min-height:88px;border:1px solid #394241;border-radius:12px;background:#202726;padding:.55rem .7rem;font-size:.82rem;line-height:1.45;color:#eef4f3;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;display:flex;flex-direction:column;gap:.2rem}
+.calc-notes-editor:focus-within{border-color:#57c2ff;box-shadow:0 0 0 3px rgba(87,194,255,.16)}
+.calc-line{display:flex;align-items:flex-start;gap:.42rem;flex-wrap:wrap}
+.calc-line-input{flex:1 1 140px;min-width:0;min-height:1.35rem;outline:none;white-space:pre-wrap;word-break:break-word}
+.calc-line-input:empty:before{content:attr(data-placeholder);color:#72807f}
+.calc-linked-value{color:#73b9ff;font-weight:800}
+.calc-inline-chip{display:inline-flex;align-items:center;justify-content:center;padding:.1rem .52rem;border-radius:.45rem;background:#5e6bff;color:#f8fbff;font-size:.8rem;font-weight:800;line-height:1.2;box-shadow:inset 0 -1px 0 rgba(255,255,255,.16)}
+.calc-note-hint{font-size:.7rem;color:#9cabaa;line-height:1.35}
+.calc-note-palette{display:flex;flex-wrap:wrap;gap:.38rem}
+.calc-scratch-chip{display:inline-flex;align-items:center;gap:.28rem;max-width:100%;padding:.28rem .56rem;border-radius:.65rem;border:1px solid #475352;background:#2c3534;color:#eef4f3;font-size:.74rem;font-weight:800;line-height:1.2;cursor:pointer;user-select:none}
+.calc-scratch-chip:hover{background:#36403f;border-color:#5b6968}
+.calc-scratch-chip:active{transform:translateY(1px)}
+.calc-scratch-chip-symbol{color:#8db9ff}
+.calc-scratch-chip-sep{color:#aebaba}
+.calc-scratch-chip-value{color:#ffb259}
+.calc-scratch-chip.numeric-mode .calc-scratch-chip-symbol{color:#ffb259}
+.calc-scratch-chip.numeric-mode .calc-scratch-chip-value{color:#8db9ff}
+.calc-line.drag-over .calc-line-input{outline:1px dashed #57c2ff;outline-offset:3px}
+.calc-note-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.calc-mini-topbar{display:none}
+.calc-mini-topbtn{border:1px solid transparent;color:#f8fbff;font-weight:900;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+.calc-mini-topbtn-back{background:#b3122b;border-color:#df5b74;border-radius:22px 10px 10px 22px;min-height:42px;font-size:1rem;box-shadow:0 6px 16px rgba(179,18,43,.28)}
+.calc-mini-topbtn-enter{background:#2fce57;border-color:#73ec92;border-radius:10px 22px 22px 10px;min-height:42px;font-size:1rem;letter-spacing:.03em;box-shadow:0 6px 16px rgba(47,206,87,.26)}
+.calc-actions-mini{display:none}
+.calc-actions-compact{display:none}
+.calc-answer-btn{background:#5e6bff;border-color:#7a84ff;color:#f8fbff}
+.calc-answer-btn:hover{background:#6f79ff}
+.calc-mini-btn.on{background:#365871;border-color:#4d7a99;color:#f7fbff}
+.calc-solve{display:flex;flex-direction:column;gap:.3rem;max-height:132px;overflow:auto}
+.calc-solve-item{border:1px solid #394241;border-radius:12px;background:#202726;padding:.5rem .6rem;display:flex;flex-direction:column;gap:.14rem}
+.calc-solve-item.target{border-color:#57c2ff;background:#1d3038}
+.calc-solve-main{font-size:.79rem;font-weight:800;color:#f5fbfb;line-height:1.35;word-break:break-word}
+.calc-solve-sub{font-size:.72rem;color:#a8b5b4;line-height:1.4;word-break:break-word}
+.calc-solve-empty{font-size:.8rem;color:#899594;line-height:1.45;padding:.15rem 0}
+.calc-values{display:flex;flex-wrap:nowrap;gap:.35rem;overflow:auto hidden;padding:0 .05rem .12rem 0}
+.calc-value-item{display:flex;align-items:center;gap:.28rem;border:1px solid #3c4645;border-radius:999px;background:#2a3130;padding:.22rem .26rem .22rem .52rem;flex:0 0 auto}
+.calc-value-copy{min-width:0;display:flex;align-items:center;gap:.2rem;cursor:pointer}
+.calc-value-copy:hover .calc-value-main{color:#57c2ff}
+.calc-value-main{font-size:.76rem;font-weight:800;color:#eef4f3;line-height:1.25;white-space:nowrap}
+.calc-value-sub{display:none}
+.calc-value-actions{display:flex;gap:.22rem;flex-wrap:nowrap;justify-content:flex-end}
+.calc-value-btn{padding:.18rem .42rem;border-radius:999px;border:1px solid #4d5857;background:#343b3a;color:#eef4f3;font-size:.65rem;font-weight:800;cursor:pointer;line-height:1.2}
+.calc-value-btn:hover{background:#3f4948;border-color:#6a7776}
+.calc-values-empty{font-size:.8rem;color:#899594;line-height:1.45;padding:.15rem 0}
+.calc-actions{order:5;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.34rem;flex-shrink:0}
+.calc-btn{padding:.72rem .2rem;border-radius:8px;border:1px solid #313a39;background:#303736;color:#f5fbfb;font-size:1rem;font-weight:800;cursor:pointer;transition:transform .08s ease,background .15s ease,border-color .15s ease}
+.calc-btn:hover{background:#384140}
+.calc-btn:active{transform:translateY(1px)}
+.calc-btn.op{background:#2f4f66;border-color:#3a5f79;color:#f6fbff}
+.calc-btn.fn{font-size:.84rem;font-weight:700;background:#2d3433}
+.calc-btn.edit{background:#445150}
+.calc-btn.eq{background:#47b7f1;border-color:#47b7f1;color:#081019}
+.calc-bottom{order:6;display:flex;gap:.5rem;flex-wrap:wrap;flex-shrink:0}
+.calc-bottom .btn-s,.calc-bottom .btn-p{flex:1 1 140px}
+.calc-bottom .btn-s{background:#303736;border-color:#404948;color:#eef4f3}
+.calc-bottom .btn-s:hover{background:#394241}
+.calc-bottom .btn-p{background:#47b7f1;border-color:#47b7f1;color:#081019}
+.calc-bottom .btn-p:hover{background:#63c7fb}
+.calc-tape-wrap{order:4;border-top:none;padding-top:0}
+.calc-tape{display:flex;flex-direction:column;gap:.35rem;max-height:150px;overflow:auto}
+.calc-tape-item{width:100%;text-align:left;border:1px solid #394241;border-radius:10px;background:#202726;padding:.45rem .6rem;cursor:pointer}
+.calc-tape-item:hover{background:#27302f}
+.calc-tape-expr{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.76rem;color:#9cabaa;line-height:1.35}
+.calc-tape-result{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88rem;font-weight:800;color:#eef4f3}
+.calc-tape-empty{font-size:.8rem;color:#899594;line-height:1.45;padding:.15rem 0}
+body.mobile-quiz-mode .calc-backdrop.open{opacity:1;pointer-events:auto}
+body.mobile-quiz-mode .calc-shell{--calc-mobile-drag:0px;top:auto;left:6px;right:6px;bottom:0;width:auto;height:min(92dvh,760px);max-height:min(92dvh,760px);border-radius:22px 22px 0 0;padding:20px .48rem calc(.62rem + env(safe-area-inset-bottom,0px));transform:translateY(100%);overflow:auto;gap:.38rem;box-shadow:0 -18px 42px rgba(0,0,0,.46)}
+body.mobile-quiz-mode .calc-shell.open{transform:translateY(var(--calc-mobile-drag,0px))}
+body.mobile-quiz-mode .calc-shell.sheet-half{height:min(210px,26dvh);max-height:min(210px,26dvh);overflow:hidden}
+body.mobile-quiz-mode .calc-shell.sheet-mid{height:min(380px,48dvh);max-height:min(380px,48dvh);overflow:hidden}
+body.mobile-quiz-mode .calc-backdrop.sheet-half{opacity:0;pointer-events:none}
+body.mobile-quiz-mode .calc-grab{display:block;width:264px;height:24px;margin:0;position:absolute;left:50%;top:0;transform:translateX(-50%);z-index:3}
+body.mobile-quiz-mode .calc-grab{cursor:grab}
+body.mobile-quiz-mode .calc-head{display:none}
+body.mobile-quiz-mode .calc-head-copy{display:none !important}
+body.mobile-quiz-mode .calc-head-actions{display:none}
+body.mobile-quiz-mode .calc-mobile-toggle{display:none !important}
+body.mobile-quiz-mode .calc-modebar,
+body.mobile-quiz-mode .calc-solve-wrap,
+body.mobile-quiz-mode .calc-tape-wrap{display:none !important}
+body.mobile-quiz-mode .calc-notes-wrap{order:1;gap:.26rem;flex:1 1 auto;min-height:0}
+body.mobile-quiz-mode .calc-notes-wrap .calc-label{display:none}
+body.mobile-quiz-mode .calc-notes-editor{min-height:212px;padding:.5rem .58rem;flex:1 1 auto}
+body.mobile-quiz-mode .calc-line-input{min-height:1.25rem}
+body.mobile-quiz-mode .calc-note-hint{font-size:.66rem;line-height:1.3}
+body.mobile-quiz-mode .calc-note-palette{gap:.22rem}
+body.mobile-quiz-mode .calc-scratch-chip{padding:.2rem .42rem;font-size:.68rem;border-radius:.62rem}
+body.mobile-quiz-mode .calc-note-actions{justify-content:flex-start;gap:.22rem}
+body.mobile-quiz-mode .calc-note-actions .calc-mini-btn{flex:none;padding:.24rem .68rem;font-size:.7rem;border-radius:999px}
+body.mobile-quiz-mode .calc-note-actions .calc-mini-btn:not(#calc-insert-mode-btn):not(#calc-answer-line-btn){display:none}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-notes-wrap{flex:1 1 auto;min-height:0;gap:.18rem}
+body.mobile-quiz-mode .calc-shell.sheet-half{padding:0 .14rem calc(.24rem + env(safe-area-inset-bottom,0px));gap:.1rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-notes-wrap{gap:.08rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-mini-topbar{display:grid;grid-template-columns:78px 1fr 78px;align-items:center;gap:.14rem;margin-top:-2px;padding-top:0}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-mini-topbtn-back{min-height:31px;padding:0;font-size:.82rem;border-radius:16px 1px 20px 6px;transform:none;background:#be1831;border-color:#ff8aa0;color:#fff;box-shadow:0 4px 12px rgba(190,24,49,.32)}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-mini-topbtn-enter{min-height:31px;padding:0;font-size:.82rem;border-radius:1px 16px 6px 20px;transform:none;background:#33db63;border-color:#a7ffbf;color:#fff;box-shadow:0 4px 12px rgba(51,219,99,.28)}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-actions-mini{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.06rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-actions-mini .calc-btn{padding:0;min-height:18px;aspect-ratio:1/1;border-radius:999px;background:transparent;border-color:#4a5352;font-size:.58rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-notes-editor{min-height:0;height:100%;flex:1 1 auto;overflow:hidden;pointer-events:auto;user-select:text}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-note-hint,
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-note-palette,
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-actions-compact,
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-actions,
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-bottom{display:none !important}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-note-actions{margin-top:0;gap:.08rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-note-actions .calc-mini-btn{padding:.14rem .46rem;font-size:.6rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-notes-editor{min-height:58px;padding:.34rem .4rem;border-radius:14px}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-line{gap:.24rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-line-input{min-height:1rem;font-size:.66rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-line-input:empty:before{font-size:.62rem}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-grab{width:264px;height:20px;top:0}
+body.mobile-quiz-mode .calc-shell.sheet-half .calc-grab::before{width:52px;height:4px}
+body.mobile-quiz-mode .calc-shell.sheet-mid .calc-notes-editor{min-height:128px;max-height:128px}
+body.mobile-quiz-mode .calc-shell.sheet-mid .calc-note-hint{display:none}
+body.mobile-quiz-mode .calc-shell.sheet-mid .calc-actions,
+body.mobile-quiz-mode .calc-shell.sheet-mid .calc-bottom{display:none !important}
+body.mobile-quiz-mode .calc-shell.sheet-mid .calc-actions-compact{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.18rem}
+body.mobile-quiz-mode .calc-values{overflow:auto hidden}
+body.mobile-quiz-mode .calc-value-actions{justify-content:flex-end}
+body.mobile-quiz-mode .calc-actions{grid-template-columns:repeat(5,minmax(0,1fr));gap:.22rem}
+body.mobile-quiz-mode .calc-btn{padding:.48rem .08rem;font-size:.88rem;border-radius:7px}
+body.mobile-quiz-mode .calc-btn.fn{font-size:.71rem}
+body.mobile-quiz-mode .calc-actions-compact .calc-btn{padding:.5rem .08rem;font-size:.84rem;border-radius:7px}
+body.mobile-quiz-mode .calc-shell.sheet-mid .calc-note-palette{max-height:46px;overflow:hidden}
+body.mobile-quiz-mode .calc-bottom{flex-direction:row;gap:.28rem;align-items:stretch}
+body.mobile-quiz-mode .calc-bottom .btn-s,
+body.mobile-quiz-mode .calc-bottom .btn-p{flex:1 1 0;width:auto;min-height:40px;padding:.42rem .58rem}
+body.mobile-quiz-mode .calc-bottom .btn-p{flex-basis:100%}
+@media (max-width:960px){
+  .calc-shell{right:12px;bottom:12px;width:min(390px,calc(100vw - 24px))}
+}
 </style>
 </head>
 <body>
@@ -245,6 +418,147 @@ body.mobile-quiz-mode .test-banner{flex-direction:column;align-items:flex-start}
     </div>
     <input type="file" id="study-profile-import-file" accept=".json,application/json,text/plain" onchange="handleStudyProfileImportFile(event)" hidden/>
     <div id="qcon"></div>
+    <div id="calc-backdrop" class="calc-backdrop" onclick="closeAnswerCalculator()"></div>
+    <div id="calc-shell" class="calc-shell" aria-hidden="true">
+      <div class="calc-grab"></div>
+      <div class="calc-head">
+        <div class="calc-head-copy">
+          <div class="calc-kicker">Miniraknare</div>
+          <div id="calc-target" class="calc-target">Klicka pa ett siffersvar</div>
+          <div id="calc-subtarget" class="calc-subtarget">Har kan du skriva upp stegen och anvanda resultatet i svaret.</div>
+        </div>
+        <div class="calc-head-actions">
+          <button id="calc-mobile-toggle" type="button" class="calc-mini-btn calc-mobile-toggle" onclick="toggleCalculatorQuestionPeek()">Visa fraga</button>
+          <button type="button" class="calc-mini-btn" onclick="calculatorClear()">Rensa</button>
+          <button type="button" class="calc-mini-btn" onclick="closeAnswerCalculator()">Stang</button>
+        </div>
+      </div>
+      <div class="calc-screen">
+        <div class="calc-entry">
+          <div class="calc-entry-icon">ƒ</div>
+          <input id="calc-expression-input" class="calc-expression-input" type="text" inputmode="text" placeholder="Ange ett uttryck" oninput="calculatorSetExpression(this.value,{fromInput:true})"/>
+        </div>
+        <div id="calc-expression" class="calc-expression">Skriv eller valj ett uttryck.</div>
+        <div id="calc-result" class="calc-result">= 0</div>
+      </div>
+      <div class="calc-values-wrap">
+        <div class="calc-label">Varden i fragan</div>
+        <div id="calc-values" class="calc-values">
+          <div class="calc-values-empty">Inga kopplade fragevarden hittades an.</div>
+        </div>
+      </div>
+      <div class="calc-modebar">
+        <button type="button" class="calc-mode-tab active" data-calc-panel-btn="formula" onclick="setCalculatorPanel('formula')">Formel</button>
+        <button type="button" class="calc-mode-tab" data-calc-panel-btn="solve" onclick="setCalculatorPanel('solve')">Losta rader</button>
+        <button type="button" class="calc-mode-tab" data-calc-panel-btn="history" onclick="setCalculatorPanel('history')">Sparade steg</button>
+      </div>
+      <div class="calc-notes-wrap calc-panel on" data-calc-panel="formula">
+        <div class="calc-label">Formel / losning</div>
+        <textarea id="calc-notes" class="calc-notes" placeholder="t.ex.&#10;I = U / R&#10;I = 9 / 330&#10;I = 0,027 A" oninput="calculatorSaveNotes(this.value)"></textarea>
+        <div class="calc-mini-topbar">
+          <button type="button" class="calc-mini-topbtn calc-mini-topbtn-back" aria-label="Backspace" onclick="calculatorBackspace()">&#9003;</button>
+          <div></div>
+          <button type="button" class="calc-mini-topbtn calc-mini-topbtn-enter" onclick="calculatorEvaluate()">ENTER</button>
+        </div>
+        <div class="calc-actions-mini">
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('0')">0</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('1')">1</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('2')">2</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('3')">3</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('4')">4</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('5')">5</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('6')">6</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('7')">7</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('8')">8</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('9')">9</button>
+        </div>
+        <div id="calc-notes-editor" class="calc-notes-editor" aria-label="Formel / losning"></div>
+        <div class="calc-note-hint">Klicka eller dra en ruta in i skrivytan. Avsluta en rad med = och tryck Enter sa visas resultatet i en bla ruta.</div>
+        <div id="calc-note-palette" class="calc-note-palette"></div>
+        <div class="calc-note-actions">
+          <button id="calc-insert-mode-btn" type="button" class="calc-mini-btn" onclick="toggleCalculatorInsertNumbers()">Visa nummer</button>
+          <button id="calc-answer-line-btn" type="button" class="calc-mini-btn calc-answer-btn" onclick="calculatorInsertAnswerLine()">Svar</button>
+          <button type="button" class="calc-mini-btn" onclick="calculatorSaveResultLine()">Lagg till steg</button>
+          <button type="button" class="calc-mini-btn" onclick="calculatorClearNotes()">Tom formel</button>
+        </div>
+        <div class="calc-actions-compact">
+          <button type="button" class="calc-btn fn" onclick="calculatorInsertText('=')">=</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('(')">(</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText(')')">)</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText(',')">,</button>
+          <button type="button" class="calc-btn edit" onclick="calculatorBackspace()">⌫</button>
+          <button type="button" class="calc-btn op" onclick="calculatorInsertText('÷')">÷</button>
+          <button type="button" class="calc-btn op" onclick="calculatorInsertText('×')">×</button>
+          <button type="button" class="calc-btn op" onclick="calculatorInsertText('-')">−</button>
+          <button type="button" class="calc-btn op" onclick="calculatorInsertText('+')">+</button>
+          <button type="button" class="calc-btn eq" onclick="calculatorEvaluate()">↵</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('0')">0</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('1')">1</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('2')">2</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('3')">3</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('4')">4</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('5')">5</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('6')">6</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('7')">7</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('8')">8</button>
+          <button type="button" class="calc-btn" onclick="calculatorInsertText('9')">9</button>
+        </div>
+      </div>
+      <div class="calc-solve-wrap calc-panel" data-calc-panel="solve">
+        <div class="calc-label">Losta rader</div>
+        <div id="calc-solve" class="calc-solve">
+          <div class="calc-solve-empty">Skriv formler som Rpar = ... sa raknas de rad for rad.</div>
+        </div>
+      </div>
+      <div class="calc-actions">
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('(', ')^2')">x²</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('1/(', ')')">1/x</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('abs(', ')')">|x|</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorInsertText('pi')">π</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorInsertText('e')">e</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('sqrt(', ')')">√x</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorInsertText('^')">x^y</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('10^(', ')')">10^x</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('log(', ')')">log</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('ln(', ')')">ln</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('sin(', ')')">sin</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('cos(', ')')">cos</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorWrapExpression('tan(', ')')">tan</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('(')">(</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText(')')">)</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('7')">7</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('8')">8</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('9')">9</button>
+        <button type="button" class="calc-btn op" onclick="calculatorInsertText('÷')">÷</button>
+        <button type="button" class="calc-btn edit" onclick="calculatorClear()">C</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('4')">4</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('5')">5</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('6')">6</button>
+        <button type="button" class="calc-btn op" onclick="calculatorInsertText('×')">×</button>
+        <button type="button" class="calc-btn edit" onclick="calculatorBackspace()">⌫</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('1')">1</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('2')">2</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('3')">3</button>
+        <button type="button" class="calc-btn op" onclick="calculatorInsertText('-')">−</button>
+        <button type="button" class="calc-btn fn" onclick="calculatorInsertText('Ans')">Ans</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText('0')">0</button>
+        <button type="button" class="calc-btn" onclick="calculatorInsertText(',')">,</button>
+<button type="button" class="calc-btn fn" onclick="calculatorInsertText('=')">=</button>
+        <button type="button" class="calc-btn op" onclick="calculatorInsertText('+')">+</button>
+        <button type="button" class="calc-btn eq" onclick="calculatorEvaluate()">↵</button>
+      </div>
+      <div class="calc-bottom">
+        <button type="button" class="btn-s" onclick="calculatorBackspace()">Backa</button>
+        <button type="button" class="btn-s" onclick="clearCalculatorTape()">Tom steg</button>
+        <button type="button" class="btn-p" onclick="calculatorUseResult()">Anvand resultat</button>
+      </div>
+      <div class="calc-tape-wrap calc-panel" data-calc-panel="history">
+        <div class="calc-label">Sparade steg</div>
+        <div id="calc-tape" class="calc-tape">
+          <div class="calc-tape-empty">Ingen uppstallning sparad an.</div>
+        </div>
+      </div>
+    </div>
     <div class="ctrl" style="margin-top:1rem">
       <button class="btn-s" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Tillbaka upp</button>
       <button class="btn-s" onclick="resetAll()">Börja om</button>
@@ -2382,8 +2696,8 @@ function formatResistance(v){
 function formatResistancePlain(v){
   const n=Number(v);
   if(!Number.isFinite(n))return '';
-  if(n>=1000)return fmt(n/1000,2)+' kOhm';
-  return fmt(n,2)+' ohm';
+  if(n>=1000)return fmt(n/1000,2)+' k\u03a9';
+  return fmt(n,2)+' \u03a9';
 }
 function parseMetricValue(raw){
   if(raw==null)return NaN;
@@ -2426,8 +2740,17 @@ function getOverlayText(qn,id){
   const def=(KV_DEFS[qn]||[]).find(x=>x.id===id);
   return kvGet(qn,id,'v',def?def.val:'');
 }
+function normalizeOhmText(txt){
+  if(txt===undefined||txt===null)return txt;
+  return String(txt)
+    .replace(/\bkohm\b/gi,'k\u03a9')
+    .replace(/\bkohm\b/gi,'k\u03a9')
+    .replace(/\bkohms\b/gi,'k\u03a9')
+    .replace(/\bkOhm\b/g,'k\u03a9')
+    .replace(/\bohm\b/gi,'\u03a9');
+}
 function setOverlayText(qn,id,val){
-  kvSet(qn,id,'v',val);
+  kvSet(qn,id,'v',normalizeOhmText(val));
 }
 function readOverlayNumber(qn,id){
   return parseMetricValue(getOverlayText(qn,id));
@@ -2464,7 +2787,12 @@ function clearStoredAnswersForQuestion(qn){
   const idx=Q.findIndex(x=>x.n===qn);
   if(idx>=0)LS.del('mark_'+idx);
   LS.del('facit_seen_q'+qn);
-  (keysByQn[qn]||[]).forEach(k=>LS.del(k));
+  (keysByQn[qn]||[]).forEach(k=>{
+    LS.del(k);
+    LS.del('calc_expr_'+k);
+    LS.del('calc_note_'+k);
+    LS.del('calc_tape_'+k);
+  });
 }
 function clearAllStoredAnswers(){
   Object.keys(localStorage).filter(k=>k.startsWith(LS_PRE)).forEach(k=>localStorage.removeItem(k));
@@ -2567,7 +2895,7 @@ function showTab(id){
 /* ═══════════════════════════════════════════════════
    HELPERS
 ═══════════════════════════════════════════════════ */
-function mk(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function mk(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=normalizeOhmText(txt);return e;}
 function el(id){return document.getElementById(id);}
 
 function isTestModeActive(){return testModeActive===true;}
@@ -2721,7 +3049,7 @@ function renderKvBoxes(qn,ic){
     box.dataset.xn=String(kvGetF(qn,d.id,'x',d.x));
     box.dataset.yn=String(kvGetF(qn,d.id,'y',d.y));
     box.dataset.sz=String(kvGetF(qn,d.id,'z',d.sz));
-    box.textContent=kvGet(qn,d.id,'v',d.val);
+    box.textContent=normalizeOhmText(kvGet(qn,d.id,'v',d.val));
     ic.appendChild(box);
     applyKvPos(box,ic);
   });
@@ -3202,7 +3530,13 @@ function forceMark(qi,card,okBtn,errBtn,isOk){
 function mkNum(key,ph,w){
   const i=document.createElement('input');i.type='text';i.inputMode='decimal';
   i.className='ans-num';i.placeholder=ph||'...';if(w)i.style.width=w;
-  i.value=LS.get(key)||'';i.oninput=()=>LS.set(key,i.value);return i;
+  i.dataset.answerKey=key;
+  i.autocomplete='off';
+  i.value=LS.get(key)||'';
+  i.oninput=()=>LS.set(key,i.value);
+  i.addEventListener('focus',()=>openAnswerCalculator(i));
+  i.addEventListener('click',()=>openAnswerCalculator(i));
+  return i;
 }
 function mkTA(key,rows){
   const t=document.createElement('textarea');t.className='ans-ta';t.rows=rows||3;
@@ -3651,7 +3985,7 @@ function renderEdQ(){
     const box=mk('div','ed-kv');
     box.id='ed-kv-'+d.id;
     box.dataset.id=d.id;
-    box.textContent=kvGet(edQn,d.id,'v',d.val);
+    box.textContent=normalizeOhmText(kvGet(edQn,d.id,'v',d.val));
     const meta=getOverlayMeta(edQn,d.id);
     box.title=meta.sym+' · '+meta.name;
 
@@ -4001,9 +4335,9 @@ function handleOverlayImportFile(ev){
 
 function onEdVal(v){
   if(!edSelId)return;
-  kvSet(edQn,edSelId,'v',v);
+  kvSet(edQn,edSelId,'v',normalizeOhmText(v));
   const box=document.getElementById('ed-kv-'+edSelId);
-  if(box)box.textContent=v;
+  if(box)box.textContent=normalizeOhmText(v);
   renderEdList();
   renderFormulaPanel();
   if(QUESTION_ENGINES[edQn])buildQuiz();
@@ -5516,6 +5850,7 @@ function expectedAnswerText(q){
 
 function buildQuiz(){
   const con=el('qcon');
+  closeAnswerCalculator({clearTarget:true});
   const mobile=isMobileQuizMode();
   if(mobile){
     const total=getActiveQuestionCount();
@@ -5711,6 +6046,2590 @@ function startWeakPracticeSession(){
   buildQuiz();
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+formatResistance=function(v){
+  const n=Number(v);
+  if(!Number.isFinite(n))return '';
+  if(n>=1000)return fmt(n/1000,2)+' k\u03a9';
+  return fmt(n,2)+' \u03a9';
+};
+formatResistancePlain=function(v){
+  const n=Number(v);
+  if(!Number.isFinite(n))return '';
+  if(n>=1000)return fmt(n/1000,2)+' k\u03a9';
+  return fmt(n,2)+' \u03a9';
+};
+const expectedAnswerTextBase=expectedAnswerText;
+expectedAnswerText=function(q){
+  return normalizeOhmText(expectedAnswerTextBase(q));
+};
+
+const CALC_TAPE_LIMIT=8;
+const answerCalculatorState={
+  activeInput:null,
+  answerKey:'',
+  questionNumber:null,
+  expr:'',
+  note:'',
+  result:'',
+  history:[],
+  availableValues:[],
+  inlineResults:[],
+  numberLinks:[],
+  activeLineIndex:0,
+  pendingEditorFocus:null,
+  insertNumbers:false,
+  mobilePeek:false,
+  mobileSheetMode:'full',
+  activePanel:'formula',
+  open:false,
+};
+let calculatorSheetDrag=null;
+
+function getCalculatorMobileSheetMode(){
+  const mode=String(answerCalculatorState.mobileSheetMode||'');
+  if(mode==='peek' || mode==='mid' || mode==='full')return mode;
+  return answerCalculatorState.mobilePeek ? 'peek' : 'full';
+}
+
+function getCalculatorExprKey(answerKey){
+  return 'calc_expr_'+answerKey;
+}
+function getCalculatorNoteKey(answerKey){
+  return 'calc_note_'+answerKey;
+}
+function getCalculatorNumberLinkKey(answerKey){
+  return 'calc_numlinks_'+answerKey;
+}
+function getCalculatorTapeKey(answerKey){
+  return 'calc_tape_'+answerKey;
+}
+function loadCalculatorNumberLinks(answerKey){
+  if(!answerKey)return [];
+  try{
+    const raw=LS.get(getCalculatorNumberLinkKey(answerKey));
+    const parsed=JSON.parse(raw||'[]');
+    return Array.isArray(parsed)?parsed:[];
+  }catch(_err){
+    return [];
+  }
+}
+function saveCalculatorNumberLinks(answerKey,links){
+  if(!answerKey)return;
+  const clean=Array.isArray(links)?links.map(item=>{
+    if(!item || typeof item!=='object')return null;
+    const numeric=String(item.numeric||'').replace(/\r/g,'');
+    const symbolic=String(item.symbolic||'').replace(/\r/g,'');
+    return numeric && symbolic ? {numeric,symbolic} : null;
+  }):[];
+  if(clean.some(Boolean))LS.set(getCalculatorNumberLinkKey(answerKey),JSON.stringify(clean));
+  else LS.del(getCalculatorNumberLinkKey(answerKey));
+}
+function loadCalculatorTape(answerKey){
+  if(!answerKey)return [];
+  const raw=LS.get(getCalculatorTapeKey(answerKey));
+  if(!raw)return [];
+  try{
+    const arr=JSON.parse(raw);
+    return Array.isArray(arr)
+      ? arr.filter(item=>item&&typeof item.expr==='string'&&typeof item.result==='string').slice(0,CALC_TAPE_LIMIT)
+      : [];
+  }catch(_err){
+    return [];
+  }
+}
+function saveCalculatorTape(answerKey,history){
+  if(!answerKey)return;
+  if(!history||!history.length){
+    LS.del(getCalculatorTapeKey(answerKey));
+    return;
+  }
+  LS.set(getCalculatorTapeKey(answerKey),JSON.stringify(history.slice(0,CALC_TAPE_LIMIT)));
+}
+function saveCalculatorExpr(answerKey,expr){
+  if(!answerKey)return;
+  const trimmed=String(expr||'').trim();
+  if(trimmed)LS.set(getCalculatorExprKey(answerKey),trimmed);
+  else LS.del(getCalculatorExprKey(answerKey));
+}
+function saveCalculatorNote(answerKey,note){
+  if(!answerKey)return;
+  const text=String(note||'');
+  if(text.trim())LS.set(getCalculatorNoteKey(answerKey),text);
+  else LS.del(getCalculatorNoteKey(answerKey));
+}
+function normalizeCalculatorInputValue(raw){
+  return String(raw==null?'':raw).replace(/,/g,'.').trim();
+}
+function formatCalculatorNumber(value){
+  const n=Number(value);
+  if(!Number.isFinite(n))return '';
+  if(n===0)return '0';
+  const abs=Math.abs(n);
+  if(abs>=1000000 || abs<0.000001)return n.toExponential(6).replace(/\.?0+e/,'e');
+  const rounded=Math.round(n*1e9)/1e9;
+  return String(rounded).replace(/\.0+$/,'').replace(/(\.\d*?)0+$/,'$1');
+}
+function formatCalculatorDisplay(value){
+  const txt=formatCalculatorNumber(value);
+  return txt?txt.replace(/\./g,','):'0';
+}
+function displayCalculatorExpression(expr){
+  const raw=String(expr||'').trim();
+  if(!raw)return '0';
+  return raw.replace(/\*/g,'×').replace(/\//g,'÷').replace(/\./g,',');
+}
+function getCalculatorQuestionNumber(input){
+  const card=input&&input.closest('.qcard');
+  if(!card)return null;
+  const idMatch=(card.id||'').match(/^card-(\d+)$/);
+  if(idMatch){
+    const qi=Number(idMatch[1]);
+    if(Q[qi])return Q[qi].n;
+  }
+  const tnum=card.querySelector('.tnum');
+  const numMatch=tnum&&tnum.textContent.match(/(\d+)/);
+  return numMatch?Number(numMatch[1]):null;
+}
+function getCalculatorAnswerPart(input){
+  const row=input&&input.closest('.ans-subrow');
+  const sub=row&&row.querySelector('.ans-sublbl');
+  const subText=(sub&&sub.textContent||'').trim().toLowerCase();
+  const subMatch=subText.match(/^([a-z])/);
+  if(subMatch)return subMatch[1];
+  const key=(input&&input.dataset&&input.dataset.answerKey)||'';
+  const keyMatch=key.match(/q\d+([a-z])/i);
+  return keyMatch?keyMatch[1].toLowerCase():'';
+}
+function buildCalculatorValueItem(def){
+  if(!def)return null;
+  const rawValue=normalizeOhmText(String(def.rawValue||'').trim());
+  const symbol=String(def.symbol||def.id||def.label||'').trim();
+  const label=String(def.label||symbol||def.id||'Varde').trim();
+  if(!rawValue || !symbol)return null;
+  const numericValue=Number.isFinite(def.numericValue)?def.numericValue:parseMetricValue(rawValue);
+  return {
+    id:def.id||symbol,
+    symbol,
+    label,
+    rawValue,
+    numericValue,
+    numericText:Number.isFinite(numericValue)?formatCalculatorNumber(numericValue):'',
+    lineText:String(def.lineText||`${symbol} = ${rawValue}`).trim(),
+  };
+}
+function pushCalculatorValueItem(list,def){
+  const item=buildCalculatorValueItem(def);
+  if(!item)return;
+  const key=(item.symbol||item.id||'').toLowerCase();
+  if(list.some(entry=>(entry.symbol||entry.id||'').toLowerCase()===key && String(entry.rawValue)===String(item.rawValue)))return;
+  list.push(item);
+}
+function sanitizeCalculatorPromptSymbol(rawLabel){
+  const cleaned=String(rawLabel||'').replace(/[()[\],.;:!?]/g,' ').replace(/\s+/g,' ').trim();
+  if(!cleaned)return '';
+  const hfeMatch=cleaned.match(/\bQ\s*([0-9]+)\b.*\bhFE\b/i) || cleaned.match(/\bhFE\b.*\bQ\s*([0-9]+)\b/i);
+  if(hfeMatch)return `hFE${hfeMatch[1]}`;
+  const tokens=cleaned.match(/\b[A-Za-z][A-Za-z0-9_]*\b/g)||[];
+  if(!tokens.length)return '';
+  return tokens[tokens.length-1];
+}
+function extractCalculatorPromptValues(text){
+  const items=[];
+  const source=String(text||'');
+  const re=/([A-Za-z0-9_ÅÄÖåäö ]{1,40})\s*=\s*([+\-]?\d+(?:[.,]\d+)?(?:\s*(?:[kMmunµ]?(?:Ω|ohm|V|A|F|H|W|Hz))|%)?)/g;
+  let match;
+  while((match=re.exec(source))){
+    const symbol=sanitizeCalculatorPromptSymbol(match[1]);
+    const rawValue=normalizeOhmText(match[2]);
+    if(!symbol || !rawValue)continue;
+    pushCalculatorValueItem(items,{
+      id:`prompt_${symbol}`,
+      symbol,
+      label:match[1].trim(),
+      rawValue,
+    });
+  }
+  return items;
+}
+function collectCalculatorOverlayValues(qn){
+  if(!Number.isFinite(Number(qn)) || !KV_DEFS[qn])return [];
+  return (KV_DEFS[qn]||[]).map(def=>{
+    const meta=getOverlayMeta(qn,def.id);
+    const rawValue=normalizeOhmText(getOverlayText(qn,def.id));
+    const numericValue=readOverlayNumber(qn,def.id);
+    const symbol=(meta.sym||def.id||'').trim();
+    const label=(meta.name||symbol||def.id||'Varde').trim();
+    return {
+      id:def.id,
+      symbol:symbol||label,
+      label,
+      rawValue,
+      numericValue,
+      numericText:Number.isFinite(numericValue)?formatCalculatorNumber(numericValue):'',
+      lineText:String(rawValue).includes('=')?String(rawValue):`${symbol||label} = ${rawValue}`,
+    };
+  }).filter(item=>item.rawValue);
+}
+function collectCalculatorPromptValues(qn,input){
+  const values=[];
+  const part=getCalculatorAnswerPart(input);
+  const question=(Q||[]).find(item=>Number(item&&item.n)===Number(qn));
+  const activeQuestion=question?getDynamicQuestion(question):null;
+  [activeQuestion&&activeQuestion.qtext, part&&activeQuestion&&activeQuestion['qtext'+part.toUpperCase()]].filter(Boolean).forEach(text=>{
+    extractCalculatorPromptValues(text).forEach(item=>pushCalculatorValueItem(values,item));
+  });
+  const engine=QUESTION_ENGINES[qn];
+  const data=engine&&typeof engine.compute==='function'?engine.compute(qn):null;
+  if(data && Number(qn)===6){
+    const branch=part==='b'?data.b:data.a;
+    if(branch && Number.isFinite(branch.Rb)){
+      pushCalculatorValueItem(values,{id:'rb_ctx',symbol:'Rb',label:'Basmotstand',rawValue:formatResistance(branch.Rb)});
+    }
+    if(Number.isFinite(data.beta)){
+      pushCalculatorValueItem(values,{id:'beta_ctx',symbol:'beta',label:'Transistorbeta',rawValue:String(fmt(data.beta,0)),numericValue:data.beta});
+    }
+    if(Number.isFinite(data.Vbe)){
+      pushCalculatorValueItem(values,{id:'vbe_ctx',symbol:'Vbe',label:'Bas-emitterspannning',rawValue:formatVolts(data.Vbe)});
+    }
+    if(Number.isFinite(data.VceSat)){
+      pushCalculatorValueItem(values,{id:'vcesat_ctx',symbol:'VCE_sat',label:'Mattnadsspanning',rawValue:formatVolts(data.VceSat)});
+    }
+  }
+  if(data && Number(qn)===7){
+    if(Number.isFinite(data.IloadmA)){
+      pushCalculatorValueItem(values,{id:'iload_ctx',symbol:'Iload',label:'Lampstrom',rawValue:`${fmt(data.IloadmA,0)} mA`,numericValue:data.IloadmA/1000});
+    }
+    if(Number.isFinite(data.beta)){
+      pushCalculatorValueItem(values,{id:'beta_ctx',symbol:'beta',label:'Transistorbeta',rawValue:String(fmt(data.beta,0)),numericValue:data.beta});
+    }
+    if(Number.isFinite(data.logicV)){
+      pushCalculatorValueItem(values,{id:'logicv_ctx',symbol:'Vlogic',label:'Logikspanning',rawValue:formatVolts(data.logicV)});
+    }
+    if(Number.isFinite(data.logicImaxmA)){
+      pushCalculatorValueItem(values,{id:'ilogic_ctx',symbol:'Ilogic_max',label:'Max logikstrom',rawValue:`${fmt(data.logicImaxmA,0)} mA`,numericValue:data.logicImaxmA/1000});
+    }
+  }
+  return values;
+}
+function collectCalculatorQuestionValues(qn,input){
+  const values=[];
+  collectCalculatorOverlayValues(qn).forEach(item=>pushCalculatorValueItem(values,item));
+  collectCalculatorPromptValues(qn,input).forEach(item=>pushCalculatorValueItem(values,item));
+  return values;
+}
+function buildDefaultCalculatorNote(values){
+  if(!values||!values.length)return '';
+  return values.map(item=>item.lineText).join('\n')+'\n\n';
+}
+function buildCalculatorKnownValues(values){
+  const known={};
+  (values||[]).forEach(item=>{
+    if(item && item.symbol && Number.isFinite(item.numericValue)){
+      known[item.symbol]=item.numericValue;
+      if(item.id)known[item.id]=item.numericValue;
+    }
+  });
+  return known;
+}
+function normalizeCalculatorFormulaSource(text){
+  return String(text||'').replace(/×/g,'*').replace(/÷/g,'/').replace(/,/g,'.');
+}
+function isCalculatorPlainValue(text){
+  const normalized=String(text||'')
+    .trim()
+    .replace(/,/g,'.')
+    .replace(/\u03a9/g,'ohm')
+    .replace(/\u00b5/g,'u')
+    .replace(/\s+/g,' ');
+  return /^[-+]?\d+(?:\.\d+)?(?:\s*[a-zA-Z%]+)?$/.test(normalized);
+}
+function extractCalculatorFormulaNames(text){
+  return [...new Set((normalizeCalculatorFormulaSource(text).match(/\b[A-Za-z_][A-Za-z0-9_]*\b/g)||[]))];
+}
+function isCalculatorAnswerLabel(text){
+  const normalized=String(text||'').toLowerCase().replace(/[()[\]{}]/g,'').replace(/\s+/g,'');
+  return normalized==='svar' || normalized==='answer' || normalized==='resultat';
+}
+function analyzeCalculatorNotes(note,values){
+  const known=buildCalculatorKnownValues(values);
+  const steps=[];
+  let targetIndex=-1;
+  let answerIndex=-1;
+  String(note||'').split(/\r?\n/).forEach(rawLine=>{
+    const line=rawLine.trim();
+    if(!line || !line.includes('='))return;
+    const eq=line.indexOf('=');
+    const lhs=line.slice(0,eq).trim();
+    const rhs=line.slice(eq+1).trim();
+    if(!lhs || !rhs)return;
+    const isAnswer=isCalculatorAnswerLabel(lhs);
+    const names=extractCalculatorFormulaNames(rhs);
+    const plain=parseMetricValue(rhs);
+    if(Number.isFinite(plain) && isCalculatorPlainValue(rhs)){
+      known[lhs]=plain;
+      if(isAnswer){
+        known.svar=plain;
+        known.answer=plain;
+      }
+      steps.push({lhs,rhs,type:'given',value:plain,isAnswer});
+      if(isAnswer)answerIndex=steps.length-1;
+      return;
+    }
+    const normalized=normalizeCalculatorFormulaSource(rhs);
+    const missing=names.filter(name=>!Object.prototype.hasOwnProperty.call(known,name));
+    const substituted=normalized.replace(/\b[A-Za-z_][A-Za-z0-9_]*\b/g,name=>Object.prototype.hasOwnProperty.call(known,name)?`(${known[name]})`:name);
+    if(missing.length){
+      targetIndex=steps.length;
+      steps.push({lhs,rhs,normalized,substituted,type:'blocked',missing});
+      return;
+    }
+    const out=evaluateCalculatorExpression(substituted);
+    if(!out.ok){
+      targetIndex=steps.length;
+      steps.push({lhs,rhs,normalized,substituted,type:'blocked',missing:[],error:out.error});
+      return;
+    }
+    known[lhs]=out.value;
+    targetIndex=steps.length;
+    steps.push({lhs,rhs,normalized,substituted,type:'solved',value:out.value});
+  });
+  if(targetIndex>=0 && steps[targetIndex])steps[targetIndex].target=true;
+  return {steps,target:targetIndex>=0?steps[targetIndex]:null,known};
+}
+function getCalculatorAnswerMeta(input){
+  const card=input&&input.closest('.qcard');
+  const tnum=card&&card.querySelector('.tnum');
+  const row=input&&input.closest('.ans-subrow');
+  let lead='';
+  if(row){
+    const sub=row.querySelector('.ans-sublbl');
+    if(sub)lead=sub.textContent.trim();
+  }
+  let prefix='';
+  if(input){
+    let prev=input.previousElementSibling;
+    while(prev){
+      if(prev.classList.contains('ans-unit')){
+        prefix=prev.textContent.trim().replace(/:$/,'');
+        break;
+      }
+      if(prev.classList.contains('ans-sublbl'))break;
+      prev=prev.previousElementSibling;
+    }
+  }
+  let section='';
+  const anchor=row||input;
+  let sibling=anchor?anchor.previousElementSibling:null;
+  while(sibling){
+    if(sibling.classList&&sibling.classList.contains('albl')){
+      section=sibling.textContent.trim();
+      break;
+    }
+    sibling=sibling.previousElementSibling;
+  }
+  const parts=[lead,prefix].filter(Boolean);
+  return {
+    title:tnum?tnum.textContent.trim():'Siffersvar',
+    detail:parts.length?parts.join(' '):section||'Rakna ut svaret och for over resultatet hit.',
+  };
+}
+function renderAnswerCalculator(){
+  const shell=el('calc-shell');
+  const backdrop=el('calc-backdrop');
+  if(!shell||!backdrop)return;
+  const targetEl=el('calc-target');
+  const subEl=el('calc-subtarget');
+  const exprEl=el('calc-expression');
+  const notesEl=el('calc-notes');
+  const resultEl=el('calc-result');
+  const solveEl=el('calc-solve');
+  const tapeEl=el('calc-tape');
+  const valuesEl=el('calc-values');
+  const inputAlive=answerCalculatorState.activeInput&&document.body.contains(answerCalculatorState.activeInput);
+  if(!answerCalculatorState.open || !inputAlive){
+    if(answerCalculatorState.activeInput)answerCalculatorState.activeInput.classList.remove('calc-active');
+    answerCalculatorState.activeInput=null;
+    answerCalculatorState.questionNumber=null;
+    answerCalculatorState.open=false;
+    shell.classList.remove('open');
+    backdrop.classList.remove('open');
+    shell.setAttribute('aria-hidden','true');
+    if(targetEl)targetEl.textContent='Klicka pa ett siffersvar';
+    if(subEl)subEl.textContent='Har kan du skriva upp stegen och anvanda resultatet i svaret.';
+    if(exprEl)exprEl.textContent='0';
+    if(notesEl)notesEl.value='';
+    if(resultEl)resultEl.textContent='= 0';
+    if(solveEl)solveEl.innerHTML='<div class="calc-solve-empty">Skriv formler som Rpar = ... sa raknas de rad for rad.</div>';
+    if(tapeEl)tapeEl.innerHTML='<div class=\"calc-tape-empty\">Ingen uppstallning sparad an.</div>';
+    if(valuesEl)valuesEl.innerHTML='<div class=\"calc-values-empty\">Inga kopplade fragevarden hittades an.</div>';
+    return;
+  }
+  const meta=getCalculatorAnswerMeta(answerCalculatorState.activeInput);
+  const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+  const autoExpr=!String(answerCalculatorState.expr||'').trim() && noteAnalysis.target
+    ? (noteAnalysis.target.substituted || noteAnalysis.target.normalized || noteAnalysis.target.rhs || '')
+    : '';
+  const exprToDisplay=String(answerCalculatorState.expr||'').trim() ? answerCalculatorState.expr : autoExpr;
+  shell.classList.add('open');
+  backdrop.classList.add('open');
+  shell.setAttribute('aria-hidden','false');
+  const activePanel=['formula','solve','history'].includes(answerCalculatorState.activePanel)?answerCalculatorState.activePanel:'formula';
+  answerCalculatorState.activePanel=activePanel;
+  shell.querySelectorAll('[data-calc-panel-btn]').forEach(btn=>{
+    btn.classList.toggle('active',btn.getAttribute('data-calc-panel-btn')===activePanel);
+  });
+  shell.querySelectorAll('[data-calc-panel]').forEach(panel=>{
+    panel.classList.toggle('on',panel.getAttribute('data-calc-panel')===activePanel);
+  });
+  if(targetEl)targetEl.textContent=meta.title;
+  if(subEl)subEl.textContent=meta.detail;
+  if(exprEl)exprEl.textContent=displayCalculatorExpression(exprToDisplay);
+  if(notesEl && notesEl.value!==answerCalculatorState.note)notesEl.value=answerCalculatorState.note||'';
+  if(resultEl){
+    let visibleResult=answerCalculatorState.result||normalizeCalculatorInputValue(answerCalculatorState.activeInput.value)||'0';
+    if(!String(answerCalculatorState.expr||'').trim() && noteAnalysis.target){
+      if((noteAnalysis.target.type==='solved' || noteAnalysis.target.type==='given') && Number.isFinite(noteAnalysis.target.value)){
+        visibleResult=formatCalculatorNumber(noteAnalysis.target.value);
+      }else if(noteAnalysis.target.missing && noteAnalysis.target.missing.length){
+        visibleResult='saknar '+noteAnalysis.target.missing.join(', ');
+      }else if(noteAnalysis.target.error){
+        visibleResult=noteAnalysis.target.error;
+      }else{
+        visibleResult=noteAnalysis.target.lhs;
+      }
+    }
+    resultEl.textContent='= '+displayCalculatorExpression(visibleResult);
+  }
+  if(solveEl){
+    solveEl.innerHTML='';
+    if(noteAnalysis.steps.length){
+      noteAnalysis.steps.forEach(step=>{
+        const row=document.createElement('div');
+        row.className='calc-solve-item'+(step.target?' target':'');
+        const stepExpr=step.substituted || step.normalized || step.rhs || '';
+        if(stepExpr){
+          row.title='Klicka for att skicka raden till uppstallningen';
+          row.onclick=()=>setCalculatorExpression(stepExpr);
+        }
+        const main=document.createElement('div');
+        main.className='calc-solve-main';
+        if(step.type==='solved'){
+          main.textContent=(step.target?'Malrad: ':'')+`${step.lhs} = ${displayCalculatorExpression(formatCalculatorNumber(step.value))}`;
+        }else if(step.type==='given'){
+          main.textContent=`Givet: ${step.lhs} = ${displayCalculatorExpression(formatCalculatorNumber(step.value))}`;
+        }else{
+          main.textContent=(step.target?'Malrad: ':'')+`${step.lhs} inte lost an`;
+        }
+        const sub=document.createElement('div');
+        sub.className='calc-solve-sub';
+        if(step.type==='solved'){
+          sub.textContent=`${step.lhs} = ${displayCalculatorExpression(step.rhs)} -> ${displayCalculatorExpression(step.substituted)} -> ${displayCalculatorExpression(formatCalculatorNumber(step.value))}`;
+        }else if(step.type==='given'){
+          sub.textContent=`${step.lhs} = ${displayCalculatorExpression(step.rhs)}`;
+        }else if(step.missing && step.missing.length){
+          sub.textContent=`${step.lhs} = ${displayCalculatorExpression(step.rhs)} | saknar: ${step.missing.join(', ')}`;
+        }else{
+          sub.textContent=step.error || `${step.lhs} = ${displayCalculatorExpression(step.rhs)}`;
+        }
+        row.append(main,sub);
+        solveEl.appendChild(row);
+      });
+    }else{
+      solveEl.innerHTML='<div class="calc-solve-empty">Skriv formler som Rpar = ... sa raknas de rad for rad.</div>';
+    }
+  }
+  if(valuesEl){
+    valuesEl.innerHTML='';
+    if(answerCalculatorState.availableValues.length){
+      answerCalculatorState.availableValues.forEach((item,index)=>{
+        const row=document.createElement('div');
+        row.className='calc-value-item';
+        const copy=document.createElement('div');
+        copy.className='calc-value-copy';
+        copy.title='Klicka for att lagga in namnet i formeln';
+        copy.onclick=()=>calculatorInsertValueSymbol(index);
+        const main=document.createElement('div');
+        main.className='calc-value-main';
+        main.textContent=item.lineText;
+        copy.appendChild(main);
+        const actions=document.createElement('div');
+        actions.className='calc-value-actions';
+        if(item.numericText){
+          const numBtn=document.createElement('button');
+          numBtn.type='button';
+          numBtn.className='calc-value-btn';
+          numBtn.textContent='Tal';
+          numBtn.onclick=()=>calculatorInsertValueNumber(index);
+          actions.appendChild(numBtn);
+        }
+        const lineBtn=document.createElement('button');
+        lineBtn.type='button';
+        lineBtn.className='calc-value-btn';
+        lineBtn.textContent='Rad';
+        lineBtn.onclick=()=>calculatorInsertValueLine(index);
+        actions.appendChild(lineBtn);
+        row.append(copy,actions);
+        valuesEl.appendChild(row);
+      });
+    }else{
+      const empty=document.createElement('div');
+      empty.className='calc-values-empty';
+      empty.textContent='Inga kopplade fragevarden hittades an.';
+      valuesEl.appendChild(empty);
+    }
+  }
+  if(tapeEl){
+    tapeEl.innerHTML='';
+    if(answerCalculatorState.history.length){
+      answerCalculatorState.history.forEach((item,index)=>{
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.className='calc-tape-item';
+        btn.onclick=()=>calculatorUseHistory(index);
+        const expr=document.createElement('div');
+        expr.className='calc-tape-expr';
+        expr.textContent=displayCalculatorExpression(item.expr);
+        const result=document.createElement('div');
+        result.className='calc-tape-result';
+        result.textContent='= '+displayCalculatorExpression(item.result);
+        btn.append(expr,result);
+        tapeEl.appendChild(btn);
+      });
+    }else{
+      const empty=document.createElement('div');
+      empty.className='calc-tape-empty';
+      empty.textContent='Ingen uppstallning sparad an.';
+      tapeEl.appendChild(empty);
+    }
+  }
+}
+function openAnswerCalculator(input){
+  if(!input)return;
+  if(answerCalculatorState.activeInput && answerCalculatorState.activeInput!==input){
+    answerCalculatorState.activeInput.classList.remove('calc-active');
+  }
+  answerCalculatorState.activeInput=input;
+  answerCalculatorState.answerKey=input.dataset.answerKey||'';
+  answerCalculatorState.questionNumber=getCalculatorQuestionNumber(input);
+  answerCalculatorState.expr=LS.get(getCalculatorExprKey(answerCalculatorState.answerKey))||'';
+  const overlayValues=collectCalculatorOverlayValues(answerCalculatorState.questionNumber);
+  answerCalculatorState.availableValues=collectCalculatorQuestionValues(answerCalculatorState.questionNumber,input);
+  answerCalculatorState.note=LS.get(getCalculatorNoteKey(answerCalculatorState.answerKey))||'';
+  const overlayDefault=buildDefaultCalculatorNote(overlayValues).trim();
+  const combinedDefault=buildDefaultCalculatorNote(answerCalculatorState.availableValues).trim();
+  if((!answerCalculatorState.note.trim() || answerCalculatorState.note.trim()===overlayDefault || answerCalculatorState.note.trim()===combinedDefault) && answerCalculatorState.availableValues.length){
+    answerCalculatorState.note='';
+    saveCalculatorNote(answerCalculatorState.answerKey,'');
+  }
+  answerCalculatorState.result=normalizeCalculatorInputValue(input.value)||'0';
+  answerCalculatorState.history=loadCalculatorTape(answerCalculatorState.answerKey);
+  answerCalculatorState.open=true;
+  input.classList.add('calc-active');
+  if(isMobileQuizMode())input.blur();
+  renderAnswerCalculator();
+}
+function closeAnswerCalculator(opts){
+  const options=opts||{};
+  if(answerCalculatorState.activeInput)answerCalculatorState.activeInput.classList.remove('calc-active');
+  if(options.clearTarget){
+    answerCalculatorState.activeInput=null;
+    answerCalculatorState.answerKey='';
+    answerCalculatorState.questionNumber=null;
+    answerCalculatorState.expr='';
+    answerCalculatorState.note='';
+    answerCalculatorState.result='';
+    answerCalculatorState.history=[];
+    answerCalculatorState.availableValues=[];
+  }
+  answerCalculatorState.open=false;
+  renderAnswerCalculator();
+}
+function calculatorSaveNotes(value){
+  if(!answerCalculatorState.open)return;
+  answerCalculatorState.note=String(value||'');
+  saveCalculatorNote(answerCalculatorState.answerKey,answerCalculatorState.note);
+  renderAnswerCalculator();
+}
+function calculatorSetNotes(nextValue){
+  answerCalculatorState.note=String(nextValue||'');
+  saveCalculatorNote(answerCalculatorState.answerKey,answerCalculatorState.note);
+  renderAnswerCalculator();
+}
+function calculatorAppendToNotes(text,opts){
+  if(!answerCalculatorState.open)return;
+  const notesEl=el('calc-notes');
+  const insert=String(text||'');
+  const inline=opts&&opts.inline;
+  if(!notesEl){
+    const next=answerCalculatorState.note
+      ? answerCalculatorState.note+(inline?'':(answerCalculatorState.note.endsWith('\n')?'':'\n'))+insert
+      : insert;
+    calculatorSetNotes(next);
+    return;
+  }
+  const current=notesEl.value||'';
+  if(inline && document.activeElement===notesEl && typeof notesEl.selectionStart==='number'){
+    const start=notesEl.selectionStart;
+    const end=notesEl.selectionEnd;
+    notesEl.value=current.slice(0,start)+insert+current.slice(end);
+    notesEl.selectionStart=notesEl.selectionEnd=start+insert.length;
+  }else{
+    const sep=inline?'':(current && !current.endsWith('\n')?'\n':'');
+    notesEl.value=current+sep+insert;
+    notesEl.selectionStart=notesEl.selectionEnd=notesEl.value.length;
+  }
+  calculatorSaveNotes(notesEl.value);
+  notesEl.focus();
+}
+function calculatorClearNotes(){
+  if(!answerCalculatorState.open)return;
+  calculatorSetNotes('');
+}
+function setCalculatorExpression(nextExpr){
+  answerCalculatorState.expr=String(nextExpr||'');
+  saveCalculatorExpr(answerCalculatorState.answerKey,answerCalculatorState.expr);
+  renderAnswerCalculator();
+}
+function calculatorInsertValueSymbol(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.availableValues[index];
+  if(!item)return;
+  calculatorAppendToNotes(item.symbol,{inline:true});
+}
+function calculatorInsertValueNumber(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.availableValues[index];
+  if(!item || !item.numericText)return;
+  let expr=answerCalculatorState.expr||'';
+  if(expr && /[0-9)]$/.test(expr))expr+='*';
+  expr+=item.numericText;
+  setCalculatorExpression(expr);
+}
+function calculatorInsertValueLine(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.availableValues[index];
+  if(!item)return;
+  calculatorAppendToNotes(item.lineText);
+}
+function calculatorAppend(token){
+  if(!answerCalculatorState.open)return;
+  const rawToken=String(token||'');
+  let expr=answerCalculatorState.expr||'';
+  const last=expr.slice(-1);
+  if(rawToken===','){
+    const segment=expr.split(/[+\-*/()]/).pop();
+    if(segment.includes('.')||segment.includes(','))return;
+    expr+=(segment===''||/[()]/.test(last))?'0.':'.';
+    setCalculatorExpression(expr);
+    return;
+  }
+  if(rawToken==='00'){
+    if(!expr)expr='0';
+    else expr+='00';
+    setCalculatorExpression(expr);
+    return;
+  }
+  if(rawToken==='('){
+    if(/[0-9)]/.test(last))expr+='*';
+    expr+='(';
+    setCalculatorExpression(expr);
+    return;
+  }
+  if(rawToken===')'){
+    const opens=(expr.match(/\(/g)||[]).length;
+    const closes=(expr.match(/\)/g)||[]).length;
+    if(opens<=closes || /[+\-*/(]$/.test(expr) || !expr)return;
+    expr+=')';
+    setCalculatorExpression(expr);
+    return;
+  }
+  if(/^[+\-*/]$/.test(rawToken)){
+    if(!expr){
+      if(rawToken==='-')setCalculatorExpression('-');
+      return;
+    }
+    if(/[+\-*/(]$/.test(expr)){
+      expr=expr.slice(0,-1)+rawToken;
+    }else{
+      expr+=rawToken;
+    }
+    setCalculatorExpression(expr);
+    return;
+  }
+  expr+=rawToken;
+  setCalculatorExpression(expr);
+}
+function calculatorClear(){
+  if(!answerCalculatorState.open)return;
+  answerCalculatorState.result=normalizeCalculatorInputValue(answerCalculatorState.activeInput&&answerCalculatorState.activeInput.value)||'0';
+  setCalculatorExpression('');
+}
+function calculatorBackspace(){
+  if(!answerCalculatorState.open)return;
+  setCalculatorExpression((answerCalculatorState.expr||'').slice(0,-1));
+}
+function evaluateCalculatorExpression(expr){
+  const normalized=String(expr||'')
+    .replace(/×/g,'*')
+    .replace(/÷/g,'/')
+    .replace(/,/g,'.')
+    .replace(/\s+/g,'');
+  if(!normalized)return {ok:false,error:'Skriv en uppstallning forst.'};
+  if(!/^[0-9+\-*/().]+$/.test(normalized))return {ok:false,error:'Uppstallningen innehaller ogiltiga tecken.'};
+  if(normalized.includes('**') || normalized.includes('//') || normalized.includes('/*') || normalized.includes('*/'))return {ok:false,error:'Det uttrycket kan inte raknas ut.'};
+  try{
+    const value=Function('\"use strict\"; return ('+normalized+');')();
+    if(!Number.isFinite(value))return {ok:false,error:'Kunde inte rakna ut resultatet.'};
+    return {ok:true,value};
+  }catch(_err){
+    return {ok:false,error:'Uppstallningen blev inte giltig. Kontrollera parenteser och operatorer.'};
+  }
+}
+function calculatorEvaluate(){
+  if(!answerCalculatorState.open)return;
+  let exprSource=answerCalculatorState.expr;
+  if(!String(exprSource||'').trim()){
+    const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+    if(noteAnalysis.target){
+      if(noteAnalysis.target.type==='solved' && Number.isFinite(noteAnalysis.target.value)){
+        answerCalculatorState.result=formatCalculatorNumber(noteAnalysis.target.value);
+        renderAnswerCalculator();
+        return;
+      }
+      if(noteAnalysis.target.missing && noteAnalysis.target.missing.length){
+        answerCalculatorState.result='saknar '+noteAnalysis.target.missing.join(', ');
+        renderAnswerCalculator();
+        return;
+      }
+      exprSource=noteAnalysis.target.substituted || noteAnalysis.target.normalized || noteAnalysis.target.rhs || '';
+    }
+  }
+  const out=evaluateCalculatorExpression(exprSource);
+  if(!out.ok){
+    answerCalculatorState.result=out.error;
+    renderAnswerCalculator();
+    return;
+  }
+  const formatted=formatCalculatorNumber(out.value);
+  answerCalculatorState.result=formatted;
+  if(answerCalculatorState.answerKey && String(exprSource||'').trim()){
+    const histExpr=String(exprSource||'').trim();
+    const exists=answerCalculatorState.history.findIndex(item=>item.expr===histExpr&&item.result===formatted);
+    if(exists>=0)answerCalculatorState.history.splice(exists,1);
+    answerCalculatorState.history.unshift({expr:histExpr,result:formatted});
+    answerCalculatorState.history=answerCalculatorState.history.slice(0,CALC_TAPE_LIMIT);
+    saveCalculatorTape(answerCalculatorState.answerKey,answerCalculatorState.history);
+  }
+  renderAnswerCalculator();
+}
+function calculatorSaveResultLine(){
+  if(!answerCalculatorState.open)return;
+  let line='';
+  if(String(answerCalculatorState.expr||'').trim()){
+    if(!answerCalculatorState.result || /[A-Za-z]/.test(answerCalculatorState.result)){
+      calculatorEvaluate();
+    }
+    if(!answerCalculatorState.result || /[A-Za-z]/.test(answerCalculatorState.result))return;
+    line=`${displayCalculatorExpression(answerCalculatorState.expr)} = ${displayCalculatorExpression(answerCalculatorState.result)}`;
+  }else{
+    const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+    if(!noteAnalysis.target || noteAnalysis.target.type!=='solved')return;
+    line=`${noteAnalysis.target.lhs} = ${displayCalculatorExpression(noteAnalysis.target.rhs)} = ${displayCalculatorExpression(formatCalculatorNumber(noteAnalysis.target.value))}`;
+  }
+  calculatorAppendToNotes(line);
+}
+function calculatorUseResult(){
+  if(!answerCalculatorState.open || !answerCalculatorState.activeInput)return;
+  let resultToUse=answerCalculatorState.result;
+  if(!String(answerCalculatorState.expr||'').trim()){
+    const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+    if(noteAnalysis.target && (noteAnalysis.target.type==='solved' || noteAnalysis.target.type==='given') && Number.isFinite(noteAnalysis.target.value)){
+      resultToUse=formatCalculatorNumber(noteAnalysis.target.value);
+    }
+  }
+  if(!resultToUse || /[A-Za-z]/.test(resultToUse)){
+    calculatorEvaluate();
+    resultToUse=answerCalculatorState.result;
+  }
+  if(!resultToUse || /[A-Za-z]/.test(resultToUse))return;
+  answerCalculatorState.result=resultToUse;
+  answerCalculatorState.activeInput.value=resultToUse;
+  answerCalculatorState.activeInput.dispatchEvent(new Event('input',{bubbles:true}));
+  answerCalculatorState.activeInput.classList.add('calc-active');
+  renderAnswerCalculator();
+}
+function calculatorUseHistory(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.history[index];
+  if(!item)return;
+  answerCalculatorState.expr=item.expr;
+  answerCalculatorState.result=item.result;
+  saveCalculatorExpr(answerCalculatorState.answerKey,answerCalculatorState.expr);
+  renderAnswerCalculator();
+}
+function clearCalculatorTape(){
+  if(!answerCalculatorState.open)return;
+  answerCalculatorState.history=[];
+  saveCalculatorTape(answerCalculatorState.answerKey,[]);
+  renderAnswerCalculator();
+}
+document.addEventListener('keydown',ev=>{
+  if(!answerCalculatorState.open)return;
+  const notesEl=el('calc-notes');
+  if(ev.key==='Escape'){
+    ev.preventDefault();
+    closeAnswerCalculator();
+    return;
+  }
+  if(ev.key==='Enter' && document.activeElement===notesEl && !ev.ctrlKey && !ev.metaKey)return;
+  if(ev.key==='Enter'){
+    ev.preventDefault();
+    calculatorEvaluate();
+  }
+});
+
+function setCalculatorPanel(panelName){
+  const valid=new Set(['formula','solve','history']);
+  answerCalculatorState.activePanel=valid.has(panelName)?panelName:'formula';
+  renderAnswerCalculator();
+}
+
+function applyCalculatorNotesEdit(editFn){
+  if(!answerCalculatorState.open)return;
+  const notesEl=el('calc-notes');
+  if(!notesEl)return;
+  answerCalculatorState.activePanel='formula';
+  const current=notesEl.value||answerCalculatorState.note||'';
+  const start=typeof notesEl.selectionStart==='number'?notesEl.selectionStart:current.length;
+  const end=typeof notesEl.selectionEnd==='number'?notesEl.selectionEnd:start;
+  const next=editFn(current,start,end);
+  if(!next || typeof next.value!=='string')return;
+  answerCalculatorState.expr='';
+  saveCalculatorExpr(answerCalculatorState.answerKey,'');
+  answerCalculatorState.note=next.value;
+  saveCalculatorNote(answerCalculatorState.answerKey,answerCalculatorState.note);
+  renderAnswerCalculator();
+  const cursorPos=Math.max(0,Math.min(next.cursorPos==null?next.value.length:next.cursorPos,next.value.length));
+  requestAnimationFrame(()=>{
+    const activeNotes=el('calc-notes');
+    if(!activeNotes)return;
+    activeNotes.focus();
+    if(typeof activeNotes.setSelectionRange==='function')activeNotes.setSelectionRange(cursorPos,cursorPos);
+  });
+}
+
+setCalculatorExpression=function(nextExpr){
+  const insert=String(nextExpr||'').trim();
+  if(!insert)return;
+  applyCalculatorNotesEdit((current,start,end)=>{
+    if(end>start){
+      return {
+        value:current.slice(0,start)+insert+current.slice(end),
+        cursorPos:start+insert.length,
+      };
+    }
+    const prefix=current && !current.endsWith('\n')?'\n':'';
+    return {
+      value:current+prefix+insert,
+      cursorPos:current.length+prefix.length+insert.length,
+    };
+  });
+};
+
+calculatorInsertText=function(text){
+  const insert=String(text||'');
+  if(!insert)return;
+  applyCalculatorNotesEdit((current,start,end)=>({
+    value:current.slice(0,start)+insert+current.slice(end),
+    cursorPos:start+insert.length,
+  }));
+};
+
+calculatorWrapExpression=function(prefix,suffix){
+  const pre=String(prefix||'');
+  const post=String(suffix||'');
+  applyCalculatorNotesEdit((current,start,end)=>{
+    const picked=current.slice(start,end);
+    const value=current.slice(0,start)+pre+picked+post+current.slice(end);
+    const cursorPos=start+pre.length+(picked?picked.length:0);
+    return {value,cursorPos};
+  });
+};
+
+calculatorClear=function(){
+  applyCalculatorNotesEdit((current,start,end)=>{
+    if(end>start){
+      return {value:current.slice(0,start)+current.slice(end),cursorPos:start};
+    }
+    const lineStart=current.lastIndexOf('\n',Math.max(0,start-1))+1;
+    const lineEndRaw=current.indexOf('\n',start);
+    const lineEnd=lineEndRaw===-1?current.length:lineEndRaw;
+    const nextStart=lineEndRaw===-1?lineStart:lineStart;
+    const removeFrom=lineStart>0?lineStart:0;
+    const removeTo=lineEndRaw===-1?lineEnd:(lineEnd+1);
+    if(removeFrom===0 && removeTo===current.length){
+      return {value:'',cursorPos:0};
+    }
+    return {
+      value:current.slice(0,removeFrom)+current.slice(removeTo),
+      cursorPos:Math.min(nextStart,current.slice(0,removeFrom).length),
+    };
+  });
+};
+
+calculatorBackspace=function(){
+  applyCalculatorNotesEdit((current,start,end)=>{
+    if(end>start){
+      return {value:current.slice(0,start)+current.slice(end),cursorPos:start};
+    }
+    if(start<=0)return {value:current,cursorPos:0};
+    return {
+      value:current.slice(0,start-1)+current.slice(end),
+      cursorPos:start-1,
+    };
+  });
+};
+
+const openAnswerCalculatorBase=openAnswerCalculator;
+openAnswerCalculator=function(input){
+  openAnswerCalculatorBase(input);
+  answerCalculatorState.expr='';
+  saveCalculatorExpr(answerCalculatorState.answerKey,'');
+  answerCalculatorState.activePanel=answerCalculatorState.activePanel||'formula';
+  renderAnswerCalculator();
+};
+
+calculatorUseHistory=function(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.history[index];
+  if(!item)return;
+  answerCalculatorState.result=item.result;
+  setCalculatorExpression(item.expr);
+};
+
+function displayCalculatorExpression(expr){
+  const raw=String(expr||'').trim();
+  if(!raw)return '0';
+  return raw
+    .replace(/\*\*/g,'^')
+    .replace(/\u00d7/g,'×')
+    .replace(/\u00f7/g,'÷')
+    .replace(/\u2212/g,'-')
+    .replace(/\*/g,'×')
+    .replace(/\//g,'÷')
+    .replace(/\./g,',');
+}
+function normalizeCalculatorFormulaSource(text){
+  return String(text||'')
+    .replace(/\u00d7/g,'*')
+    .replace(/\u00f7/g,'/')
+    .replace(/\u2212/g,'-')
+    .replace(/,/g,'.');
+}
+function getCalculatorBuiltinScope(extra){
+  const resultValue=parseMetricValue(answerCalculatorState&&answerCalculatorState.result);
+  const ansValue=Number.isFinite(resultValue)?resultValue:0;
+  return Object.assign({
+    pi:Math.PI,
+    PI:Math.PI,
+    e:Math.E,
+    E:Math.E,
+    Ans:ansValue,
+    ans:ansValue,
+    sin:Math.sin,
+    cos:Math.cos,
+    tan:Math.tan,
+    asin:Math.asin,
+    acos:Math.acos,
+    atan:Math.atan,
+    sqrt:Math.sqrt,
+    abs:Math.abs,
+    log:(v)=>Math.log10?Math.log10(v):Math.log(v)/Math.LN10,
+    ln:Math.log,
+    exp:Math.exp,
+    pow:Math.pow,
+  },extra||{});
+}
+function getCalculatorCurrentScope(extraKnown){
+  const noteAnalysis=analyzeCalculatorNotes.__currentAnalysis;
+  const noteKnown=noteAnalysis&&noteAnalysis.known?noteAnalysis.known:{};
+  return getCalculatorBuiltinScope(Object.assign({},buildCalculatorKnownValues(answerCalculatorState.availableValues),noteKnown,extraKnown||{}));
+}
+function isCalculatorPlainValue(text){
+  const normalized=String(text||'')
+    .trim()
+    .replace(/,/g,'.')
+    .replace(/\u03a9/g,'ohm')
+    .replace(/\u00b5/g,'u')
+    .replace(/\s+/g,' ');
+  return /^[-+]?\d+(?:\.\d+)?(?:\s*[a-zA-Z%]+)?$/.test(normalized);
+}
+function extractCalculatorFormulaNames(text){
+  return [...new Set((normalizeCalculatorFormulaSource(text).match(/\b[A-Za-z_][A-Za-z0-9_]*\b/g)||[]))];
+}
+function evaluateCalculatorExpression(expr,extraScope){
+  const normalized=normalizeCalculatorFormulaSource(expr).replace(/\^/g,'**').replace(/\s+/g,'');
+  if(!normalized)return {ok:false,error:'Skriv en uppstallning forst.'};
+  if(!/^[0-9A-Za-z_+\-*/().]+$/.test(normalized))return {ok:false,error:'Uppstallningen innehaller ogiltiga tecken.'};
+  const scope=getCalculatorBuiltinScope(extraScope||{});
+  const names=extractCalculatorFormulaNames(normalized);
+  const missing=names.filter(name=>!Object.prototype.hasOwnProperty.call(scope,name));
+  if(missing.length)return {ok:false,error:'saknar '+missing.join(', ')};
+  try{
+    const fn=Function(...Object.keys(scope),'"use strict"; return ('+normalized+');');
+    const value=fn(...Object.values(scope));
+    if(!Number.isFinite(value))return {ok:false,error:'Kunde inte rakna ut resultatet.'};
+    return {ok:true,value};
+  }catch(_err){
+    return {ok:false,error:'Uppstallningen blev inte giltig. Kontrollera parenteser och operatorer.'};
+  }
+}
+function analyzeCalculatorNotes(note,values){
+  const known=buildCalculatorKnownValues(values);
+  const steps=[];
+  let targetIndex=-1;
+  let answerIndex=-1;
+  String(note||'').split(/\r?\n/).forEach(rawLine=>{
+    const line=rawLine.trim();
+    if(!line || !line.includes('='))return;
+    const eq=line.indexOf('=');
+    const lhs=line.slice(0,eq).trim();
+    const rhs=line.slice(eq+1).trim();
+    if(!lhs || !rhs)return;
+    const isAnswer=isCalculatorAnswerLabel(lhs);
+    const names=extractCalculatorFormulaNames(rhs);
+    const plain=parseMetricValue(rhs);
+    if(Number.isFinite(plain) && isCalculatorPlainValue(rhs)){
+      known[lhs]=plain;
+      if(isAnswer){
+        known.svar=plain;
+        known.answer=plain;
+      }
+      steps.push({lhs,rhs,type:'given',value:plain,isAnswer});
+      if(isAnswer)answerIndex=steps.length-1;
+      return;
+    }
+    const normalized=normalizeCalculatorFormulaSource(rhs);
+    const evalScope=getCalculatorBuiltinScope(known);
+    const missing=names.filter(name=>!Object.prototype.hasOwnProperty.call(evalScope,name));
+    const substituted=normalized.replace(/\b[A-Za-z_][A-Za-z0-9_]*\b/g,name=>Object.prototype.hasOwnProperty.call(known,name)?`(${known[name]})`:name);
+    if(missing.length){
+      targetIndex=steps.length;
+      steps.push({lhs,rhs,normalized,substituted,type:'blocked',missing,isAnswer});
+      if(isAnswer)answerIndex=steps.length-1;
+      return;
+    }
+    const out=evaluateCalculatorExpression(normalized,known);
+    if(!out.ok){
+      targetIndex=steps.length;
+      steps.push({lhs,rhs,normalized,substituted,type:'blocked',missing:[],error:out.error,isAnswer});
+      if(isAnswer)answerIndex=steps.length-1;
+      return;
+    }
+    known[lhs]=out.value;
+    if(isAnswer){
+      known.svar=out.value;
+      known.answer=out.value;
+    }
+    targetIndex=steps.length;
+    steps.push({lhs,rhs,normalized,substituted,type:'solved',value:out.value,isAnswer});
+    if(isAnswer)answerIndex=steps.length-1;
+  });
+  const chosenIndex=answerIndex>=0?answerIndex:targetIndex;
+  if(chosenIndex>=0 && steps[chosenIndex])steps[chosenIndex].target=true;
+  const result={steps,target:chosenIndex>=0?steps[chosenIndex]:null,known};
+  analyzeCalculatorNotes.__currentAnalysis=result;
+  return result;
+}
+function syncCalculatorExpressionInput(text,cursorPos){
+  const inputEl=el('calc-expression-input');
+  if(!inputEl)return;
+  const shown=text?displayCalculatorExpression(text):'';
+  if(inputEl.value!==shown)inputEl.value=shown;
+  if(Number.isFinite(cursorPos)){
+    requestAnimationFrame(()=>{
+      if(!el('calc-expression-input'))return;
+      inputEl.focus();
+      inputEl.setSelectionRange(cursorPos,cursorPos);
+    });
+  }
+}
+function setCalculatorExpression(nextExpr,opts){
+  answerCalculatorState.expr=String(nextExpr||'');
+  saveCalculatorExpr(answerCalculatorState.answerKey,answerCalculatorState.expr);
+  renderAnswerCalculator();
+  if(opts&&Number.isFinite(opts.cursorPos))syncCalculatorExpressionInput(answerCalculatorState.expr,opts.cursorPos);
+}
+function calculatorInsertText(text){
+  if(!answerCalculatorState.open)return;
+  const inputEl=el('calc-expression-input');
+  const insert=String(text||'');
+  const current=String(answerCalculatorState.expr||'');
+  if(inputEl && typeof inputEl.selectionStart==='number' && document.activeElement===inputEl){
+    const start=inputEl.selectionStart;
+    const end=inputEl.selectionEnd;
+    const next=current.slice(0,start)+insert+current.slice(end);
+    setCalculatorExpression(next,{cursorPos:start+insert.length});
+    return;
+  }
+  setCalculatorExpression(current+insert);
+}
+function calculatorWrapExpression(prefix,suffix){
+  if(!answerCalculatorState.open)return;
+  const inputEl=el('calc-expression-input');
+  const pre=String(prefix||'');
+  const post=String(suffix||'');
+  const current=String(answerCalculatorState.expr||'');
+  if(inputEl && typeof inputEl.selectionStart==='number' && document.activeElement===inputEl){
+    const start=inputEl.selectionStart;
+    const end=inputEl.selectionEnd;
+    const picked=current.slice(start,end);
+    const next=current.slice(0,start)+pre+picked+post+current.slice(end);
+    const cursor=start+pre.length+(picked?picked.length:0);
+    setCalculatorExpression(next,{cursorPos:cursor});
+    return;
+  }
+  const next=current+pre+post;
+  setCalculatorExpression(next,{cursorPos:current.length+pre.length});
+}
+function calculatorInsertValueNumber(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.availableValues[index];
+  if(!item || !item.numericText)return;
+  calculatorInsertText(getCalculatorNumericTextForItem(item),{linkSymbol:getCalculatorLinkSymbolForItem(item)});
+}
+function calculatorClear(){
+  if(!answerCalculatorState.open)return;
+  answerCalculatorState.result=normalizeCalculatorInputValue(answerCalculatorState.activeInput&&answerCalculatorState.activeInput.value)||'0';
+  setCalculatorExpression('');
+}
+function calculatorBackspace(){
+  if(!answerCalculatorState.open)return;
+  const inputEl=el('calc-expression-input');
+  const current=String(answerCalculatorState.expr||'');
+  if(inputEl && typeof inputEl.selectionStart==='number' && document.activeElement===inputEl){
+    const start=inputEl.selectionStart;
+    const end=inputEl.selectionEnd;
+    if(start!==end){
+      setCalculatorExpression(current.slice(0,start)+current.slice(end),{cursorPos:start});
+      return;
+    }
+    if(start>0){
+      setCalculatorExpression(current.slice(0,start-1)+current.slice(end),{cursorPos:start-1});
+      return;
+    }
+  }
+  setCalculatorExpression(current.slice(0,-1));
+}
+function renderAnswerCalculator(){
+  const shell=el('calc-shell');
+  const backdrop=el('calc-backdrop');
+  if(!shell||!backdrop)return;
+  const targetEl=el('calc-target');
+  const subEl=el('calc-subtarget');
+  const exprEl=el('calc-expression');
+  const exprInputEl=el('calc-expression-input');
+  const notesEl=el('calc-notes');
+  const resultEl=el('calc-result');
+  const solveEl=el('calc-solve');
+  const tapeEl=el('calc-tape');
+  const valuesEl=el('calc-values');
+  const inputAlive=answerCalculatorState.activeInput&&document.body.contains(answerCalculatorState.activeInput);
+  if(!answerCalculatorState.open || !inputAlive){
+    if(answerCalculatorState.activeInput)answerCalculatorState.activeInput.classList.remove('calc-active');
+    answerCalculatorState.activeInput=null;
+    answerCalculatorState.questionNumber=null;
+    answerCalculatorState.open=false;
+    shell.classList.remove('open');
+    backdrop.classList.remove('open');
+    shell.setAttribute('aria-hidden','true');
+    if(targetEl)targetEl.textContent='Klicka pa ett siffersvar';
+    if(subEl)subEl.textContent='Har kan du skriva upp stegen och anvanda resultatet i svaret.';
+    if(exprInputEl)exprInputEl.value='';
+    if(exprEl)exprEl.textContent='Skriv eller valj ett uttryck.';
+    if(notesEl)notesEl.value='';
+    if(resultEl)resultEl.textContent='= 0';
+    if(solveEl)solveEl.innerHTML='<div class="calc-solve-empty">Skriv formler som Rpar = ... sa raknas de rad for rad.</div>';
+    if(tapeEl)tapeEl.innerHTML='<div class=\"calc-tape-empty\">Ingen uppstallning sparad an.</div>';
+    if(valuesEl)valuesEl.innerHTML='<div class=\"calc-values-empty\">Inga kopplade fragevarden hittades an.</div>';
+    return;
+  }
+  const meta=getCalculatorAnswerMeta(answerCalculatorState.activeInput);
+  const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+  const autoExpr=!String(answerCalculatorState.expr||'').trim() && noteAnalysis.target
+    ? (noteAnalysis.target.rhs || noteAnalysis.target.normalized || '')
+    : '';
+  const exprToDisplay=String(answerCalculatorState.expr||'').trim() ? answerCalculatorState.expr : autoExpr;
+  shell.classList.add('open');
+  backdrop.classList.add('open');
+  shell.setAttribute('aria-hidden','false');
+  if(targetEl)targetEl.textContent=meta.title;
+  if(subEl)subEl.textContent=meta.detail;
+  if(exprInputEl){
+    const shown=exprToDisplay?displayCalculatorExpression(exprToDisplay):'';
+    if(document.activeElement!==exprInputEl && exprInputEl.value!==shown){
+      exprInputEl.value=shown;
+    }
+  }
+  if(exprEl){
+    if(String(answerCalculatorState.expr||'').trim()){
+      exprEl.textContent='Manuell uppstallning';
+    }else if(noteAnalysis.target){
+      exprEl.textContent=`Malrad: ${noteAnalysis.target.lhs} = ${displayCalculatorExpression(noteAnalysis.target.rhs)}`;
+    }else{
+      exprEl.textContent='Skriv eller valj ett uttryck.';
+    }
+  }
+  if(notesEl && notesEl.value!==answerCalculatorState.note)notesEl.value=answerCalculatorState.note||'';
+  if(resultEl){
+    let visibleResult=answerCalculatorState.result||normalizeCalculatorInputValue(answerCalculatorState.activeInput.value)||'0';
+    if(!String(answerCalculatorState.expr||'').trim() && noteAnalysis.target){
+      if(noteAnalysis.target.type==='solved' && Number.isFinite(noteAnalysis.target.value)){
+        visibleResult=formatCalculatorNumber(noteAnalysis.target.value);
+      }else if(noteAnalysis.target.missing && noteAnalysis.target.missing.length){
+        visibleResult='saknar '+noteAnalysis.target.missing.join(', ');
+      }else if(noteAnalysis.target.error){
+        visibleResult=noteAnalysis.target.error;
+      }else{
+        visibleResult=noteAnalysis.target.lhs;
+      }
+    }
+    resultEl.textContent='= '+displayCalculatorExpression(visibleResult);
+  }
+  if(solveEl){
+    solveEl.innerHTML='';
+    if(noteAnalysis.steps.length){
+      noteAnalysis.steps.forEach(step=>{
+        const row=document.createElement('div');
+        row.className='calc-solve-item'+(step.target?' target':'');
+        const stepExpr=step.rhs || step.normalized || '';
+        if(stepExpr){
+          row.title='Klicka for att skicka raden till uttrycksfaltet';
+          row.onclick=()=>setCalculatorExpression(stepExpr);
+        }
+        const main=document.createElement('div');
+        main.className='calc-solve-main';
+        if(step.type==='solved'){
+          main.textContent=(step.target?'Malrad: ':'')+`${step.lhs} = ${displayCalculatorExpression(formatCalculatorNumber(step.value))}`;
+        }else if(step.type==='given'){
+          main.textContent=`Givet: ${step.lhs} = ${displayCalculatorExpression(formatCalculatorNumber(step.value))}`;
+        }else{
+          main.textContent=(step.target?'Malrad: ':'')+`${step.lhs} inte lost an`;
+        }
+        const sub=document.createElement('div');
+        sub.className='calc-solve-sub';
+        if(step.type==='solved'){
+          sub.textContent=`${step.lhs} = ${displayCalculatorExpression(step.rhs)} -> ${displayCalculatorExpression(step.substituted)} -> ${displayCalculatorExpression(formatCalculatorNumber(step.value))}`;
+        }else if(step.type==='given'){
+          sub.textContent=`${step.lhs} = ${displayCalculatorExpression(step.rhs)}`;
+        }else if(step.missing && step.missing.length){
+          sub.textContent=`${step.lhs} = ${displayCalculatorExpression(step.rhs)} | saknar: ${step.missing.join(', ')}`;
+        }else{
+          sub.textContent=step.error || `${step.lhs} = ${displayCalculatorExpression(step.rhs)}`;
+        }
+        row.append(main,sub);
+        solveEl.appendChild(row);
+      });
+    }else{
+      solveEl.innerHTML='<div class="calc-solve-empty">Skriv formler som Rpar = ... sa raknas de rad for rad.</div>';
+    }
+  }
+  if(valuesEl){
+    valuesEl.innerHTML='';
+    if(answerCalculatorState.availableValues.length){
+      answerCalculatorState.availableValues.forEach((item,index)=>{
+        const row=document.createElement('div');
+        row.className='calc-value-item';
+        const copy=document.createElement('div');
+        copy.className='calc-value-copy';
+        copy.title='Klicka for att lagga in variabeln i formeln';
+        copy.onclick=()=>calculatorInsertText(item.symbol);
+        const main=document.createElement('div');
+        main.className='calc-value-main';
+        main.textContent=item.lineText;
+        copy.appendChild(main);
+        const actions=document.createElement('div');
+        actions.className='calc-value-actions';
+        if(item.numericText){
+          const numBtn=document.createElement('button');
+          numBtn.type='button';
+          numBtn.className='calc-value-btn';
+          numBtn.textContent='Tal';
+          numBtn.onclick=()=>calculatorInsertValueNumber(index);
+          actions.appendChild(numBtn);
+        }
+        const lineBtn=document.createElement('button');
+        lineBtn.type='button';
+        lineBtn.className='calc-value-btn';
+        lineBtn.textContent='Rad';
+        lineBtn.onclick=()=>calculatorInsertValueLine(index);
+        actions.appendChild(lineBtn);
+        row.append(copy,actions);
+        valuesEl.appendChild(row);
+      });
+    }else{
+      valuesEl.innerHTML='<div class=\"calc-values-empty\">Inga kopplade fragevarden hittades an.</div>';
+    }
+  }
+  if(tapeEl){
+    tapeEl.innerHTML='';
+    if(answerCalculatorState.history.length){
+      answerCalculatorState.history.forEach((item,index)=>{
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.className='calc-tape-item';
+        btn.onclick=()=>calculatorUseHistory(index);
+        const expr=document.createElement('div');
+        expr.className='calc-tape-expr';
+        expr.textContent=displayCalculatorExpression(item.expr);
+        const result=document.createElement('div');
+        result.className='calc-tape-result';
+        result.textContent='= '+displayCalculatorExpression(item.result);
+        btn.append(expr,result);
+        tapeEl.appendChild(btn);
+      });
+    }else{
+      tapeEl.innerHTML='<div class=\"calc-tape-empty\">Ingen uppstallning sparad an.</div>';
+    }
+  }
+}
+function calculatorEvaluate(){
+  if(!answerCalculatorState.open)return;
+  const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+  let exprSource=answerCalculatorState.expr;
+  if(!String(exprSource||'').trim()){
+    if(noteAnalysis.target){
+      if(noteAnalysis.target.type==='solved' && Number.isFinite(noteAnalysis.target.value)){
+        answerCalculatorState.result=formatCalculatorNumber(noteAnalysis.target.value);
+        renderAnswerCalculator();
+        return;
+      }
+      if(noteAnalysis.target.missing && noteAnalysis.target.missing.length){
+        answerCalculatorState.result='saknar '+noteAnalysis.target.missing.join(', ');
+        renderAnswerCalculator();
+        return;
+      }
+      exprSource=noteAnalysis.target.rhs || noteAnalysis.target.normalized || '';
+    }
+  }
+  const out=evaluateCalculatorExpression(exprSource,getCalculatorCurrentScope());
+  if(!out.ok){
+    answerCalculatorState.result=out.error;
+    renderAnswerCalculator();
+    return;
+  }
+  const formatted=formatCalculatorNumber(out.value);
+  answerCalculatorState.result=formatted;
+  if(answerCalculatorState.answerKey && String(exprSource||'').trim()){
+    const histExpr=String(exprSource||'').trim();
+    const exists=answerCalculatorState.history.findIndex(item=>item.expr===histExpr&&item.result===formatted);
+    if(exists>=0)answerCalculatorState.history.splice(exists,1);
+    answerCalculatorState.history.unshift({expr:histExpr,result:formatted});
+    answerCalculatorState.history=answerCalculatorState.history.slice(0,CALC_TAPE_LIMIT);
+    saveCalculatorTape(answerCalculatorState.answerKey,answerCalculatorState.history);
+  }
+  renderAnswerCalculator();
+}
+
+function getCalculatorInlineKey(answerKey){
+  return 'calc_inline_'+answerKey;
+}
+function loadCalculatorInlineResults(answerKey){
+  if(!answerKey)return [];
+  try{
+    const raw=LS.get(getCalculatorInlineKey(answerKey));
+    const parsed=JSON.parse(raw||'[]');
+    return Array.isArray(parsed)?parsed.map(v=>String(v||'')):[];
+  }catch(_err){
+    return [];
+  }
+}
+function saveCalculatorInlineResults(answerKey,results){
+  if(!answerKey)return;
+  const clean=Array.isArray(results)?results.map(v=>String(v||'')):[];
+  if(clean.some(Boolean))LS.set(getCalculatorInlineKey(answerKey),JSON.stringify(clean));
+  else LS.del(getCalculatorInlineKey(answerKey));
+}
+function normalizeCalculatorNumberLinks(links,lineCount){
+  const size=Math.max(1,Number(lineCount)||1);
+  const clean=Array.isArray(links)?links.slice(0,size).map(item=>{
+    if(!item || typeof item!=='object')return null;
+    const numeric=String(item.numeric||'').replace(/\r/g,'');
+    const symbolic=String(item.symbolic||'').replace(/\r/g,'');
+    return numeric && symbolic ? {numeric,symbolic} : null;
+  }):[];
+  while(clean.length<size)clean.push(null);
+  return clean;
+}
+function getCalculatorNoteLines(note){
+  const lines=String(note||'').replace(/\r/g,'').split('\n');
+  return lines.length?lines:[''];
+}
+function normalizeCalculatorInlineResults(results,lineCount){
+  const size=Math.max(1,Number(lineCount)||1);
+  const clean=Array.isArray(results)?results.slice(0,size).map(v=>String(v||'')):[];
+  while(clean.length<size)clean.push('');
+  return clean;
+}
+function normalizeCalculatorRawLineText(text){
+  return String(text||'').replace(/\r/g,'').replace(/\u00a0/g,' ').replace(/\n/g,'');
+}
+function normalizeCalculatorLineText(text){
+  const normalized=normalizeCalculatorRawLineText(text);
+  return answerCalculatorState.insertNumbers ? convertCalculatorLineToNumberMode(normalized) : normalized;
+}
+function escapeCalculatorHtml(text){
+  return String(text==null?'':text)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+function getCalculatorLineInput(index){
+  return document.querySelector(`.calc-line-input[data-line-index="${index}"]`);
+}
+function getCalculatorActiveLineIndex(){
+  const active=document.activeElement;
+  if(active && active.classList && active.classList.contains('calc-line-input')){
+    return Number(active.dataset.lineIndex)||0;
+  }
+  return Number.isFinite(answerCalculatorState.activeLineIndex)?answerCalculatorState.activeLineIndex:0;
+}
+function getCalculatorLineSelection(elm){
+  if(!elm)return {start:0,end:0};
+  const fallback=(elm.textContent||'').length;
+  const sel=window.getSelection();
+  if(!sel || !sel.rangeCount)return {start:fallback,end:fallback};
+  const range=sel.getRangeAt(0);
+  if(!elm.contains(range.startContainer) || !elm.contains(range.endContainer))return {start:fallback,end:fallback};
+  const startRange=range.cloneRange();
+  startRange.selectNodeContents(elm);
+  startRange.setEnd(range.startContainer,range.startOffset);
+  const endRange=range.cloneRange();
+  endRange.selectNodeContents(elm);
+  endRange.setEnd(range.endContainer,range.endOffset);
+  return {start:startRange.toString().length,end:endRange.toString().length};
+}
+function setCalculatorLineSelection(elm,start,end){
+  if(!elm)return;
+  const safeEnd=end==null?start:end;
+  const textNodes=[];
+  const walker=document.createTreeWalker(elm,NodeFilter.SHOW_TEXT);
+  let textNode=walker.nextNode();
+  while(textNode){
+    textNodes.push(textNode);
+    textNode=walker.nextNode();
+  }
+  if(!textNodes.length){
+    const emptyNode=document.createTextNode('');
+    elm.appendChild(emptyNode);
+    textNodes.push(emptyNode);
+  }
+  const total=textNodes.reduce((sum,node)=>sum+(node.nodeValue||'').length,0);
+  const s=Math.max(0,Math.min(start,total));
+  const e=Math.max(0,Math.min(safeEnd,total));
+  const resolvePosition=offset=>{
+    let remaining=offset;
+    for(const node of textNodes){
+      const len=(node.nodeValue||'').length;
+      if(remaining<=len)return {node,offset:remaining};
+      remaining-=len;
+    }
+    const last=textNodes[textNodes.length-1];
+    return {node:last,offset:(last.nodeValue||'').length};
+  };
+  const startPos=resolvePosition(s);
+  const endPos=resolvePosition(e);
+  const range=document.createRange();
+  range.setStart(startPos.node,startPos.offset);
+  range.setEnd(endPos.node,endPos.offset);
+  const sel=window.getSelection();
+  if(!sel)return;
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+function getCalculatorLinkedValueRanges(lineElm){
+  if(!lineElm)return [];
+  return [...lineElm.querySelectorAll('.calc-linked-value')].map(node=>{
+    const before=document.createRange();
+    before.selectNodeContents(lineElm);
+    before.setEndBefore(node);
+    const start=before.toString().length;
+    const end=start+(node.textContent||'').length;
+    return {node,start,end};
+  });
+}
+function getCalculatorBackspaceLinkedRange(lineElm,selection){
+  const ranges=getCalculatorLinkedValueRanges(lineElm);
+  if(!ranges.length)return null;
+  const sel=selection||getCalculatorLineSelection(lineElm);
+  if(sel.end>sel.start){
+    return ranges.find(range=>sel.start<range.end&&sel.end>range.start)||null;
+  }
+  if(sel.start<=0)return null;
+  return ranges.find(range=>sel.start>range.start&&sel.start<=range.end)||null;
+}
+function removeCalculatorLinkedValueByRange(lineIndex,range){
+  if(!range)return false;
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const targetIndex=Math.max(0,Math.min(Number(lineIndex)||0,lines.length-1));
+  const current=lines[targetIndex]||'';
+  lines[targetIndex]=current.slice(0,range.start)+current.slice(range.end);
+  results[targetIndex]='';
+  nextLinks[targetIndex]=buildCalculatorLinkedInsert(current,nextLinks[targetIndex],range.start,range.end,'');
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(lines,results);
+  queueCalculatorEditorFocus(targetIndex,range.start);
+  renderAnswerCalculator();
+  return true;
+}
+function queueCalculatorEditorFocus(lineIndex,cursorPos,cursorEnd){
+  answerCalculatorState.pendingEditorFocus={lineIndex,cursorPos,cursorEnd};
+}
+function reconcileCalculatorNumberLinks(lines,links){
+  return normalizeCalculatorNumberLinks(links,lines.length).map((link,index)=>{
+    if(!link)return null;
+    const current=String(lines[index]||'');
+    const numeric=String(link.numeric||'');
+    const symbolic=String(link.symbolic||'');
+    return current===numeric || current===symbolic ? link : null;
+  });
+}
+function syncCalculatorNoteState(lines,inlineResults){
+  const safeLines=(Array.isArray(lines)&&lines.length?lines:['']).map(line=>String(line||'').replace(/\r/g,''));
+  answerCalculatorState.note=safeLines.join('\n');
+  saveCalculatorNote(answerCalculatorState.answerKey,answerCalculatorState.note);
+  answerCalculatorState.inlineResults=normalizeCalculatorInlineResults(inlineResults,safeLines.length);
+  saveCalculatorInlineResults(answerCalculatorState.answerKey,answerCalculatorState.inlineResults);
+  answerCalculatorState.numberLinks=reconcileCalculatorNumberLinks(safeLines,answerCalculatorState.numberLinks);
+  saveCalculatorNumberLinks(answerCalculatorState.answerKey,answerCalculatorState.numberLinks);
+  const notesEl=el('calc-notes');
+  if(notesEl)notesEl.value=answerCalculatorState.note;
+}
+function addCalculatorHistory(expr,result){
+  if(!answerCalculatorState.answerKey)return;
+  const histExpr=String(expr||'').trim();
+  const formatted=String(result||'').trim();
+  if(!histExpr || !formatted)return;
+  const exists=answerCalculatorState.history.findIndex(item=>item.expr===histExpr&&item.result===formatted);
+  if(exists>=0)answerCalculatorState.history.splice(exists,1);
+  answerCalculatorState.history.unshift({expr:histExpr,result:formatted});
+  answerCalculatorState.history=answerCalculatorState.history.slice(0,CALC_TAPE_LIMIT);
+  saveCalculatorTape(answerCalculatorState.answerKey,answerCalculatorState.history);
+}
+function insertCalculatorTextIntoLine(lineIndex,insertText,start,end,opts){
+  const text=String(insertText||'');
+  const options=opts||{};
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const targetIndex=Math.max(0,Math.min(Number(lineIndex)||0,lines.length-1));
+  const current=lines[targetIndex]||'';
+  const safeStart=Math.max(0,Math.min(Number(start)||0,current.length));
+  const safeEnd=Math.max(safeStart,Math.min(end==null?safeStart:Number(end),current.length));
+  lines[targetIndex]=current.slice(0,safeStart)+text+current.slice(safeEnd);
+  results[targetIndex]='';
+  const linked=buildCalculatorLinkedInsert(current,nextLinks[targetIndex],safeStart,safeEnd,text,options.linkSymbol);
+  nextLinks[targetIndex]=linked;
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(lines,results);
+  queueCalculatorEditorFocus(targetIndex,safeStart+text.length);
+  renderAnswerCalculator();
+}
+function setCalculatorDropSelectionFromPoint(lineElm,clientX,clientY){
+  if(!lineElm)return;
+  let range=null;
+  if(typeof document.caretRangeFromPoint==='function'){
+    range=document.caretRangeFromPoint(clientX,clientY);
+  }else if(typeof document.caretPositionFromPoint==='function'){
+    const pos=document.caretPositionFromPoint(clientX,clientY);
+    if(pos){
+      range=document.createRange();
+      range.setStart(pos.offsetNode,pos.offset);
+      range.collapse(true);
+    }
+  }
+  if(!range || !lineElm.contains(range.startContainer))return;
+  const sel=window.getSelection();
+  if(!sel)return;
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+function getCalculatorInsertTextForItem(item){
+  if(!item)return '';
+  if(answerCalculatorState.insertNumbers){
+    const numeric=getCalculatorNumericTextForItem(item);
+    if(numeric)return numeric;
+  }
+  return String(item.symbol||item.name||item.lineText||'').trim();
+}
+function getCalculatorNumericTextForItem(item){
+  if(!item)return '';
+  const numeric=String(item.numericText||'').trim();
+  if(numeric)return numeric.replace(/\./g,',');
+  const parsed=parseMetricValue(item.rawValue);
+  if(Number.isFinite(parsed))return formatCalculatorNumber(parsed).replace(/\./g,',');
+  return '';
+}
+function getCalculatorLinkSymbolForItem(item){
+  return String(item&&item.symbol||item&&item.name||'').trim();
+}
+function getCalculatorNumericInsertItems(){
+  return (answerCalculatorState.availableValues||[])
+    .map(item=>({
+      symbol:String(item&&item.symbol||'').trim(),
+      text:getCalculatorInsertTextForItem(item),
+    }))
+    .filter(item=>item.symbol && item.text)
+    .sort((a,b)=>b.symbol.length-a.symbol.length);
+}
+function getCalculatorLinkedItemAt(text,index){
+  const source=String(text||'');
+  const items=getCalculatorNumericInsertItems();
+  for(const item of items){
+    if(source.slice(index,index+item.symbol.length)===item.symbol)return item;
+  }
+  return null;
+}
+function getCalculatorKnownSymbolSet(){
+  return new Set((answerCalculatorState.availableValues||[]).map(item=>String(item&&item.symbol||'').trim()).filter(Boolean));
+}
+function canReplaceCalculatorSymbolAt(text,start,symbol){
+  const prev=start>0?text[start-1]:'';
+  const next=text[start+symbol.length]||'';
+  const edgePattern=/[\s+\-*/=(),[\]{}^%:;<>|&!?]/;
+  const prevOk=!prev || edgePattern.test(prev) || prev==='x' || prev==='X' || prev==='×' || prev==='÷';
+  const nextOk=!next || edgePattern.test(next) || next==='x' || next==='X' || next==='×' || next==='÷';
+  return prevOk || nextOk || start===0;
+}
+function replaceCalculatorSymbolsWithNumbers(text){
+  const source=String(text||'');
+  const items=getCalculatorNumericInsertItems();
+  if(!items.length)return source;
+  let out='';
+  let index=0;
+  while(index<source.length){
+    let matched=null;
+    for(const item of items){
+      if(source.slice(index,index+item.symbol.length)===item.symbol && canReplaceCalculatorSymbolAt(source,index,item.symbol)){
+        matched=item;
+        break;
+      }
+    }
+    if(matched){
+      out+=matched.text;
+      index+=matched.symbol.length;
+      continue;
+    }
+    out+=source[index];
+    index+=1;
+  }
+  return out;
+}
+function buildCalculatorLinkedLineHtml(link){
+  if(!link)return '';
+  const source=String(link.symbolic||'');
+  if(!getCalculatorNumericInsertItems().length)return escapeCalculatorHtml(link.numeric||'');
+  let out='';
+  let index=0;
+  while(index<source.length){
+    const matched=getCalculatorLinkedItemAt(source,index);
+    if(matched){
+      out+=`<span class="calc-linked-value">${escapeCalculatorHtml(matched.text)}</span>`;
+      index+=matched.symbol.length;
+      continue;
+    }
+    out+=escapeCalculatorHtml(source[index]);
+    index+=1;
+  }
+  return out;
+}
+function mapCalculatorNumericOffsetToSymbolic(symbolicText,numericOffset){
+  const source=String(symbolicText||'');
+  if(!getCalculatorNumericInsertItems().length)return Math.max(0,Math.min(Number(numericOffset)||0,source.length));
+  let sourceIndex=0;
+  let numericIndex=0;
+  const target=Math.max(0,Number(numericOffset)||0);
+  while(sourceIndex<source.length){
+    const matched=getCalculatorLinkedItemAt(source,sourceIndex);
+    if(matched){
+      const nextNumeric=numericIndex+matched.text.length;
+      if(target<=numericIndex)return sourceIndex;
+      if(target<nextNumeric){
+        return target-numericIndex<=Math.floor(matched.text.length/2) ? sourceIndex : sourceIndex+matched.symbol.length;
+      }
+      numericIndex=nextNumeric;
+      sourceIndex+=matched.symbol.length;
+      continue;
+    }
+    if(target<=numericIndex)return sourceIndex;
+    numericIndex+=1;
+    sourceIndex+=1;
+  }
+  return sourceIndex;
+}
+function buildCalculatorLinkedInsert(lineText,lineLink,start,end,insertText,linkSymbol){
+  const numericLine=String(lineText||'');
+  const numericInsert=String(insertText||'');
+  const hasLineLink=!!(lineLink && typeof lineLink==='object' && String(lineLink.numeric||'')===numericLine);
+  const hasExplicitLink=linkSymbol!=null && String(linkSymbol)!=='';
+  if(!hasLineLink && !hasExplicitLink)return null;
+  const symbolicInsert=hasExplicitLink?String(linkSymbol):numericInsert;
+  let symbolicLine=numericLine;
+  let symbolicStart=start;
+  let symbolicEnd=end;
+  if(hasLineLink){
+    symbolicLine=String(lineLink.symbolic||numericLine);
+    symbolicStart=mapCalculatorNumericOffsetToSymbolic(symbolicLine,start);
+    symbolicEnd=mapCalculatorNumericOffsetToSymbolic(symbolicLine,end);
+  }
+  return {
+    numeric:numericLine.slice(0,start)+numericInsert+numericLine.slice(end),
+    symbolic:symbolicLine.slice(0,symbolicStart)+symbolicInsert+symbolicLine.slice(symbolicEnd),
+  };
+}
+function getCalculatorTextDiff(oldText,newText){
+  const before=String(oldText||'');
+  const after=String(newText||'');
+  let start=0;
+  while(start<before.length && start<after.length && before[start]===after[start])start++;
+  let beforeEnd=before.length;
+  let afterEnd=after.length;
+  while(beforeEnd>start && afterEnd>start && before[beforeEnd-1]===after[afterEnd-1]){
+    beforeEnd-=1;
+    afterEnd-=1;
+  }
+  return {
+    start,
+    end:beforeEnd,
+    insertText:after.slice(start,afterEnd),
+  };
+}
+function updateCalculatorLineLinkFromDiff(currentLine,currentLink,nextLine,linkSymbol){
+  const current=String(currentLine||'');
+  const next=String(nextLine||'');
+  const diff=getCalculatorTextDiff(current,next);
+  return buildCalculatorLinkedInsert(current,currentLink,diff.start,diff.end,diff.insertText,linkSymbol);
+}
+function convertCalculatorLineToNumberMode(line){
+  const raw=String(line||'');
+  const eqIndex=raw.indexOf('=');
+  if(eqIndex>0){
+    const lhs=raw.slice(0,eqIndex).trim();
+    if(getCalculatorKnownSymbolSet().has(lhs)){
+      return raw.slice(0,eqIndex+1)+replaceCalculatorSymbolsWithNumbers(raw.slice(eqIndex+1));
+    }
+  }
+  return replaceCalculatorSymbolsWithNumbers(raw);
+}
+function convertCalculatorExistingNamesToNumbers(){
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  if(!lines.length)return false;
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const converted=lines.map(line=>convertCalculatorLineToNumberMode(line));
+  converted.forEach((line,index)=>{
+    const raw=String(lines[index]||'');
+    if(line!==raw){
+      nextLinks[index]={numeric:line,symbolic:raw};
+    }
+  });
+  if(converted.join('\n')===lines.join('\n'))return false;
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(converted,normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,converted.length));
+  return true;
+}
+function convertCalculatorExistingNumbersToNames(){
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  if(!lines.length)return false;
+  const links=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  let changed=false;
+  const reverted=lines.map((line,index)=>{
+    const raw=String(line||'');
+    const link=links[index];
+    if(link && raw===String(link.numeric||'')){
+      changed=true;
+      return String(link.symbolic||raw);
+    }
+    return raw;
+  });
+  if(!changed)return false;
+  syncCalculatorNoteState(reverted,normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,reverted.length));
+  return true;
+}
+function syncCalculatorInsertModeUi(){
+  const btn=el('calc-insert-mode-btn');
+  if(!btn)return;
+  const numeric=!!answerCalculatorState.insertNumbers;
+  btn.classList.toggle('on',numeric);
+  btn.textContent=numeric?'Visa namn':'Visa nummer';
+  btn.title=numeric?'Infogning sker nu som tal. Tryck for att ga tillbaka till namn/symboler.':'Infogning sker nu som namn/symboler. Tryck for att byta till tal.';
+  btn.setAttribute('aria-pressed',numeric?'true':'false');
+}
+function toggleCalculatorInsertNumbers(force){
+  const nextMode=typeof force==='boolean'?force:!answerCalculatorState.insertNumbers;
+  const wasNumeric=!!answerCalculatorState.insertNumbers;
+  answerCalculatorState.insertNumbers=nextMode;
+  if(nextMode && !wasNumeric){
+    const changed=convertCalculatorExistingNamesToNumbers();
+    if(changed){
+      renderAnswerCalculator();
+      return;
+    }
+  }
+  if(!nextMode && wasNumeric){
+    const changed=convertCalculatorExistingNumbersToNames();
+    if(changed){
+      renderAnswerCalculator();
+      return;
+    }
+  }
+  renderAnswerCalculator();
+}
+function renderCalculatorScratchPalette(){
+  const palette=el('calc-note-palette');
+  if(!palette)return;
+  if(!answerCalculatorState.open || !answerCalculatorState.activeInput || !document.body.contains(answerCalculatorState.activeInput)){
+    palette.innerHTML='';
+    return;
+  }
+  palette.innerHTML='';
+  if(!answerCalculatorState.availableValues.length)return;
+  answerCalculatorState.availableValues.forEach((item,index)=>{
+    const chip=document.createElement('button');
+    chip.type='button';
+    chip.className='calc-scratch-chip';
+    if(answerCalculatorState.insertNumbers)chip.classList.add('numeric-mode');
+    chip.draggable=true;
+    chip.title=answerCalculatorState.insertNumbers?'Klicka eller dra in talet i skrivytan. Andrar du talet senare ar det bara vanlig text.':'Klicka eller dra in namnet/symbolen i skrivytan.';
+    chip.dataset.insertText=getCalculatorInsertTextForItem(item);
+    chip.dataset.linkSymbol=answerCalculatorState.insertNumbers?getCalculatorLinkSymbolForItem(item):'';
+    const symbol=document.createElement('span');
+    symbol.className='calc-scratch-chip-symbol';
+    symbol.textContent=answerCalculatorState.insertNumbers?normalizeOhmText(item.rawValue||item.numericText||''):String(item.symbol||item.name||`V${index+1}`);
+    const sep=document.createElement('span');
+    sep.className='calc-scratch-chip-sep';
+    sep.textContent='=';
+    const value=document.createElement('span');
+    value.className='calc-scratch-chip-value';
+    const valueText=item.rawValue || (String(item.lineText||'').includes('=') ? String(item.lineText).split('=').slice(1).join('=').trim() : (item.numericText||''));
+    value.textContent=answerCalculatorState.insertNumbers?String(item.symbol||item.name||`V${index+1}`):normalizeOhmText(valueText);
+    chip.append(symbol,sep,value);
+    chip.addEventListener('click',()=>{
+      calculatorInsertText(chip.dataset.insertText||'',{linkSymbol:chip.dataset.linkSymbol||''});
+    });
+    chip.addEventListener('dragstart',event=>{
+      if(!event.dataTransfer)return;
+      event.dataTransfer.setData('text/plain',chip.dataset.insertText||'');
+      if(chip.dataset.linkSymbol)event.dataTransfer.setData('application/x-calc-link-symbol',chip.dataset.linkSymbol);
+      event.dataTransfer.effectAllowed='copy';
+    });
+    palette.appendChild(chip);
+  });
+}
+function syncCalculatorMobilePeekUi(){
+  const shell=el('calc-shell');
+  const backdrop=el('calc-backdrop');
+  const btn=el('calc-mobile-toggle');
+  if(!shell || !backdrop)return;
+  const mobile=document.body.classList.contains('mobile-quiz-mode') || isMobileQuizMode();
+  const canPeek=!!answerCalculatorState.open && mobile;
+  if(!canPeek){
+    answerCalculatorState.mobilePeek=false;
+    answerCalculatorState.mobileSheetMode='full';
+    shell.classList.remove('sheet-half','sheet-mid','dragging');
+    shell.style.removeProperty('--calc-mobile-drag');
+    backdrop.classList.remove('sheet-half');
+    if(btn){
+      btn.hidden=true;
+      btn.style.display='none';
+      btn.setAttribute('aria-pressed','false');
+    }
+    return;
+  }
+  const mode=getCalculatorMobileSheetMode();
+  answerCalculatorState.mobileSheetMode=mode;
+  answerCalculatorState.mobilePeek=(mode!=='full');
+  shell.classList.toggle('sheet-half',mode==='peek');
+  shell.classList.toggle('sheet-mid',mode==='mid');
+  backdrop.classList.toggle('sheet-half',mode!=='full');
+  shell.style.setProperty('--calc-mobile-drag','0px');
+  shell.classList.remove('dragging');
+  if(btn){
+    btn.hidden=true;
+    btn.style.display='none';
+    btn.setAttribute('aria-pressed',mode!=='full'?'true':'false');
+  }
+}
+function toggleCalculatorQuestionPeek(force){
+  if(!answerCalculatorState.open)return;
+  const mobile=document.body.classList.contains('mobile-quiz-mode') || isMobileQuizMode();
+  if(!mobile){
+    answerCalculatorState.mobilePeek=false;
+    answerCalculatorState.mobileSheetMode='full';
+    renderAnswerCalculator();
+    return;
+  }
+  const lineIndex=getCalculatorActiveLineIndex();
+  const lineEl=getCalculatorLineInput(lineIndex);
+  const selection=lineEl?getCalculatorLineSelection(lineEl):null;
+  let nextMode='full';
+  if(typeof force==='string'){
+    nextMode=force;
+  }else if(typeof force==='boolean'){
+    nextMode=force?'peek':'full';
+  }else{
+    const currentMode=getCalculatorMobileSheetMode();
+    nextMode=currentMode==='full'?'peek':'full';
+  }
+  if(nextMode!=='peek' && nextMode!=='mid' && nextMode!=='full')nextMode='full';
+  answerCalculatorState.mobileSheetMode=nextMode;
+  answerCalculatorState.mobilePeek=(nextMode!=='full');
+  if(selection)queueCalculatorEditorFocus(lineIndex,selection.start,selection.end);
+  renderAnswerCalculator();
+}
+function finishCalculatorSheetDrag(){
+  const shell=el('calc-shell');
+  if(shell){
+    shell.classList.remove('dragging');
+    shell.style.setProperty('--calc-mobile-drag','0px');
+  }
+  calculatorSheetDrag=null;
+}
+function bindCalculatorSheetGestures(){
+  const grab=el('calc-shell')?el('calc-shell').querySelector('.calc-grab'):null;
+  if(!grab || grab.dataset.gestureBound==='1')return;
+  grab.dataset.gestureBound='1';
+  const onPointerMove=event=>{
+    if(!calculatorSheetDrag || event.pointerId!==calculatorSheetDrag.pointerId)return;
+    const shell=el('calc-shell');
+    if(!shell)return;
+    const deltaY=event.clientY-calculatorSheetDrag.startY;
+    shell.classList.add('dragging');
+    let visualDelta=0;
+    if(calculatorSheetDrag.startedMode==='full'){
+      visualDelta=Math.max(0,Math.min(260,deltaY));
+    }else{
+      visualDelta=Math.max(-220,Math.min(220,deltaY));
+    }
+    shell.style.setProperty('--calc-mobile-drag',`${visualDelta}px`);
+  };
+  const onPointerEnd=event=>{
+    if(!calculatorSheetDrag || event.pointerId!==calculatorSheetDrag.pointerId)return;
+    const deltaY=event.clientY-calculatorSheetDrag.startY;
+    const moved=Math.abs(deltaY);
+    const startedMode=calculatorSheetDrag.startedMode||'full';
+    finishCalculatorSheetDrag();
+    if(moved<10){
+      if(startedMode==='peek'){
+        toggleCalculatorQuestionPeek('mid');
+        return;
+      }
+      if(startedMode==='mid'){
+        toggleCalculatorQuestionPeek('full');
+        return;
+      }
+      toggleCalculatorQuestionPeek('mid');
+      return;
+    }
+    if(startedMode==='peek'){
+      if(deltaY>90){
+        closeAnswerCalculator();
+        return;
+      }
+      if(deltaY<-60){
+        toggleCalculatorQuestionPeek('mid');
+        return;
+      }
+      toggleCalculatorQuestionPeek('peek');
+      return;
+    }
+    if(startedMode==='mid'){
+      if(deltaY>150){
+        closeAnswerCalculator();
+        return;
+      }
+      if(deltaY>80){
+        toggleCalculatorQuestionPeek('peek');
+        return;
+      }
+      if(deltaY<-70){
+        toggleCalculatorQuestionPeek('full');
+        return;
+      }
+      toggleCalculatorQuestionPeek('mid');
+      return;
+    }
+    if(deltaY>90){
+      toggleCalculatorQuestionPeek('mid');
+      return;
+    }
+    toggleCalculatorQuestionPeek('full');
+  };
+  grab.addEventListener('pointerdown',event=>{
+    const mobile=document.body.classList.contains('mobile-quiz-mode') || isMobileQuizMode();
+    if(!mobile || !answerCalculatorState.open)return;
+    if(event.pointerType==='mouse' && event.button!==0)return;
+    calculatorSheetDrag={
+      pointerId:event.pointerId,
+      startY:event.clientY,
+      startedMode:getCalculatorMobileSheetMode(),
+    };
+    if(grab.setPointerCapture)grab.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  });
+  grab.addEventListener('pointermove',onPointerMove);
+  grab.addEventListener('pointerup',onPointerEnd);
+  grab.addEventListener('pointercancel',onPointerEnd);
+}
+function getCalculatorLineFormulaParts(lineText){
+  const cleaned=normalizeCalculatorLineText(lineText).trim();
+  const withoutTrailingEq=cleaned.replace(/\s*=\s*$/,'').trim();
+  if(!withoutTrailingEq)return null;
+  const assignIndex=withoutTrailingEq.indexOf('=');
+  if(assignIndex>0){
+    const lhs=withoutTrailingEq.slice(0,assignIndex).trim();
+    const rhs=withoutTrailingEq.slice(assignIndex+1).trim();
+    if(lhs && rhs){
+      return {lhs,rhs,expr:rhs,storedLine:`${lhs} = ${rhs} =`};
+    }
+  }
+  return {lhs:'',rhs:withoutTrailingEq,expr:withoutTrailingEq,storedLine:`${withoutTrailingEq} =`};
+}
+function evaluateCalculatorEditorLine(lineIndex){
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const parts=getCalculatorLineFormulaParts(lines[lineIndex]||'');
+  if(!parts)return {ok:false,error:'Skriv en formel forst.'};
+  const previousNote=lines.slice(0,lineIndex).join('\n');
+  const previousAnalysis=analyzeCalculatorNotes(previousNote,answerCalculatorState.availableValues);
+  const out=evaluateCalculatorExpression(parts.expr,previousAnalysis.known||{});
+  if(!out.ok)return out;
+  return {
+    ok:true,
+    lines,
+    lineIndex,
+    parts,
+    value:out.value,
+    formatted:formatCalculatorNumber(out.value),
+  };
+}
+function commitCalculatorEditorLine(lineIndex,opts){
+  const options=opts||{};
+  const evaluated=evaluateCalculatorEditorLine(lineIndex);
+  if(!evaluated.ok){
+    answerCalculatorState.result=evaluated.error;
+    queueCalculatorEditorFocus(lineIndex,(getCalculatorNoteLines(answerCalculatorState.note)[lineIndex]||'').length);
+    renderAnswerCalculator();
+    return false;
+  }
+  const lines=evaluated.lines.slice();
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const previousLine=lines[lineIndex]||'';
+  lines[lineIndex]=evaluated.parts.storedLine;
+  results[lineIndex]=evaluated.formatted;
+  nextLinks[lineIndex]=updateCalculatorLineLinkFromDiff(previousLine,nextLinks[lineIndex],lines[lineIndex]);
+  let focusLine=lineIndex;
+  let cursorPos=lines[lineIndex].length;
+  if(options.insertNextLine!==false){
+    const nextIndex=lineIndex+1;
+    if(nextIndex>=lines.length || lines[nextIndex].trim()!==''){
+      lines.splice(nextIndex,0,'');
+      results.splice(nextIndex,0,'');
+      nextLinks.splice(nextIndex,0,null);
+    }
+    focusLine=nextIndex;
+    cursorPos=0;
+  }
+  answerCalculatorState.result=evaluated.formatted;
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(lines,results);
+  addCalculatorHistory(evaluated.parts.expr,evaluated.formatted);
+  queueCalculatorEditorFocus(focusLine,cursorPos);
+  renderAnswerCalculator();
+  return true;
+}
+function renderCalculatorNotesEditor(){
+  const editor=el('calc-notes-editor');
+  if(!editor)return;
+  if(!answerCalculatorState.open || !answerCalculatorState.activeInput || !document.body.contains(answerCalculatorState.activeInput)){
+    editor.innerHTML='';
+    return;
+  }
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const numberLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  editor.innerHTML='';
+  lines.forEach((line,index)=>{
+    const row=document.createElement('div');
+    row.className='calc-line';
+    row.dataset.lineIndex=index;
+    const input=document.createElement('div');
+    input.className='calc-line-input';
+    input.dataset.lineIndex=index;
+    input.contentEditable='true';
+    input.spellcheck=false;
+    const lineLink=numberLinks[index];
+    const isLinkedNumeric=lineLink && String(line||'')===String(lineLink.numeric||'');
+    const isLinkedSymbolic=lineLink && String(line||'')===String(lineLink.symbolic||'');
+    if((answerCalculatorState.insertNumbers && isLinkedNumeric) || (!answerCalculatorState.insertNumbers && isLinkedSymbolic)){
+      input.innerHTML=buildCalculatorLinkedLineHtml(lineLink);
+    }else{
+      input.textContent=line;
+    }
+    input.setAttribute('data-placeholder',index===0?'Skriv en formel och avsluta med =':'');
+    input.addEventListener('focus',()=>{answerCalculatorState.activeLineIndex=index;});
+    input.addEventListener('click',()=>{answerCalculatorState.activeLineIndex=index;});
+    input.addEventListener('dragover',event=>{
+      event.preventDefault();
+      row.classList.add('drag-over');
+      if(event.dataTransfer)event.dataTransfer.dropEffect='copy';
+    });
+    input.addEventListener('dragleave',()=>{row.classList.remove('drag-over');});
+    input.addEventListener('drop',event=>{
+      event.preventDefault();
+      row.classList.remove('drag-over');
+      const dropped=event.dataTransfer?(event.dataTransfer.getData('text/plain')||event.dataTransfer.getData('text')||''):'';
+      const linkSymbol=event.dataTransfer?(event.dataTransfer.getData('application/x-calc-link-symbol')||''):'';
+      if(!dropped)return;
+      answerCalculatorState.activeLineIndex=index;
+      setCalculatorDropSelectionFromPoint(input,event.clientX,event.clientY);
+      const selection=getCalculatorLineSelection(input);
+      insertCalculatorTextIntoLine(index,dropped,selection.start,selection.end,{linkSymbol});
+    });
+    input.addEventListener('input',event=>{
+      const lineElm=event.currentTarget;
+      const lineNo=Number(lineElm.dataset.lineIndex)||0;
+      const selection=getCalculatorLineSelection(lineElm);
+      const nextLines=getCalculatorNoteLines(answerCalculatorState.note);
+      const nextResults=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,nextLines.length);
+      const previousLine=nextLines[lineNo]||'';
+      const rawLine=normalizeCalculatorRawLineText(lineElm.textContent||'');
+      const storedLine=normalizeCalculatorLineText(rawLine);
+      nextLines[lineNo]=storedLine;
+      nextResults[lineNo]='';
+      const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,nextLines.length);
+      const prevLink=nextLinks[lineNo];
+      if(answerCalculatorState.insertNumbers && prevLink){
+        nextLinks[lineNo]=updateCalculatorLineLinkFromDiff(previousLine,prevLink,storedLine);
+      }else if(answerCalculatorState.insertNumbers && storedLine!==rawLine){
+        nextLinks[lineNo]={numeric:storedLine,symbolic:rawLine};
+      }else if(prevLink){
+        const prevNumeric=String(prevLink.numeric||'');
+        const prevSymbolic=String(prevLink.symbolic||'');
+        if(rawLine!==prevNumeric && rawLine!==prevSymbolic && storedLine!==prevNumeric && storedLine!==prevSymbolic){
+          nextLinks[lineNo]=null;
+        }
+      }
+      answerCalculatorState.numberLinks=nextLinks;
+      syncCalculatorNoteState(nextLines,nextResults);
+      answerCalculatorState.activeLineIndex=lineNo;
+      queueCalculatorEditorFocus(lineNo,selection.start,selection.end);
+      renderAnswerCalculator();
+    });
+    input.addEventListener('keydown',event=>{
+      const lineElm=event.currentTarget;
+      const lineNo=Number(lineElm.dataset.lineIndex)||0;
+      if(event.key==='Enter'){
+        event.preventDefault();
+        const currentLine=normalizeCalculatorLineText(lineElm.textContent||'');
+        answerCalculatorState.activeLineIndex=lineNo;
+        if(currentLine.trim().endsWith('=')){
+          commitCalculatorEditorLine(lineNo,{insertNextLine:true});
+          return;
+        }
+        const nextLines=getCalculatorNoteLines(answerCalculatorState.note);
+        const nextResults=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,nextLines.length);
+        nextLines[lineNo]=currentLine;
+        nextResults[lineNo]='';
+        nextLines.splice(lineNo+1,0,'');
+        nextResults.splice(lineNo+1,0,'');
+        syncCalculatorNoteState(nextLines,nextResults);
+        queueCalculatorEditorFocus(lineNo+1,0);
+        renderAnswerCalculator();
+        return;
+      }
+      if(event.key==='Backspace'){
+        const selection=getCalculatorLineSelection(lineElm);
+        const linkedRange=getCalculatorBackspaceLinkedRange(lineElm,selection);
+        if(linkedRange){
+          event.preventDefault();
+          removeCalculatorLinkedValueByRange(lineNo,linkedRange);
+          return;
+        }
+        const currentLine=normalizeCalculatorLineText(lineElm.textContent||'');
+        if(selection.start===0 && selection.end===0 && !currentLine && lineNo>0){
+          event.preventDefault();
+          const nextLines=getCalculatorNoteLines(answerCalculatorState.note);
+          const nextResults=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,nextLines.length);
+          nextLines.splice(lineNo,1);
+          nextResults.splice(lineNo,1);
+          const targetLine=lineNo-1;
+          const targetPos=(nextLines[targetLine]||'').length;
+          syncCalculatorNoteState(nextLines,nextResults);
+          queueCalculatorEditorFocus(targetLine,targetPos);
+          renderAnswerCalculator();
+        }
+      }
+    });
+    row.appendChild(input);
+    if(results[index]){
+      const chip=document.createElement('span');
+      chip.className='calc-inline-chip';
+      chip.contentEditable='false';
+      chip.textContent=displayCalculatorExpression(results[index]);
+      row.appendChild(chip);
+    }
+    editor.appendChild(row);
+  });
+  editor.ondragover=event=>{
+    event.preventDefault();
+    if(event.dataTransfer)event.dataTransfer.dropEffect='copy';
+  };
+  editor.ondrop=event=>{
+    if(event.target && event.target.closest('.calc-line-input'))return;
+    event.preventDefault();
+    const dropped=event.dataTransfer?(event.dataTransfer.getData('text/plain')||event.dataTransfer.getData('text')||''):'';
+    const linkSymbol=event.dataTransfer?(event.dataTransfer.getData('application/x-calc-link-symbol')||''):'';
+    if(!dropped)return;
+    calculatorInsertText(dropped,{linkSymbol});
+  };
+  const pending=answerCalculatorState.pendingEditorFocus;
+  if(pending){
+    answerCalculatorState.pendingEditorFocus=null;
+    requestAnimationFrame(()=>{
+      const target=getCalculatorLineInput(Math.max(0,Math.min(pending.lineIndex||0,getCalculatorNoteLines(answerCalculatorState.note).length-1)));
+      if(!target)return;
+      target.focus();
+      setCalculatorLineSelection(target,pending.cursorPos==null?(target.textContent||'').length:pending.cursorPos,pending.cursorEnd);
+    });
+  }
+}
+
+const renderAnswerCalculatorLineBase=renderAnswerCalculator;
+renderAnswerCalculator=function(){
+  if(document.body.classList.contains('mobile-quiz-mode') || isMobileQuizMode()){
+    answerCalculatorState.activePanel='formula';
+  }
+  renderAnswerCalculatorLineBase();
+  syncCalculatorMarkedAnswerToInput(analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues));
+  bindCalculatorSheetGestures();
+  syncCalculatorInsertModeUi();
+  renderCalculatorNotesEditor();
+  renderCalculatorScratchPalette();
+  syncCalculatorMobilePeekUi();
+};
+
+calculatorSaveNotes=function(value){
+  const lines=getCalculatorNoteLines(String(value||''));
+  syncCalculatorNoteState(lines,normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length));
+  renderAnswerCalculator();
+};
+calculatorSetNotes=function(nextValue){
+  calculatorSaveNotes(nextValue);
+};
+calculatorClearNotes=function(){
+  if(!answerCalculatorState.open)return;
+  answerCalculatorState.numberLinks=[null];
+  syncCalculatorNoteState([''],['']);
+  answerCalculatorState.result=normalizeCalculatorInputValue(answerCalculatorState.activeInput&&answerCalculatorState.activeInput.value)||'0';
+  queueCalculatorEditorFocus(0,0);
+  renderAnswerCalculator();
+};
+calculatorAppendToNotes=function(text,opts){
+  if(!answerCalculatorState.open)return;
+  const insert=String(text||'').replace(/\r/g,'');
+  if(!insert)return;
+  if(opts&&opts.inline){
+    calculatorInsertText(insert);
+    return;
+  }
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const activeIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  const insertLines=insert.split('\n');
+  const at=lines[activeIndex]?activeIndex+1:activeIndex;
+  lines.splice(at,0,...insertLines);
+  results.splice(at,0,...insertLines.map(()=>'')); 
+  syncCalculatorNoteState(lines,results);
+  const lastIndex=at+insertLines.length-1;
+  queueCalculatorEditorFocus(lastIndex,(insertLines[insertLines.length-1]||'').length);
+  renderAnswerCalculator();
+};
+setCalculatorExpression=function(nextExpr){
+  if(!answerCalculatorState.open)return;
+  const insert=String(nextExpr||'');
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  lines[lineIndex]=insert;
+  results[lineIndex]='';
+  syncCalculatorNoteState(lines,results);
+  queueCalculatorEditorFocus(lineIndex,insert.length);
+  renderAnswerCalculator();
+};
+calculatorInsertText=function(text,opts){
+  if(!answerCalculatorState.open)return;
+  const insert=String(text||'');
+  const options=opts||{};
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  const lineEl=getCalculatorLineInput(lineIndex);
+  const selection=lineEl?getCalculatorLineSelection(lineEl):{start:(lines[lineIndex]||'').length,end:(lines[lineIndex]||'').length};
+  const current=lines[lineIndex]||'';
+  lines[lineIndex]=current.slice(0,selection.start)+insert+current.slice(selection.end);
+  results[lineIndex]='';
+  nextLinks[lineIndex]=buildCalculatorLinkedInsert(current,nextLinks[lineIndex],selection.start,selection.end,insert,options.linkSymbol);
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(lines,results);
+  queueCalculatorEditorFocus(lineIndex,selection.start+insert.length);
+  renderAnswerCalculator();
+};
+calculatorWrapExpression=function(prefix,suffix){
+  if(!answerCalculatorState.open)return;
+  const pre=String(prefix||'');
+  const post=String(suffix||'');
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  const lineEl=getCalculatorLineInput(lineIndex);
+  const selection=lineEl?getCalculatorLineSelection(lineEl):{start:(lines[lineIndex]||'').length,end:(lines[lineIndex]||'').length};
+  const current=lines[lineIndex]||'';
+  const picked=current.slice(selection.start,selection.end);
+  lines[lineIndex]=current.slice(0,selection.start)+pre+picked+post+current.slice(selection.end);
+  results[lineIndex]='';
+  nextLinks[lineIndex]=buildCalculatorLinkedInsert(current,nextLinks[lineIndex],selection.start,selection.end,pre+picked+post);
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(lines,results);
+  queueCalculatorEditorFocus(lineIndex,selection.start+pre.length+(picked?picked.length:0));
+  renderAnswerCalculator();
+};
+calculatorClear=function(){
+  if(!answerCalculatorState.open)return;
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  const lineEl=getCalculatorLineInput(lineIndex);
+  const selection=lineEl?getCalculatorLineSelection(lineEl):{start:0,end:0};
+  const current=lines[lineIndex]||'';
+  if(selection.end>selection.start){
+    lines[lineIndex]=current.slice(0,selection.start)+current.slice(selection.end);
+    nextLinks[lineIndex]=buildCalculatorLinkedInsert(current,nextLinks[lineIndex],selection.start,selection.end,'');
+    queueCalculatorEditorFocus(lineIndex,selection.start);
+  }else{
+    lines[lineIndex]='';
+    nextLinks[lineIndex]=null;
+    queueCalculatorEditorFocus(lineIndex,0);
+  }
+  results[lineIndex]='';
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(lines,results);
+  answerCalculatorState.result=normalizeCalculatorInputValue(answerCalculatorState.activeInput&&answerCalculatorState.activeInput.value)||'0';
+  renderAnswerCalculator();
+};
+calculatorBackspace=function(){
+  if(!answerCalculatorState.open)return;
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  const nextLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
+  const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  const lineEl=getCalculatorLineInput(lineIndex);
+  const selection=lineEl?getCalculatorLineSelection(lineEl):{start:(lines[lineIndex]||'').length,end:(lines[lineIndex]||'').length};
+  const linkedRange=lineEl?getCalculatorBackspaceLinkedRange(lineEl,selection):null;
+  if(linkedRange){
+    removeCalculatorLinkedValueByRange(lineIndex,linkedRange);
+    return;
+  }
+  const current=lines[lineIndex]||'';
+  if(selection.end>selection.start){
+    lines[lineIndex]=current.slice(0,selection.start)+current.slice(selection.end);
+    nextLinks[lineIndex]=buildCalculatorLinkedInsert(current,nextLinks[lineIndex],selection.start,selection.end,'');
+    queueCalculatorEditorFocus(lineIndex,selection.start);
+  }else if(selection.start>0){
+    lines[lineIndex]=current.slice(0,selection.start-1)+current.slice(selection.end);
+    nextLinks[lineIndex]=buildCalculatorLinkedInsert(current,nextLinks[lineIndex],selection.start-1,selection.end,'');
+    queueCalculatorEditorFocus(lineIndex,selection.start-1);
+  }else if(!current && lineIndex>0){
+    const prevIndex=lineIndex-1;
+    const prevLine=lines[prevIndex]||'';
+    lines.splice(lineIndex,1);
+    results.splice(lineIndex,1);
+    nextLinks.splice(lineIndex,1);
+    queueCalculatorEditorFocus(prevIndex,prevLine.length);
+  }else{
+    queueCalculatorEditorFocus(lineIndex,0);
+  }
+  results[Math.max(0,Math.min(lineIndex,results.length-1))]='';
+  answerCalculatorState.numberLinks=nextLinks;
+  syncCalculatorNoteState(lines,results);
+  renderAnswerCalculator();
+};
+calculatorInsertValueSymbol=function(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.availableValues[index];
+  if(!item)return;
+  calculatorInsertText(item.symbol);
+};
+calculatorInsertValueLine=function(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.availableValues[index];
+  if(!item)return;
+  calculatorAppendToNotes(item.lineText);
+};
+function getCalculatorMarkedAnswerValue(noteAnalysis){
+  const analysis=noteAnalysis||analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+  if(!analysis || !analysis.target || !analysis.target.isAnswer)return '';
+  if((analysis.target.type==='solved' || analysis.target.type==='given') && Number.isFinite(analysis.target.value)){
+    return formatCalculatorNumber(analysis.target.value);
+  }
+  return '';
+}
+function syncCalculatorMarkedAnswerToInput(noteAnalysis){
+  if(!answerCalculatorState.open || !answerCalculatorState.activeInput)return false;
+  const answerText=getCalculatorMarkedAnswerValue(noteAnalysis);
+  if(!answerText)return false;
+  if(String(answerCalculatorState.activeInput.value||'').trim()===String(answerText).trim())return true;
+  answerCalculatorState.result=answerText;
+  answerCalculatorState.activeInput.value=answerText;
+  answerCalculatorState.activeInput.dispatchEvent(new Event('input',{bubbles:true}));
+  answerCalculatorState.activeInput.classList.add('calc-active');
+  return true;
+}
+calculatorInsertAnswerLine=function(){
+  if(!answerCalculatorState.open)return;
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
+  let answerText='';
+  const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+  if(noteAnalysis.target && Number.isFinite(noteAnalysis.target.value)){
+    answerText=formatCalculatorNumber(noteAnalysis.target.value);
+  }else if(answerCalculatorState.result && !/[A-Za-z]/.test(String(answerCalculatorState.result))){
+    answerText=String(answerCalculatorState.result).trim();
+  }
+  const answerLine=answerText?`(svar) = ${answerText}`:'(svar) = ';
+  const existingIndex=lines.findIndex(line=>{
+    const text=String(line||'').trim();
+    if(!text.includes('='))return false;
+    const lhs=text.slice(0,text.indexOf('=')).trim();
+    return isCalculatorAnswerLabel(lhs);
+  });
+  const lineIndex=existingIndex>=0?existingIndex:Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  if(existingIndex>=0 || !String(lines[lineIndex]||'').trim()){
+    lines[lineIndex]=answerLine;
+    results[lineIndex]='';
+  }else{
+    lines.splice(lineIndex+1,0,answerLine);
+    results.splice(lineIndex+1,0,'');
+  }
+  syncCalculatorNoteState(lines,results);
+  const focusIndex=existingIndex>=0?lineIndex:((existingIndex>=0 || !String(lines[lineIndex]||'').trim())?lineIndex:lineIndex+1);
+  queueCalculatorEditorFocus(focusIndex,answerLine.length);
+  syncCalculatorMarkedAnswerToInput(analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues));
+  renderAnswerCalculator();
+};
+calculatorSaveResultLine=function(){
+  if(!answerCalculatorState.open)return;
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  let lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  let current=lines[lineIndex]||'';
+  if(!current.trim() && lineIndex>0){
+    lineIndex-=1;
+    current=lines[lineIndex]||'';
+  }
+  if(!current.trim())return;
+  if(!current.trim().endsWith('=')){
+    lines[lineIndex]=`${current.trim()} =`;
+    syncCalculatorNoteState(lines,normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length));
+  }
+  commitCalculatorEditorLine(lineIndex,{insertNextLine:true});
+};
+calculatorUseHistory=function(index){
+  if(!answerCalculatorState.open)return;
+  const item=answerCalculatorState.history[index];
+  if(!item)return;
+  answerCalculatorState.result=item.result;
+  setCalculatorExpression(item.expr);
+};
+calculatorEvaluate=function(){
+  if(!answerCalculatorState.open)return;
+  const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+  const current=(lines[lineIndex]||'').trim();
+  if(current){
+    const evaluated=evaluateCalculatorEditorLine(lineIndex);
+    if(!evaluated.ok){
+      answerCalculatorState.result=evaluated.error;
+    }else{
+      answerCalculatorState.result=evaluated.formatted;
+      addCalculatorHistory(evaluated.parts.expr,evaluated.formatted);
+    }
+    queueCalculatorEditorFocus(lineIndex,(lines[lineIndex]||'').length);
+    renderAnswerCalculator();
+    return;
+  }
+  const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+  if(noteAnalysis.target && (noteAnalysis.target.type==='solved' || noteAnalysis.target.type==='given') && Number.isFinite(noteAnalysis.target.value)){
+    answerCalculatorState.result=formatCalculatorNumber(noteAnalysis.target.value);
+  }else if(noteAnalysis.target && noteAnalysis.target.missing && noteAnalysis.target.missing.length){
+    answerCalculatorState.result='saknar '+noteAnalysis.target.missing.join(', ');
+  }else{
+    answerCalculatorState.result='Skriv en formel forst.';
+  }
+  renderAnswerCalculator();
+};
+calculatorUseResult=function(){
+  if(!answerCalculatorState.open || !answerCalculatorState.activeInput)return;
+  const noteAnalysis=analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues);
+  let resultToUse=getCalculatorMarkedAnswerValue(noteAnalysis);
+  if(!resultToUse && noteAnalysis.target && (noteAnalysis.target.type==='solved' || noteAnalysis.target.type==='given') && Number.isFinite(noteAnalysis.target.value)){
+    resultToUse=formatCalculatorNumber(noteAnalysis.target.value);
+  }
+  if(!resultToUse || /[A-Za-z]/.test(resultToUse)){
+    calculatorEvaluate();
+    resultToUse=getCalculatorMarkedAnswerValue(analyzeCalculatorNotes(answerCalculatorState.note,answerCalculatorState.availableValues)) || answerCalculatorState.result;
+  }
+  if(!resultToUse || /[A-Za-z]/.test(resultToUse))return;
+  answerCalculatorState.result=resultToUse;
+  answerCalculatorState.activeInput.value=resultToUse;
+  answerCalculatorState.activeInput.dispatchEvent(new Event('input',{bubbles:true}));
+  answerCalculatorState.activeInput.classList.add('calc-active');
+  renderAnswerCalculator();
+};
+
+const openAnswerCalculatorRichBase=openAnswerCalculator;
+openAnswerCalculator=function(input){
+  openAnswerCalculatorRichBase(input);
+  answerCalculatorState.inlineResults=loadCalculatorInlineResults(answerCalculatorState.answerKey);
+  answerCalculatorState.numberLinks=loadCalculatorNumberLinks(answerCalculatorState.answerKey);
+  answerCalculatorState.activeLineIndex=0;
+  answerCalculatorState.pendingEditorFocus=null;
+  answerCalculatorState.activePanel='formula';
+  answerCalculatorState.mobileSheetMode=isMobileQuizMode()?'peek':'full';
+  answerCalculatorState.mobilePeek=!!isMobileQuizMode();
+  renderAnswerCalculator();
+};
+
+const closeAnswerCalculatorRichBase=closeAnswerCalculator;
+closeAnswerCalculator=function(opts){
+  closeAnswerCalculatorRichBase(opts);
+  answerCalculatorState.inlineResults=[];
+  answerCalculatorState.numberLinks=[];
+  answerCalculatorState.activeLineIndex=0;
+  answerCalculatorState.pendingEditorFocus=null;
+  answerCalculatorState.mobileSheetMode='full';
+  answerCalculatorState.mobilePeek=false;
+};
+
+const normalizeCalculatorFormulaSourceBase=normalizeCalculatorFormulaSource;
+normalizeCalculatorFormulaSource=function(text){
+  return normalizeCalculatorFormulaSourceBase(text)
+    .replace(/(?<=[0-9A-Za-z_)])\s*[xX]\s*(?=[0-9A-Za-z_(])/g,'*');
+};
 
 syncOverlayProfileUiText();
 seedBundledProfileMapStorage();
