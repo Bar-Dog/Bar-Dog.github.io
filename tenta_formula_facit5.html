@@ -333,6 +333,7 @@ body.mobile-quiz-mode .calc-tape-wrap{display:none !important}
 body.mobile-quiz-mode .calc-notes-wrap{order:1;gap:.26rem;flex:1 1 auto;min-height:0}
 body.mobile-quiz-mode .calc-notes-wrap .calc-label{display:none}
 body.mobile-quiz-mode .calc-notes-editor{min-height:212px;padding:.5rem .58rem;flex:1 1 auto}
+body.mobile-quiz-mode .calc-line-input{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;caret-color:transparent}
 body.mobile-quiz-mode .calc-line-input{min-height:1.25rem}
 body.mobile-quiz-mode .calc-note-hint{font-size:.66rem;line-height:1.3}
 body.mobile-quiz-mode .calc-note-palette{gap:.22rem}
@@ -6078,6 +6079,7 @@ const answerCalculatorState={
   numberLinks:[],
   activeLineIndex:0,
   pendingEditorFocus:null,
+  mobileEditorSelection:{lineIndex:0,start:0,end:0},
   insertNumbers:false,
   mobilePeek:false,
   mobileSheetMode:'full',
@@ -6090,6 +6092,15 @@ function getCalculatorMobileSheetMode(){
   const mode=String(answerCalculatorState.mobileSheetMode||'');
   if(mode==='peek' || mode==='mid' || mode==='full')return mode;
   return answerCalculatorState.mobilePeek ? 'peek' : 'full';
+}
+function isCalculatorMobileInputSuppressed(){
+  return document.body.classList.contains('mobile-quiz-mode') || isMobileQuizMode();
+}
+function setCalculatorMobileEditorSelection(lineIndex,start,end){
+  const safeLine=Math.max(0,Number(lineIndex)||0);
+  const safeStart=Math.max(0,Number(start)||0);
+  const safeEnd=Math.max(safeStart,end==null?safeStart:Number(end)||0);
+  answerCalculatorState.mobileEditorSelection={lineIndex:safeLine,start:safeStart,end:safeEnd};
 }
 
 function getCalculatorExprKey(answerKey){
@@ -7493,11 +7504,23 @@ function getCalculatorActiveLineIndex(){
   if(active && active.classList && active.classList.contains('calc-line-input')){
     return Number(active.dataset.lineIndex)||0;
   }
+  if(isCalculatorMobileInputSuppressed() && answerCalculatorState.mobileEditorSelection && Number.isFinite(answerCalculatorState.mobileEditorSelection.lineIndex)){
+    return Number(answerCalculatorState.mobileEditorSelection.lineIndex)||0;
+  }
   return Number.isFinite(answerCalculatorState.activeLineIndex)?answerCalculatorState.activeLineIndex:0;
 }
 function getCalculatorLineSelection(elm){
   if(!elm)return {start:0,end:0};
   const fallback=(elm.textContent||'').length;
+  if(isCalculatorMobileInputSuppressed()){
+    const mobileSel=answerCalculatorState.mobileEditorSelection||{};
+    const lineIndex=Number(elm.dataset.lineIndex)||0;
+    if(Number(mobileSel.lineIndex)===lineIndex){
+      const start=Math.max(0,Math.min(Number(mobileSel.start)||0,fallback));
+      const end=Math.max(start,Math.min(mobileSel.end==null?start:Number(mobileSel.end)||0,fallback));
+      return {start,end};
+    }
+  }
   const sel=window.getSelection();
   if(!sel || !sel.rangeCount)return {start:fallback,end:fallback};
   const range=sel.getRangeAt(0);
@@ -7513,6 +7536,15 @@ function getCalculatorLineSelection(elm){
 function setCalculatorLineSelection(elm,start,end){
   if(!elm)return;
   const safeEnd=end==null?start:end;
+  if(isCalculatorMobileInputSuppressed()){
+    const total=(elm.textContent||'').length;
+    const lineIndex=Number(elm.dataset.lineIndex)||0;
+    const s=Math.max(0,Math.min(start,total));
+    const e=Math.max(0,Math.min(safeEnd,total));
+    setCalculatorMobileEditorSelection(lineIndex,s,e);
+    answerCalculatorState.activeLineIndex=lineIndex;
+    return;
+  }
   const textNodes=[];
   const walker=document.createTreeWalker(elm,NodeFilter.SHOW_TEXT);
   let textNode=walker.nextNode();
@@ -7587,6 +7619,10 @@ function removeCalculatorLinkedValueByRange(lineIndex,range){
 }
 function queueCalculatorEditorFocus(lineIndex,cursorPos,cursorEnd){
   answerCalculatorState.pendingEditorFocus={lineIndex,cursorPos,cursorEnd};
+  if(isCalculatorMobileInputSuppressed()){
+    setCalculatorMobileEditorSelection(lineIndex,cursorPos==null?0:cursorPos,cursorEnd);
+    answerCalculatorState.activeLineIndex=Math.max(0,Number(lineIndex)||0);
+  }
 }
 function reconcileCalculatorNumberLinks(lines,links){
   return normalizeCalculatorNumberLinks(links,lines.length).map((link,index)=>{
@@ -8158,6 +8194,7 @@ function renderCalculatorNotesEditor(){
     return;
   }
   const lines=getCalculatorNoteLines(answerCalculatorState.note);
+  const mobileInputSuppressed=isCalculatorMobileInputSuppressed();
   const results=normalizeCalculatorInlineResults(answerCalculatorState.inlineResults,lines.length);
   const numberLinks=normalizeCalculatorNumberLinks(answerCalculatorState.numberLinks,lines.length);
   editor.innerHTML='';
@@ -8168,8 +8205,13 @@ function renderCalculatorNotesEditor(){
     const input=document.createElement('div');
     input.className='calc-line-input';
     input.dataset.lineIndex=index;
-    input.contentEditable='true';
+    input.contentEditable=mobileInputSuppressed?'false':'true';
     input.spellcheck=false;
+    input.setAttribute('inputmode',mobileInputSuppressed?'none':'text');
+    input.setAttribute('autocapitalize','off');
+    input.setAttribute('autocorrect','off');
+    input.setAttribute('autocomplete','off');
+    if('virtualKeyboardPolicy' in input)input.virtualKeyboardPolicy=mobileInputSuppressed?'manual':'auto';
     const lineLink=numberLinks[index];
     const isLinkedNumeric=lineLink && String(line||'')===String(lineLink.numeric||'');
     const isLinkedSymbolic=lineLink && String(line||'')===String(lineLink.symbolic||'');
@@ -8179,8 +8221,18 @@ function renderCalculatorNotesEditor(){
       input.textContent=line;
     }
     input.setAttribute('data-placeholder',index===0?'Skriv en formel och avsluta med =':'');
+    if(mobileInputSuppressed){
+      input.setAttribute('aria-readonly','true');
+      input.setAttribute('tabindex','0');
+    }
     input.addEventListener('focus',()=>{answerCalculatorState.activeLineIndex=index;});
     input.addEventListener('click',()=>{answerCalculatorState.activeLineIndex=index;});
+    input.addEventListener('pointerdown',event=>{
+      if(!mobileInputSuppressed)return;
+      event.preventDefault();
+      answerCalculatorState.activeLineIndex=index;
+      setCalculatorMobileEditorSelection(index,String(line||'').length,String(line||'').length);
+    });
     input.addEventListener('dragover',event=>{
       event.preventDefault();
       row.classList.add('drag-over');
@@ -8301,6 +8353,10 @@ function renderCalculatorNotesEditor(){
     requestAnimationFrame(()=>{
       const target=getCalculatorLineInput(Math.max(0,Math.min(pending.lineIndex||0,getCalculatorNoteLines(answerCalculatorState.note).length-1)));
       if(!target)return;
+      if(isCalculatorMobileInputSuppressed()){
+        setCalculatorLineSelection(target,pending.cursorPos==null?(target.textContent||'').length:pending.cursorPos,pending.cursorEnd);
+        return;
+      }
       target.focus();
       setCalculatorLineSelection(target,pending.cursorPos==null?(target.textContent||'').length:pending.cursorPos,pending.cursorEnd);
     });
@@ -8608,6 +8664,7 @@ openAnswerCalculator=function(input){
   answerCalculatorState.numberLinks=loadCalculatorNumberLinks(answerCalculatorState.answerKey);
   answerCalculatorState.activeLineIndex=0;
   answerCalculatorState.pendingEditorFocus=null;
+  answerCalculatorState.mobileEditorSelection={lineIndex:0,start:0,end:0};
   answerCalculatorState.activePanel='formula';
   answerCalculatorState.mobileSheetMode=isMobileQuizMode()?'peek':'full';
   answerCalculatorState.mobilePeek=!!isMobileQuizMode();
@@ -8621,6 +8678,7 @@ closeAnswerCalculator=function(opts){
   answerCalculatorState.numberLinks=[];
   answerCalculatorState.activeLineIndex=0;
   answerCalculatorState.pendingEditorFocus=null;
+  answerCalculatorState.mobileEditorSelection={lineIndex:0,start:0,end:0};
   answerCalculatorState.mobileSheetMode='full';
   answerCalculatorState.mobilePeek=false;
 };
