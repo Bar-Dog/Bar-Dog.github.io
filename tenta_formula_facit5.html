@@ -58,9 +58,19 @@ body.mobile-quiz-mode #v-quiz{padding:1rem .75rem 3rem}
 body.mobile-quiz-mode #qcon{display:flex;flex-direction:column;gap:1rem}
 body.mobile-quiz-mode .qz-wrap{gap:1rem}
 body.mobile-quiz-mode .ctrl{justify-content:flex-start}
-body.mobile-quiz-mode .mobile-quiz-nav{display:flex;flex-direction:column;align-items:stretch}
-body.mobile-quiz-mode .mobile-quiz-actions{width:100%}
-body.mobile-quiz-mode .mobile-quiz-actions .btn-s{flex:1}
+body.mobile-quiz-mode #score-sec + .ctrl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:.55rem;margin-bottom:.35rem}
+body.mobile-quiz-mode #score-sec + .ctrl>button{width:100%;min-width:0;min-height:44px;padding:.52rem .72rem;font-size:.82rem;line-height:1.18;white-space:normal;text-align:center;justify-self:stretch}
+body.mobile-quiz-mode #score-sec + .ctrl>button[onclick="showResults()"],
+body.mobile-quiz-mode #score-sec + .ctrl>button[onclick="startWeakPracticeSession()"],
+body.mobile-quiz-mode #score-sec + .ctrl>#btn-test-submit{grid-column:1/-1}
+body.mobile-quiz-mode #score-sec + .ctrl>button[hidden]{display:none !important}
+body.mobile-quiz-mode #practice-banner.show ~ #score-sec + .ctrl>button[onclick="startWeakPracticeSession()"]{display:none !important}
+body.mobile-quiz-mode .mobile-quiz-nav{display:flex;flex-direction:column;align-items:stretch;gap:.32rem;padding:.52rem .62rem;border-radius:10px}
+body.mobile-quiz-mode #qcon>.mobile-quiz-nav:not(:first-child){display:none !important}
+body.mobile-quiz-mode .mobile-quiz-count{font-size:.78rem}
+body.mobile-quiz-mode .mobile-quiz-state{font-size:.68rem}
+body.mobile-quiz-mode .mobile-quiz-actions{width:100%;gap:.3rem}
+body.mobile-quiz-mode .mobile-quiz-actions .btn-s{flex:1;padding:.28rem .58rem;font-size:.8rem;border-radius:8px}
 body.mobile-quiz-mode .imgrow{flex-direction:column}
 body.mobile-quiz-mode .imgrow .imgcon{border-right:none;border-bottom:1px solid #e2e8f0}
 body.mobile-quiz-mode .imgrow .imgcon:last-child{border-bottom:none}
@@ -70,7 +80,9 @@ body.mobile-quiz-mode .actrow button{flex:1 1 140px}
 .practice-banner-main{display:flex;flex-direction:column;gap:.18rem}
 .practice-banner-title{font-size:.78rem;font-weight:800;color:#1d4ed8;text-transform:uppercase;letter-spacing:.05em}
 .practice-banner-text{font-size:.84rem;color:#1e3a8a;line-height:1.5}
-body.mobile-quiz-mode .practice-banner{flex-direction:column;align-items:flex-start}
+body.mobile-quiz-mode .practice-banner{flex-direction:column;align-items:flex-start;gap:.7rem}
+body.mobile-quiz-mode .practice-banner>.btn-p,
+body.mobile-quiz-mode .practice-banner>.btn-s{width:100%;min-height:44px}
 .tab.locked{opacity:.5}
 .test-banner{display:none;gap:.8rem;align-items:center;justify-content:space-between;padding:.9rem 1rem;border:1.5px solid #fdba74;border-radius:12px;background:#fff7ed}
 .test-banner.show{display:flex}
@@ -5117,7 +5129,6 @@ function buildQuiz(){
     const currentQi=activeIndices[activeQIndex];
     con.appendChild(buildMobileQuizNav());
     con.appendChild(makeCard(Q[currentQi],currentQi));
-    con.appendChild(buildMobileQuizNav());
   }else{
     activeIndices.forEach(qi=>con.appendChild(makeCard(Q[qi],qi)));
   }
@@ -5939,7 +5950,6 @@ function buildQuiz(){
     const currentQi=activeIndices[activeQIndex];
     con.appendChild(buildMobileQuizNav());
     con.appendChild(makeCard(Q[currentQi],currentQi));
-    con.appendChild(buildMobileQuizNav());
   }else{
     activeIndices.forEach(qi=>con.appendChild(makeCard(Q[qi],qi)));
   }
@@ -8761,6 +8771,8 @@ let languageApplyQueued=false;
 let languageObserver=null;
 
 const I18N_EXACT_EN={
+  '↑ Tillbaka upp':'↑ Up',
+  'Tillbaka upp':'Up',
   'Quiz':'Quiz',
   'Overlay-Editor':'Overlay Editor',
   'Visa resultat':'Show results',
