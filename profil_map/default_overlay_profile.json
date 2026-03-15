@@ -1,0 +1,1395 @@
+{
+    "version":  1,
+    "exportType":  "study-profile",
+    "exportScope":  "overlay-only",
+    "app":  "tenta_formula_facit5",
+    "exportedAt":  "2026-03-15T15:16:19.1558375+01:00",
+    "profile":  {
+                    "strongestQuestions":  [
+
+                                           ],
+                    "weakestQuestions":  [
+
+                                         ],
+                    "questionStats":  [
+
+                                      ]
+                },
+    "stats":  {
+                  "practiceModeActive":  false,
+                  "activeQuestionNumbers":  [
+
+                                            ],
+                  "currentVisibleSummary":  {
+                                                "totalQuestions":  0,
+                                                "totalPoints":  0,
+                                                "points":  0,
+                                                "practiceMode":  false,
+                                                "correctQuestionNumbers":  [
+
+                                                                           ],
+                                                "wrongQuestionNumbers":  [
+
+                                                                         ]
+                                            },
+                  "lastTestSummary":  null
+              },
+    "overlaySnapshot":  {
+                            "version":  2,
+                            "app":  "tenta_formula_facit5",
+                            "exportedAt":  "2026-03-15T14:02:53.430Z",
+                            "overlays":  {
+                                             "1":  {
+                                                       "v1":  {
+                                                                  "v":  "10V",
+                                                                  "x":  "0",
+                                                                  "y":  "38.24",
+                                                                  "z":  "40",
+                                                                  "w":  "1",
+                                                                  "name":  "SpÃ¤nningskÃ¤lla",
+                                                                  "sym":  "Vs"
+                                                              },
+                                                       "r1":  {
+                                                                  "v":  "300 Î©",
+                                                                  "x":  "30.32",
+                                                                  "y":  "3.16",
+                                                                  "z":  "18",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd fÃ¶re fÃ¶rgrening",
+                                                                  "sym":  "Rs"
+                                                              },
+                                                       "r2":  {
+                                                                  "v":  "400 Î©",
+                                                                  "x":  "54.22",
+                                                                  "y":  "50.71",
+                                                                  "z":  "18",
+                                                                  "w":  "1",
+                                                                  "name":  "VÃ¤nstra parallellmotstÃ¥ndet",
+                                                                  "sym":  "Rp1"
+                                                              },
+                                                       "r3":  {
+                                                                  "v":  "400 Î©",
+                                                                  "x":  "86.34",
+                                                                  "y":  "51.64",
+                                                                  "z":  "18",
+                                                                  "w":  "1",
+                                                                  "name":  "HÃ¶gra parallellmotstÃ¥ndet",
+                                                                  "sym":  "Rp2"
+                                                              }
+                                                   },
+                                             "3":  {
+                                                       "v1":  {
+                                                                  "v":  "3V",
+                                                                  "x":  "13.27",
+                                                                  "y":  "59.69",
+                                                                  "z":  "50",
+                                                                  "w":  "1",
+                                                                  "name":  "MatningsspÃ¤nning",
+                                                                  "sym":  "Vs"
+                                                              },
+                                                       "r1":  {
+                                                                  "v":  "100 Î©",
+                                                                  "x":  "60.5",
+                                                                  "y":  "37.67",
+                                                                  "z":  "34",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd",
+                                                                  "sym":  "R1"
+                                                              },
+                                                       "r2":  {
+                                                                  "v":  "100 Î©",
+                                                                  "x":  "82.66",
+                                                                  "y":  "76.77",
+                                                                  "z":  "34",
+                                                                  "w":  "1",
+                                                                  "name":  "ParallellmotstÃ¥nd vid dioden",
+                                                                  "sym":  "R2"
+                                                              }
+                                                   },
+                                             "4":  {
+                                                       "av":  {
+                                                                  "v":  "3V",
+                                                                  "x":  "0",
+                                                                  "y":  "21.08",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "Matning krets A",
+                                                                  "sym":  "Vs_A"
+                                                              },
+                                                       "ar":  {
+                                                                  "v":  "330 Î©",
+                                                                  "x":  "17.68",
+                                                                  "y":  "20.57",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd A",
+                                                                  "sym":  "R_A"
+                                                              },
+                                                       "bv":  {
+                                                                  "v":  "1V",
+                                                                  "x":  "25.65",
+                                                                  "y":  "20.82",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "Matning krets B",
+                                                                  "sym":  "Vs_B"
+                                                              },
+                                                       "br":  {
+                                                                  "v":  "330 Î©",
+                                                                  "x":  "42.18",
+                                                                  "y":  "20.05",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd B",
+                                                                  "sym":  "R_B"
+                                                              },
+                                                       "cv":  {
+                                                                  "v":  "3V",
+                                                                  "x":  "50.01",
+                                                                  "y":  "20.3",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "Matning krets C",
+                                                                  "sym":  "Vs_C"
+                                                              },
+                                                       "cr":  {
+                                                                  "v":  "330 Î©",
+                                                                  "x":  "67.53",
+                                                                  "y":  "20.57",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd C",
+                                                                  "sym":  "R_C"
+                                                              },
+                                                       "dv":  {
+                                                                  "v":  "3V",
+                                                                  "x":  "75.51",
+                                                                  "y":  "20.56",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "Matning krets D",
+                                                                  "sym":  "Vs_D"
+                                                              },
+                                                       "dr":  {
+                                                                  "v":  "330 Î©",
+                                                                  "x":  "91.97",
+                                                                  "y":  "20.83",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd D",
+                                                                  "sym":  "R_D"
+                                                              },
+                                                       "ev":  {
+                                                                  "v":  "5V",
+                                                                  "x":  "0",
+                                                                  "y":  "74.52",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "Matning krets E",
+                                                                  "sym":  "Vs_E"
+                                                              },
+                                                       "er":  {
+                                                                  "v":  "330 Î©",
+                                                                  "x":  "17.53",
+                                                                  "y":  "74.79",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd E",
+                                                                  "sym":  "R_E"
+                                                              },
+                                                       "fv":  {
+                                                                  "v":  "5V",
+                                                                  "x":  "25.07",
+                                                                  "y":  "74.78",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "Matning krets F",
+                                                                  "sym":  "Vs_F"
+                                                              },
+                                                       "fr":  {
+                                                                  "v":  "330 Î©",
+                                                                  "x":  "42.75",
+                                                                  "y":  "75.31",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd F",
+                                                                  "sym":  "R_F"
+                                                              },
+                                                       "gv":  {
+                                                                  "v":  "5V",
+                                                                  "x":  "50.52",
+                                                                  "y":  "75.31",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "Matning krets G",
+                                                                  "sym":  "Vs_G"
+                                                              },
+                                                       "gr":  {
+                                                                  "v":  "330 Î©",
+                                                                  "x":  "68.66",
+                                                                  "y":  "75.05",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "SeriemotstÃ¥nd G",
+                                                                  "sym":  "R_G"
+                                                              }
+                                                   },
+                                             "5":  {
+                                                       "vcc":  {
+                                                                   "v":  "10V",
+                                                                   "x":  "5.87",
+                                                                   "y":  "39.33",
+                                                                   "z":  "30",
+                                                                   "w":  "1",
+                                                                   "name":  "MatningsspÃ¤nning",
+                                                                   "sym":  "Vs"
+                                                               },
+                                                       "r1":  {
+                                                                  "v":  "1 kÎ©",
+                                                                  "x":  "15.07",
+                                                                  "y":  "24.4",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R1",
+                                                                  "sym":  "R1"
+                                                              },
+                                                       "r2":  {
+                                                                  "v":  "1 kÎ©",
+                                                                  "x":  "25.01",
+                                                                  "y":  "24.82",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R2",
+                                                                  "sym":  "R2"
+                                                              },
+                                                       "r3":  {
+                                                                  "v":  "9 kÎ©",
+                                                                  "x":  "38.62",
+                                                                  "y":  "23.98",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R3",
+                                                                  "sym":  "R3"
+                                                              },
+                                                       "r4":  {
+                                                                  "v":  "1 kÎ©",
+                                                                  "x":  "38.86",
+                                                                  "y":  "66.92",
+                                                                  "z":  "31",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R4",
+                                                                  "sym":  "R4"
+                                                              },
+                                                       "r5":  {
+                                                                  "v":  "1 kÎ©",
+                                                                  "x":  "49.05",
+                                                                  "y":  "24.4",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R5",
+                                                                  "sym":  "R5"
+                                                              },
+                                                       "r6":  {
+                                                                  "v":  "1 kÎ©",
+                                                                  "x":  "62.36",
+                                                                  "y":  "23.99",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R6",
+                                                                  "sym":  "R6"
+                                                              },
+                                                       "r7":  {
+                                                                  "v":  "1 kÎ©",
+                                                                  "x":  "72.66",
+                                                                  "y":  "23.16",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R7",
+                                                                  "sym":  "R7"
+                                                              },
+                                                       "r8":  {
+                                                                  "v":  "9 kÎ©",
+                                                                  "x":  "86.27",
+                                                                  "y":  "23.57",
+                                                                  "z":  "26",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R8",
+                                                                  "sym":  "R8"
+                                                              },
+                                                       "r9":  {
+                                                                  "v":  "1 kÎ©",
+                                                                  "x":  "86.67",
+                                                                  "y":  "67.75",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "MotstÃ¥nd R9",
+                                                                  "sym":  "R9"
+                                                              },
+                                                       "r10":  {
+                                                                   "v":  "1 kÎ©",
+                                                                   "x":  "94.38",
+                                                                   "y":  "23.57",
+                                                                   "z":  "26",
+                                                                   "w":  "1",
+                                                                   "name":  "MotstÃ¥nd R10",
+                                                                   "sym":  "R10"
+                                                               }
+                                                   },
+                                             "6":  {
+                                                       "vcc":  {
+                                                                   "v":  "3V",
+                                                                   "x":  "5.26",
+                                                                   "y":  "38.27",
+                                                                   "z":  "35",
+                                                                   "w":  "1",
+                                                                   "name":  "MatningsspÃ¤nning",
+                                                                   "sym":  "Vs"
+                                                               },
+                                                       "rc":  {
+                                                                  "v":  "100 Î©",
+                                                                  "x":  "82.1",
+                                                                  "y":  "37.81",
+                                                                  "z":  "18",
+                                                                  "w":  "1",
+                                                                  "name":  "KollektormotstÃ¥nd",
+                                                                  "sym":  "Rc"
+                                                              }
+                                                   },
+                                             "7":  {
+                                                       "vcc":  {
+                                                                   "v":  "12V",
+                                                                   "x":  "3.13",
+                                                                   "y":  "33.42",
+                                                                   "z":  "34",
+                                                                   "w":  "1",
+                                                                   "name":  "MatningsspÃ¤nning",
+                                                                   "sym":  "Vs"
+                                                               },
+                                                       "r2":  {
+                                                                  "v":  "3.3 kÎ©",
+                                                                  "x":  "74.41",
+                                                                  "y":  "22.16",
+                                                                  "z":  "17",
+                                                                  "w":  "1",
+                                                                  "name":  "BasmotstÃ¥nd",
+                                                                  "sym":  "Rbase"
+                                                              }
+                                                   },
+                                             "8":  {
+                                                       "v1":  {
+                                                                  "v":  "1V",
+                                                                  "x":  "4.11",
+                                                                  "y":  "34.21",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "IngÃ¥ngsspÃ¤nning 1",
+                                                                  "sym":  "Vin1"
+                                                              },
+                                                       "r2":  {
+                                                                  "v":  "10 kÎ©",
+                                                                  "x":  "32.77",
+                                                                  "y":  "14.31",
+                                                                  "z":  "16",
+                                                                  "w":  "1",
+                                                                  "name":  "IngÃ¥ngsmotstÃ¥nd 1",
+                                                                  "sym":  "Rin1"
+                                                              },
+                                                       "r3":  {
+                                                                  "v":  "20 kÎ©",
+                                                                  "x":  "32.49",
+                                                                  "y":  "43.15",
+                                                                  "z":  "16",
+                                                                  "w":  "1",
+                                                                  "name":  "IngÃ¥ngsmotstÃ¥nd 2",
+                                                                  "sym":  "Rin2"
+                                                              },
+                                                       "v2":  {
+                                                                  "v":  "2V",
+                                                                  "x":  "27",
+                                                                  "y":  "56.84",
+                                                                  "z":  "30",
+                                                                  "w":  "1",
+                                                                  "name":  "IngÃ¥ngsspÃ¤nning 2",
+                                                                  "sym":  "Vin2"
+                                                              },
+                                                       "r1":  {
+                                                                  "v":  "30 kÎ©",
+                                                                  "x":  "57.8",
+                                                                  "y":  "13.99",
+                                                                  "z":  "16",
+                                                                  "w":  "1",
+                                                                  "name":  "Ã…terkopplingsmotstÃ¥nd",
+                                                                  "sym":  "Rf"
+                                                              }
+                                                   },
+                                             "10":  {
+                                                        "v1":  {
+                                                                   "v":  "12 V",
+                                                                   "x":  "3.22",
+                                                                   "y":  "44.22",
+                                                                   "z":  "18",
+                                                                   "w":  "1",
+                                                                   "name":  "MatningsspÃ¤nning",
+                                                                   "sym":  "Vs"
+                                                               },
+                                                        "r1":  {
+                                                                   "v":  "4.7 kÎ©",
+                                                                   "x":  "42.71",
+                                                                   "y":  "72",
+                                                                   "z":  "20",
+                                                                   "w":  "1",
+                                                                   "name":  "BasmotstÃ¥nd",
+                                                                   "sym":  "Rb"
+                                                               }
+                                                    },
+                                             "13":  {
+                                                        "v1":  {
+                                                                   "v":  "9 V",
+                                                                   "x":  "15.33",
+                                                                   "y":  "51.4",
+                                                                   "z":  "40",
+                                                                   "w":  "1",
+                                                                   "name":  "Matningsspanning",
+                                                                   "sym":  "V1"
+                                                               },
+                                                        "r1":  {
+                                                                   "v":  "220 Î©",
+                                                                   "x":  "38.22",
+                                                                   "y":  "37.61",
+                                                                   "z":  "40",
+                                                                   "w":  "1",
+                                                                   "name":  "Resistor",
+                                                                   "sym":  "R1"
+                                                               },
+                                                        "c1":  {
+                                                                   "v":  "470 ÂµF",
+                                                                   "x":  "39.89",
+                                                                   "y":  "71.4",
+                                                                   "z":  "40",
+                                                                   "w":  "1",
+                                                                   "name":  "Kondensator",
+                                                                   "sym":  "C1"
+                                                               }
+                                                    },
+                                             "14":  {
+                                                        "r1":  {
+                                                                   "v":  "300 ohm",
+                                                                   "x":  "36.95",
+                                                                   "y":  "50.03",
+                                                                   "z":  "60",
+                                                                   "w":  "1",
+                                                                   "name":  "Vanster resistor",
+                                                                   "sym":  "R1"
+                                                               },
+                                                        "r2":  {
+                                                                   "v":  "300 ohm",
+                                                                   "x":  "53.85",
+                                                                   "y":  "50.03",
+                                                                   "z":  "60",
+                                                                   "w":  "1",
+                                                                   "name":  "Mittenresistor",
+                                                                   "sym":  "R2"
+                                                               },
+                                                        "r3":  {
+                                                                   "v":  "100 ohm",
+                                                                   "x":  "57.46",
+                                                                   "y":  "3.57",
+                                                                   "z":  "60",
+                                                                   "w":  "1",
+                                                                   "name":  "Ovra resistor",
+                                                                   "sym":  "R3"
+                                                               },
+                                                        "r4":  {
+                                                                   "v":  "200 ohm",
+                                                                   "x":  "77.3",
+                                                                   "y":  "49.57",
+                                                                   "z":  "60",
+                                                                   "w":  "1",
+                                                                   "name":  "Hoger resistor",
+                                                                   "sym":  "R4"
+                                                               }
+                                                    },
+                                             "15":  {
+                                                        "v1":  {
+                                                                   "v":  "9 V",
+                                                                   "x":  "9.69",
+                                                                   "y":  "35.45",
+                                                                   "z":  "72",
+                                                                   "w":  "1",
+                                                                   "name":  "Batteri",
+                                                                   "sym":  "Vs"
+                                                               },
+                                                        "r1":  {
+                                                                   "v":  "100 ohm",
+                                                                   "x":  "49.2",
+                                                                   "y":  "28.64",
+                                                                   "z":  "60",
+                                                                   "w":  "1",
+                                                                   "name":  "Seriemotstand",
+                                                                   "sym":  "R1"
+                                                               },
+                                                        "r2":  {
+                                                                   "v":  "330 ohm",
+                                                                   "x":  "55.47",
+                                                                   "y":  "39.91",
+                                                                   "z":  "60",
+                                                                   "w":  "1",
+                                                                   "name":  "LED-motstand",
+                                                                   "sym":  "R2"
+                                                               },
+                                                        "vz":  {
+                                                                   "v":  "5 V",
+                                                                   "x":  "49.8",
+                                                                   "y":  "66.24",
+                                                                   "z":  "55",
+                                                                   "w":  "1",
+                                                                   "name":  "Zenerspanning",
+                                                                   "sym":  "Vz"
+                                                               },
+                                                        "uled":  {
+                                                                     "v":  "3 V",
+                                                                     "x":  "79.3",
+                                                                     "y":  "65.41",
+                                                                     "z":  "72",
+                                                                     "w":  "1",
+                                                                     "name":  "LED-spanningsfall",
+                                                                     "sym":  "Uled"
+                                                                 }
+                                                    },
+                                             "16":  {
+                                                        "v1":  {
+                                                                   "v":  "12 V",
+                                                                   "x":  "11.89",
+                                                                   "y":  "44.82",
+                                                                   "z":  "72",
+                                                                   "w":  "1",
+                                                                   "name":  "Matningsspanning",
+                                                                   "sym":  "Vs"
+                                                               },
+                                                        "r1":  {
+                                                                   "v":  "450 ohm",
+                                                                   "x":  "35.62",
+                                                                   "y":  "2.01",
+                                                                   "z":  "70",
+                                                                   "w":  "1",
+                                                                   "name":  "Vanster resistor",
+                                                                   "sym":  "R1"
+                                                               },
+                                                        "r2":  {
+                                                                   "v":  "300 ohm",
+                                                                   "x":  "56.28",
+                                                                   "y":  "51.61",
+                                                                   "z":  "70",
+                                                                   "w":  "1",
+                                                                   "name":  "Mittresistor",
+                                                                   "sym":  "R2"
+                                                               },
+                                                        "r3":  {
+                                                                   "v":  "100 ohm",
+                                                                   "x":  "61.08",
+                                                                   "y":  "2.61",
+                                                                   "z":  "70",
+                                                                   "w":  "1",
+                                                                   "name":  "Ovre hoger resistor",
+                                                                   "sym":  "R3"
+                                                               },
+                                                        "r4":  {
+                                                                   "v":  "200 ohm",
+                                                                   "x":  "83.13",
+                                                                   "y":  "50.81",
+                                                                   "z":  "70",
+                                                                   "w":  "1",
+                                                                   "name":  "Hoger resistor",
+                                                                   "sym":  "R4"
+                                                               }
+                                                    },
+                                             "17":  {
+                                                        "v1":  {
+                                                                   "v":  "12 V",
+                                                                   "x":  "9.78",
+                                                                   "y":  "23.84",
+                                                                   "z":  "72",
+                                                                   "w":  "1",
+                                                                   "name":  "Matningsspanning",
+                                                                   "sym":  "Vs"
+                                                               },
+                                                        "r10":  {
+                                                                    "v":  "1 kOhm",
+                                                                    "x":  "54.45",
+                                                                    "y":  "22.59",
+                                                                    "z":  "68",
+                                                                    "w":  "1",
+                                                                    "name":  "Motstand R10",
+                                                                    "sym":  "R10"
+                                                                },
+                                                        "hfe1":  {
+                                                                     "v":  "hFE=300",
+                                                                     "x":  "36.07",
+                                                                     "y":  "53.25",
+                                                                     "z":  "40",
+                                                                     "w":  "1",
+                                                                     "name":  "Q1 stromforstarkning",
+                                                                     "sym":  "hFE1"
+                                                                 },
+                                                        "hfe2":  {
+                                                                     "v":  "hFE=60",
+                                                                     "x":  "60.12",
+                                                                     "y":  "72.16",
+                                                                     "z":  "34",
+                                                                     "w":  "1",
+                                                                     "name":  "Q2 stromforstarkning",
+                                                                     "sym":  "hFE2"
+                                                                 },
+                                                        "ilamp":  {
+                                                                      "v":  "60 mA",
+                                                                      "x":  "80.92",
+                                                                      "y":  "31.38",
+                                                                      "z":  "63",
+                                                                      "w":  "1",
+                                                                      "name":  "Lampstrom",
+                                                                      "sym":  "Ilampa"
+                                                                  }
+                                                    },
+                                             "18":  {
+                                                        "v1":  {
+                                                                   "v":  "-1 V",
+                                                                   "x":  "7.73",
+                                                                   "y":  "41.58",
+                                                                   "z":  "72",
+                                                                   "w":  "1",
+                                                                   "name":  "Vanster ingang",
+                                                                   "sym":  "V1"
+                                                               },
+                                                        "v2":  {
+                                                                   "v":  "2 V",
+                                                                   "x":  "31.1",
+                                                                   "y":  "60.63",
+                                                                   "z":  "72",
+                                                                   "w":  "1",
+                                                                   "name":  "Nedre ingang",
+                                                                   "sym":  "V2"
+                                                               },
+                                                        "r2":  {
+                                                                   "v":  "10 kOhm",
+                                                                   "x":  "35.93",
+                                                                   "y":  "13.75",
+                                                                   "z":  "67",
+                                                                   "w":  "1",
+                                                                   "name":  "Motstand R2",
+                                                                   "sym":  "R2"
+                                                               },
+                                                        "r3":  {
+                                                                   "v":  "20 kOhm",
+                                                                   "x":  "35.12",
+                                                                   "y":  "44.5",
+                                                                   "z":  "66",
+                                                                   "w":  "1",
+                                                                   "name":  "Motstand R3",
+                                                                   "sym":  "R3"
+                                                               },
+                                                        "r1":  {
+                                                                   "v":  "30 kOhm",
+                                                                   "x":  "56.92",
+                                                                   "y":  "13.85",
+                                                                   "z":  "67",
+                                                                   "w":  "1",
+                                                                   "name":  "Aterkopplingsmotstand",
+                                                                   "sym":  "R1"
+                                                               }
+                                                    }
+                                         },
+                            "vanillas":  {
+                                             "1":  {
+                                                       "overlays":  {
+                                                                        "v1":  {
+                                                                                   "v":  "10V",
+                                                                                   "x":  "0",
+                                                                                   "y":  "38.24",
+                                                                                   "z":  "40",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SpÃ¤nningskÃ¤lla",
+                                                                                   "sym":  "Vs"
+                                                                               },
+                                                                        "r1":  {
+                                                                                   "v":  "300 Î©",
+                                                                                   "x":  "29.1",
+                                                                                   "y":  "3.16",
+                                                                                   "z":  "18",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd fÃ¶re fÃ¶rgrening",
+                                                                                   "sym":  "Rs"
+                                                                               },
+                                                                        "r2":  {
+                                                                                   "v":  "400 Î©",
+                                                                                   "x":  "54.22",
+                                                                                   "y":  "50.71",
+                                                                                   "z":  "18",
+                                                                                   "w":  "1",
+                                                                                   "name":  "VÃ¤nstra parallellmotstÃ¥ndet",
+                                                                                   "sym":  "Rp1"
+                                                                               },
+                                                                        "r3":  {
+                                                                                   "v":  "400 Î©",
+                                                                                   "x":  "86.34",
+                                                                                   "y":  "51.64",
+                                                                                   "z":  "18",
+                                                                                   "w":  "1",
+                                                                                   "name":  "HÃ¶gra parallellmotstÃ¥ndet",
+                                                                                   "sym":  "Rp2"
+                                                                               }
+                                                                    },
+                                                       "pvs":  {
+
+                                                               }
+                                                   },
+                                             "3":  {
+                                                       "overlays":  {
+                                                                        "v1":  {
+                                                                                   "v":  "3V",
+                                                                                   "x":  "13.27",
+                                                                                   "y":  "59.47",
+                                                                                   "z":  "50",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MatningsspÃ¤nning",
+                                                                                   "sym":  "Vs"
+                                                                               },
+                                                                        "r1":  {
+                                                                                   "v":  "100 Î©",
+                                                                                   "x":  "60.5",
+                                                                                   "y":  "37.89",
+                                                                                   "z":  "34",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd",
+                                                                                   "sym":  "R1"
+                                                                               },
+                                                                        "r2":  {
+                                                                                   "v":  "100 Î©",
+                                                                                   "x":  "82.66",
+                                                                                   "y":  "76.77",
+                                                                                   "z":  "34",
+                                                                                   "w":  "1",
+                                                                                   "name":  "ParallellmotstÃ¥nd vid dioden",
+                                                                                   "sym":  "R2"
+                                                                               }
+                                                                    },
+                                                       "pvs":  {
+
+                                                               }
+                                                   },
+                                             "4":  {
+                                                       "overlays":  {
+                                                                        "av":  {
+                                                                                   "v":  "3V",
+                                                                                   "x":  "0",
+                                                                                   "y":  "21.08",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Matning krets A",
+                                                                                   "sym":  "Vs_A"
+                                                                               },
+                                                                        "ar":  {
+                                                                                   "v":  "330 Î©",
+                                                                                   "x":  "17.68",
+                                                                                   "y":  "20.57",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd A",
+                                                                                   "sym":  "R_A"
+                                                                               },
+                                                                        "bv":  {
+                                                                                   "v":  "1V",
+                                                                                   "x":  "25.65",
+                                                                                   "y":  "20.82",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Matning krets B",
+                                                                                   "sym":  "Vs_B"
+                                                                               },
+                                                                        "br":  {
+                                                                                   "v":  "330 Î©",
+                                                                                   "x":  "42.64",
+                                                                                   "y":  "20.31",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd B",
+                                                                                   "sym":  "R_B"
+                                                                               },
+                                                                        "cv":  {
+                                                                                   "v":  "3V",
+                                                                                   "x":  "50.01",
+                                                                                   "y":  "20.3",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Matning krets C",
+                                                                                   "sym":  "Vs_C"
+                                                                               },
+                                                                        "cr":  {
+                                                                                   "v":  "330 Î©",
+                                                                                   "x":  "67.53",
+                                                                                   "y":  "20.57",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd C",
+                                                                                   "sym":  "R_C"
+                                                                               },
+                                                                        "dv":  {
+                                                                                   "v":  "3V",
+                                                                                   "x":  "75.51",
+                                                                                   "y":  "20.56",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Matning krets D",
+                                                                                   "sym":  "Vs_D"
+                                                                               },
+                                                                        "dr":  {
+                                                                                   "v":  "330 Î©",
+                                                                                   "x":  "91.97",
+                                                                                   "y":  "20.83",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd D",
+                                                                                   "sym":  "R_D"
+                                                                               },
+                                                                        "ev":  {
+                                                                                   "v":  "5V",
+                                                                                   "x":  "0",
+                                                                                   "y":  "74.52",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Matning krets E",
+                                                                                   "sym":  "Vs_E"
+                                                                               },
+                                                                        "er":  {
+                                                                                   "v":  "330 Î©",
+                                                                                   "x":  "17.53",
+                                                                                   "y":  "74.79",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd E",
+                                                                                   "sym":  "R_E"
+                                                                               },
+                                                                        "fv":  {
+                                                                                   "v":  "5V",
+                                                                                   "x":  "25.07",
+                                                                                   "y":  "74.78",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Matning krets F",
+                                                                                   "sym":  "Vs_F"
+                                                                               },
+                                                                        "fr":  {
+                                                                                   "v":  "330 Î©",
+                                                                                   "x":  "42.75",
+                                                                                   "y":  "75.31",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd F",
+                                                                                   "sym":  "R_F"
+                                                                               },
+                                                                        "gv":  {
+                                                                                   "v":  "5V",
+                                                                                   "x":  "50.52",
+                                                                                   "y":  "75.31",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Matning krets G",
+                                                                                   "sym":  "Vs_G"
+                                                                               },
+                                                                        "gr":  {
+                                                                                   "v":  "330 Î©",
+                                                                                   "x":  "68.66",
+                                                                                   "y":  "75.05",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "SeriemotstÃ¥nd G",
+                                                                                   "sym":  "R_G"
+                                                                               }
+                                                                    },
+                                                       "pvs":  {
+
+                                                               }
+                                                   },
+                                             "5":  {
+                                                       "overlays":  {
+                                                                        "vcc":  {
+                                                                                    "v":  "10V",
+                                                                                    "x":  "5.87",
+                                                                                    "y":  "39.33",
+                                                                                    "z":  "30",
+                                                                                    "w":  "1",
+                                                                                    "name":  "MatningsspÃ¤nning",
+                                                                                    "sym":  "Vs"
+                                                                                },
+                                                                        "r1":  {
+                                                                                   "v":  "1 kÎ©",
+                                                                                   "x":  "15.07",
+                                                                                   "y":  "24.4",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R1",
+                                                                                   "sym":  "R1"
+                                                                               },
+                                                                        "r2":  {
+                                                                                   "v":  "1 kÎ©",
+                                                                                   "x":  "25.01",
+                                                                                   "y":  "24.82",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R2",
+                                                                                   "sym":  "R2"
+                                                                               },
+                                                                        "r3":  {
+                                                                                   "v":  "9 kÎ©",
+                                                                                   "x":  "38.77",
+                                                                                   "y":  "24.4",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R3",
+                                                                                   "sym":  "R3"
+                                                                               },
+                                                                        "r4":  {
+                                                                                   "v":  "1 kÎ©",
+                                                                                   "x":  "38.86",
+                                                                                   "y":  "66.92",
+                                                                                   "z":  "31",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R4",
+                                                                                   "sym":  "R4"
+                                                                               },
+                                                                        "r5":  {
+                                                                                   "v":  "1 kÎ©",
+                                                                                   "x":  "49.05",
+                                                                                   "y":  "24.4",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R5",
+                                                                                   "sym":  "R5"
+                                                                               },
+                                                                        "r6":  {
+                                                                                   "v":  "1 kÎ©",
+                                                                                   "x":  "62.36",
+                                                                                   "y":  "23.99",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R6",
+                                                                                   "sym":  "R6"
+                                                                               },
+                                                                        "r7":  {
+                                                                                   "v":  "1 kÎ©",
+                                                                                   "x":  "72.66",
+                                                                                   "y":  "23.16",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R7",
+                                                                                   "sym":  "R7"
+                                                                               },
+                                                                        "r8":  {
+                                                                                   "v":  "9 kÎ©",
+                                                                                   "x":  "86.27",
+                                                                                   "y":  "23.57",
+                                                                                   "z":  "26",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R8",
+                                                                                   "sym":  "R8"
+                                                                               },
+                                                                        "r9":  {
+                                                                                   "v":  "1 kÎ©",
+                                                                                   "x":  "86.67",
+                                                                                   "y":  "67.75",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "MotstÃ¥nd R9",
+                                                                                   "sym":  "R9"
+                                                                               },
+                                                                        "r10":  {
+                                                                                    "v":  "1 kÎ©",
+                                                                                    "x":  "94.38",
+                                                                                    "y":  "23.57",
+                                                                                    "z":  "26",
+                                                                                    "w":  "1",
+                                                                                    "name":  "MotstÃ¥nd R10",
+                                                                                    "sym":  "R10"
+                                                                                }
+                                                                    },
+                                                       "pvs":  {
+
+                                                               }
+                                                   },
+                                             "6":  {
+                                                       "overlays":  {
+                                                                        "vcc":  {
+                                                                                    "v":  "3V",
+                                                                                    "x":  "5.26",
+                                                                                    "y":  "38.27",
+                                                                                    "z":  "35",
+                                                                                    "w":  "1",
+                                                                                    "name":  "MatningsspÃ¤nning",
+                                                                                    "sym":  "Vs"
+                                                                                },
+                                                                        "rc":  {
+                                                                                   "v":  "100 Î©",
+                                                                                   "x":  "82.1",
+                                                                                   "y":  "37.81",
+                                                                                   "z":  "18",
+                                                                                   "w":  "1",
+                                                                                   "name":  "KollektormotstÃ¥nd",
+                                                                                   "sym":  "Rc"
+                                                                               }
+                                                                    },
+                                                       "pvs":  {
+                                                                   "rbA":  "5000",
+                                                                   "rbB":  "15000"
+                                                               }
+                                                   },
+                                             "7":  {
+                                                       "overlays":  {
+                                                                        "vcc":  {
+                                                                                    "v":  "12V",
+                                                                                    "x":  "3.13",
+                                                                                    "y":  "33.42",
+                                                                                    "z":  "34",
+                                                                                    "w":  "1",
+                                                                                    "name":  "MatningsspÃ¤nning",
+                                                                                    "sym":  "Vs"
+                                                                                },
+                                                                        "r2":  {
+                                                                                   "v":  "3.3 kÎ©",
+                                                                                   "x":  "74.41",
+                                                                                   "y":  "22.16",
+                                                                                   "z":  "17",
+                                                                                   "w":  "1",
+                                                                                   "name":  "BasmotstÃ¥nd",
+                                                                                   "sym":  "Rbase"
+                                                                               }
+                                                                    },
+                                                       "pvs":  {
+                                                                   "iloadmA":  "100",
+                                                                   "beta":  "330",
+                                                                   "logicV":  "5",
+                                                                   "logicImaxmA":  "10"
+                                                               }
+                                                   },
+                                             "8":  {
+                                                       "overlays":  {
+                                                                        "v1":  {
+                                                                                   "v":  "1V",
+                                                                                   "x":  "3.5",
+                                                                                   "y":  "33.6",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "IngÃ¥ngsspÃ¤nning 1",
+                                                                                   "sym":  "Vin1"
+                                                                               },
+                                                                        "r2":  {
+                                                                                   "v":  "10 kÎ©",
+                                                                                   "x":  "32.77",
+                                                                                   "y":  "14.92",
+                                                                                   "z":  "16",
+                                                                                   "w":  "1",
+                                                                                   "name":  "IngÃ¥ngsmotstÃ¥nd 1",
+                                                                                   "sym":  "Rin1"
+                                                                               },
+                                                                        "r3":  {
+                                                                                   "v":  "20 kÎ©",
+                                                                                   "x":  "33.25",
+                                                                                   "y":  "44.07",
+                                                                                   "z":  "16",
+                                                                                   "w":  "1",
+                                                                                   "name":  "IngÃ¥ngsmotstÃ¥nd 2",
+                                                                                   "sym":  "Rin2"
+                                                                               },
+                                                                        "v2":  {
+                                                                                   "v":  "2V",
+                                                                                   "x":  "26.24",
+                                                                                   "y":  "56.84",
+                                                                                   "z":  "30",
+                                                                                   "w":  "1",
+                                                                                   "name":  "IngÃ¥ngsspÃ¤nning 2",
+                                                                                   "sym":  "Vin2"
+                                                                               },
+                                                                        "r1":  {
+                                                                                   "v":  "30 kÎ©",
+                                                                                   "x":  "57.5",
+                                                                                   "y":  "13.99",
+                                                                                   "z":  "16",
+                                                                                   "w":  "1",
+                                                                                   "name":  "Ã…terkopplingsmotstÃ¥nd",
+                                                                                   "sym":  "Rf"
+                                                                               }
+                                                                    },
+                                                       "pvs":  {
+
+                                                               }
+                                                   },
+                                             "10":  {
+                                                        "overlays":  {
+                                                                         "v1":  {
+                                                                                    "v":  "12 V",
+                                                                                    "x":  "2.76",
+                                                                                    "y":  "43.67",
+                                                                                    "z":  "18",
+                                                                                    "w":  "1",
+                                                                                    "name":  "MatningsspÃ¤nning",
+                                                                                    "sym":  "Vs"
+                                                                                },
+                                                                         "r1":  {
+                                                                                    "v":  "4.7 kÎ©",
+                                                                                    "x":  "43.62",
+                                                                                    "y":  "72.18",
+                                                                                    "z":  "20",
+                                                                                    "w":  "1",
+                                                                                    "name":  "BasmotstÃ¥nd",
+                                                                                    "sym":  "Rb"
+                                                                                }
+                                                                     },
+                                                        "pvs":  {
+
+                                                                }
+                                                    },
+                                             "13":  {
+                                                        "overlays":  {
+                                                                         "v1":  {
+                                                                                    "v":  "9 V",
+                                                                                    "x":  "15.03",
+                                                                                    "y":  "51.8",
+                                                                                    "z":  "40",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Matningsspanning",
+                                                                                    "sym":  "V1"
+                                                                                },
+                                                                         "r1":  {
+                                                                                    "v":  "220 Î©",
+                                                                                    "x":  "38.22",
+                                                                                    "y":  "37.61",
+                                                                                    "z":  "40",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Resistor",
+                                                                                    "sym":  "R1"
+                                                                                },
+                                                                         "c1":  {
+                                                                                    "v":  "470 ÂµF",
+                                                                                    "x":  "39.89",
+                                                                                    "y":  "71.4",
+                                                                                    "z":  "40",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Kondensator",
+                                                                                    "sym":  "C1"
+                                                                                }
+                                                                     },
+                                                        "pvs":  {
+                                                                    "vs":  "9",
+                                                                    "r":  "220",
+                                                                    "cuF":  "470"
+                                                                }
+                                                    },
+                                             "15":  {
+                                                        "overlays":  {
+                                                                         "v1":  {
+                                                                                    "v":  "9 V",
+                                                                                    "x":  "9.69",
+                                                                                    "y":  "35.45",
+                                                                                    "z":  "72",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Batteri",
+                                                                                    "sym":  "Vs"
+                                                                                },
+                                                                         "r1":  {
+                                                                                    "v":  "100 ohm",
+                                                                                    "x":  "49.2",
+                                                                                    "y":  "28.64",
+                                                                                    "z":  "60",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Seriemotstand",
+                                                                                    "sym":  "R1"
+                                                                                },
+                                                                         "r2":  {
+                                                                                    "v":  "330 ohm",
+                                                                                    "x":  "54.71",
+                                                                                    "y":  "39.91",
+                                                                                    "z":  "60",
+                                                                                    "w":  "1",
+                                                                                    "name":  "LED-motstand",
+                                                                                    "sym":  "R2"
+                                                                                },
+                                                                         "vz":  {
+                                                                                    "v":  "5 V",
+                                                                                    "x":  "49.8",
+                                                                                    "y":  "66.24",
+                                                                                    "z":  "55",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Zenerspanning",
+                                                                                    "sym":  "Vz"
+                                                                                },
+                                                                         "uled":  {
+                                                                                      "v":  "3 V",
+                                                                                      "x":  "79.3",
+                                                                                      "y":  "65.41",
+                                                                                      "z":  "72",
+                                                                                      "w":  "1",
+                                                                                      "name":  "LED-spanningsfall",
+                                                                                      "sym":  "Uled"
+                                                                                  }
+                                                                     },
+                                                        "pvs":  {
+
+                                                                }
+                                                    },
+                                             "16":  {
+                                                        "overlays":  {
+                                                                         "v1":  {
+                                                                                    "v":  "12 V",
+                                                                                    "x":  "11.89",
+                                                                                    "y":  "44.82",
+                                                                                    "z":  "72",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Matningsspanning",
+                                                                                    "sym":  "Vs"
+                                                                                },
+                                                                         "r1":  {
+                                                                                    "v":  "450 ohm",
+                                                                                    "x":  "35.62",
+                                                                                    "y":  "2.01",
+                                                                                    "z":  "70",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Vanster resistor",
+                                                                                    "sym":  "R1"
+                                                                                },
+                                                                         "r2":  {
+                                                                                    "v":  "300 ohm",
+                                                                                    "x":  "56.28",
+                                                                                    "y":  "51.61",
+                                                                                    "z":  "70",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Mittresistor",
+                                                                                    "sym":  "R2"
+                                                                                },
+                                                                         "r3":  {
+                                                                                    "v":  "100 ohm",
+                                                                                    "x":  "61.08",
+                                                                                    "y":  "2.61",
+                                                                                    "z":  "70",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Ovre hoger resistor",
+                                                                                    "sym":  "R3"
+                                                                                },
+                                                                         "r4":  {
+                                                                                    "v":  "200 ohm",
+                                                                                    "x":  "83.13",
+                                                                                    "y":  "50.81",
+                                                                                    "z":  "70",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Hoger resistor",
+                                                                                    "sym":  "R4"
+                                                                                }
+                                                                     },
+                                                        "pvs":  {
+
+                                                                }
+                                                    },
+                                             "17":  {
+                                                        "overlays":  {
+                                                                         "v1":  {
+                                                                                    "v":  "12 V",
+                                                                                    "x":  "9.78",
+                                                                                    "y":  "23.84",
+                                                                                    "z":  "72",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Matningsspanning",
+                                                                                    "sym":  "Vs"
+                                                                                },
+                                                                         "r10":  {
+                                                                                     "v":  "1 kOhm",
+                                                                                     "x":  "54.45",
+                                                                                     "y":  "22.59",
+                                                                                     "z":  "68",
+                                                                                     "w":  "1",
+                                                                                     "name":  "Motstand R10",
+                                                                                     "sym":  "R10"
+                                                                                 },
+                                                                         "hfe1":  {
+                                                                                      "v":  "hFE=300",
+                                                                                      "x":  "36.07",
+                                                                                      "y":  "53.25",
+                                                                                      "z":  "40",
+                                                                                      "w":  "1",
+                                                                                      "name":  "Q1 stromforstarkning",
+                                                                                      "sym":  "hFE1"
+                                                                                  },
+                                                                         "hfe2":  {
+                                                                                      "v":  "hFE=60",
+                                                                                      "x":  "60.12",
+                                                                                      "y":  "72.16",
+                                                                                      "z":  "34",
+                                                                                      "w":  "1",
+                                                                                      "name":  "Q2 stromforstarkning",
+                                                                                      "sym":  "hFE2"
+                                                                                  },
+                                                                         "ilamp":  {
+                                                                                       "v":  "60 mA",
+                                                                                       "x":  "80.92",
+                                                                                       "y":  "31.38",
+                                                                                       "z":  "63",
+                                                                                       "w":  "1",
+                                                                                       "name":  "Lampstrom",
+                                                                                       "sym":  "Ilampa"
+                                                                                   }
+                                                                     },
+                                                        "pvs":  {
+
+                                                                }
+                                                    },
+                                             "18":  {
+                                                        "overlays":  {
+                                                                         "v1":  {
+                                                                                    "v":  "-1 V",
+                                                                                    "x":  "7.73",
+                                                                                    "y":  "41.58",
+                                                                                    "z":  "72",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Vanster ingang",
+                                                                                    "sym":  "V1"
+                                                                                },
+                                                                         "v2":  {
+                                                                                    "v":  "2 V",
+                                                                                    "x":  "31.1",
+                                                                                    "y":  "60.63",
+                                                                                    "z":  "72",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Nedre ingang",
+                                                                                    "sym":  "V2"
+                                                                                },
+                                                                         "r2":  {
+                                                                                    "v":  "10 kOhm",
+                                                                                    "x":  "35.93",
+                                                                                    "y":  "13.75",
+                                                                                    "z":  "67",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Motstand R2",
+                                                                                    "sym":  "R2"
+                                                                                },
+                                                                         "r3":  {
+                                                                                    "v":  "20 kOhm",
+                                                                                    "x":  "35.12",
+                                                                                    "y":  "44.5",
+                                                                                    "z":  "66",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Motstand R3",
+                                                                                    "sym":  "R3"
+                                                                                },
+                                                                         "r1":  {
+                                                                                    "v":  "30 kOhm",
+                                                                                    "x":  "56.92",
+                                                                                    "y":  "13.85",
+                                                                                    "z":  "67",
+                                                                                    "w":  "1",
+                                                                                    "name":  "Aterkopplingsmotstand",
+                                                                                    "sym":  "R1"
+                                                                                }
+                                                                     },
+                                                        "pvs":  {
+
+                                                                }
+                                                    }
+                                         }
+                        }
+}
