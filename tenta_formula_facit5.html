@@ -10,9 +10,17 @@
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:var(--dark)}
 
 /* ── TABS ── */
-#tabs{display:flex;border-bottom:2px solid var(--border);background:#fff;position:sticky;top:0;z-index:900;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+#tabs{display:flex;align-items:center;border-bottom:2px solid var(--border);background:#fff;position:sticky;top:0;z-index:900;box-shadow:0 1px 6px rgba(0,0,0,.08)}
 .tab{padding:.7rem 1.6rem;font-weight:700;font-size:.9rem;cursor:pointer;border-bottom:3px solid transparent;color:var(--muted);transition:color .15s,border-color .15s;user-select:none}
 .tab.on{color:var(--dark);border-bottom-color:var(--dark)}
+.lang-switch{margin-left:auto;display:flex;align-items:center;gap:.35rem;padding:.35rem .55rem .35rem .35rem}
+.lang-btn{border:1.5px solid var(--border);background:#fff;border-radius:999px;padding:.22rem .34rem;line-height:1;cursor:pointer;transition:background .15s,border-color .15s,transform .08s ease;display:inline-flex;align-items:center;justify-content:center;min-width:42px;min-height:32px}
+.lang-btn:hover{background:var(--bg)}
+.lang-btn:active{transform:translateY(1px)}
+.lang-btn.on{background:var(--dark);border-color:var(--dark);box-shadow:0 2px 8px rgba(15,23,42,.12)}
+.lang-flag{display:inline-block;width:24px;height:16px;border-radius:3px;background-position:center;background-repeat:no-repeat;background-size:cover;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 0 0 1px rgba(15,23,42,.12)}
+.lang-flag-sv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Crect width='24' height='16' fill='%23006AA7'/%3E%3Crect x='7' width='4' height='16' fill='%23FECC00'/%3E%3Crect y='6' width='24' height='4' fill='%23FECC00'/%3E%3C/svg%3E")}
+.lang-flag-gb{background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 16%22%3E%3Crect width=%2224%22 height=%2216%22 fill=%22%23012169%22/%3E%3Cpath d=%22M0 0L24 16M24 0L0 16%22 stroke=%22%23FFFFFF%22 stroke-width=%224%22/%3E%3Cpath d=%22M0 0L24 16M24 0L0 16%22 stroke=%22%23C8102E%22 stroke-width=%222%22/%3E%3Crect x=%229%22 width=%226%22 height=%2216%22 fill=%22%23FFFFFF%22/%3E%3Crect y=%225%22 width=%2224%22 height=%226%22 fill=%22%23FFFFFF%22/%3E%3Crect x=%2210%22 width=%224%22 height=%2216%22 fill=%22%23C8102E%22/%3E%3Crect y=%226%22 width=%2224%22 height=%224%22 fill=%22%23C8102E%22/%3E%3C/svg%3E')}
 .view{display:none;padding:1.5rem 1rem 4rem}
 .view.on{display:block}
 
@@ -387,8 +395,12 @@ body.mobile-quiz-mode .calc-bottom .btn-p{flex-basis:100%}
 <body>
 
 <div id="tabs">
-  <div class="tab on" onclick="showTab('quiz')">📋 Quiz</div>
-  <div class="tab" onclick="showTab('editor')">✏️ Overlay-Editor</div>
+  <div id="tab-quiz" class="tab on" onclick="showTab('quiz')">📋 Quiz</div>
+  <div id="tab-editor" class="tab" onclick="showTab('editor')">✏️ Overlay-Editor</div>
+  <div id="lang-switch" class="lang-switch">
+    <button id="lang-btn-sv" type="button" class="lang-btn on" onclick="setUiLanguage('sv')" aria-label="Svenska" title="Svenska"><span class="lang-flag lang-flag-sv" aria-hidden="true"></span></button>
+    <button id="lang-btn-en" type="button" class="lang-btn" onclick="setUiLanguage('en')" aria-label="English" title="English"><span class="lang-flag lang-flag-gb" aria-hidden="true"></span></button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════ QUIZ VIEW ══════════════════════════════════ -->
@@ -2489,7 +2501,10 @@ const Q9_WRONG_OPTIONS=[
   'Större på sommaren eftersom varm luft alltid ger mer ESD än torr vinterluft.',
   'Samma hela året; ESD påverkas inte av luftfuktighet.',
   'Mindre på vintern eftersom elektronik blir kallare och då tål urladdningar bättre.',
-  'Större på sommaren eftersom solen laddar upp kretsarna elektriskt.'
+  'Större på sommaren eftersom solen laddar upp kretsarna elektriskt.',
+  'Mindre på vintern eftersom snö och kyla neutraliserar statisk elektricitet.',
+  'Större på sommaren eftersom högre temperatur alltid innebär mer statisk laddning.',
+  'ESD-risken beror bara på batterispänningen i kretsen, inte på årstid eller luftfuktighet.'
 ];
 
 const Q19_CORRECT_OPTIONS=[
@@ -2662,18 +2677,18 @@ QUESTION_ENGINES[7].facit=function(data){
   const options=buildQ7BCorrectOptions(data);
   return `Formler
 Ib_min = Iload / beta
-URbase_min = Ib_min x Rbase
+URbase_min = Ib_min × Rbase
 A_max = Vs - Veb_on - URbase_min
 
-Med aktuella varden
+Med aktuella värden
 Ib_min = ${fmt(data.IloadmA,2)} mA / ${fmt(data.beta,0)} = ${fmt(data.IbMinmA,3)} mA
-URbase_min = ${fmt(data.IbMinmA,3)} mA x ${formatResistance(data.Rbase)} = ${fmt(data.URbaseMin,3)} V
+URbase_min = ${fmt(data.IbMinmA,3)} mA × ${formatResistance(data.Rbase)} = ${fmt(data.URbaseMin,3)} V
 A_max = ${fmt(data.Vs,2)} - ${fmt(data.VebOn,1)} - ${fmt(data.URbaseMin,3)} = ${fmt(data.Amax,3)} V
 
 Svar a)
-Lampan lyser fullt nar A ligger mellan 0 V och ${fmt(data.Amax,3)} V.
+Lampan lyser fullt när A ligger mellan 0 V och ${fmt(data.Amax,3)} V.
 
-Tre godkanda svar till b)
+Tre godkända svar till b)
 1) ${options[0]}
 
 2) ${options[1]}
@@ -2806,17 +2821,44 @@ function rerenderAfterValueChange(qn){
   if(document.getElementById('qcon'))buildQuiz();
   if(el('v-editor')&&el('v-editor').classList.contains('on')&&edQn===qn)renderEdQ();
 }
+function isMcqRandomQuestion(qn){
+  return qn===2 || qn===9 || qn===19;
+}
+function hasQuestionRandomizer(qn){
+  const engine=QUESTION_ENGINES[qn];
+  return !!((engine&&engine.randomize) || isMcqRandomQuestion(qn));
+}
+function rerollMcqQuestion(qn){
+  clearStoredAnswersForQuestion(qn);
+  switch(qn){
+    case 2:
+      getQ2Exercise();
+      break;
+    case 9:
+      getQ9Exercise();
+      break;
+    case 19:
+      getQ19Exercise();
+      break;
+  }
+}
 function randomizeAllSupportedCore(){
   Object.keys(QUESTION_ENGINES).forEach(qn=>{
     const engine=QUESTION_ENGINES[qn];
     if(engine&&engine.randomize)engine.randomize(Number(qn));
   });
+  [2,9,19].forEach(qn=>rerollMcqQuestion(qn));
 }
 function randomizeQuestion(qn){
   if(testModeActive)return;
   const engine=QUESTION_ENGINES[qn];
-  if(!engine||!engine.randomize)return;
-  engine.randomize(qn);
+  if(engine&&engine.randomize){
+    engine.randomize(qn);
+  }else if(isMcqRandomQuestion(qn)){
+    rerollMcqQuestion(qn);
+  }else{
+    return;
+  }
   rerenderAfterValueChange(qn);
 }
 function resetSupportedQuestionValues(qnOverride){
@@ -2939,7 +2981,7 @@ function updateTestModeUI(){
   if(randomBtn)randomBtn.hidden=testModeActive;
   if(vanillaBtn)vanillaBtn.hidden=testModeActive;
   if(submitBtn)submitBtn.hidden=!testModeActive;
-  if(testBtn)testBtn.textContent=testModeActive?'Avbryt testlage':'Starta testlage';
+  if(testBtn)testBtn.textContent=testModeActive?tr('Avbryt testläge'):tr('Starta testläge');
   if(editorTab)editorTab.classList.toggle('locked',testModeActive);
   if(!banner)return;
   if(!testModeActive){
@@ -3228,7 +3270,7 @@ function autoCheckQuestion(q){
     case 1:
       return data?near(parseUserNum(LS.get('my_q1')),data.IrightmA,0.08,0.25):false;
     case 2:
-      return (LS.get('my_q2choice')||'')===getQ2Exercise().correct;
+      return getCanonicalMcqChoice('my_q2choice',getQ2Exercise())===getExerciseRawCorrect(getQ2Exercise());
     case 3:
       return data
         ? near(parseUserNum(LS.get('my_q3a')),data.VR1,0.08,0.15) &&
@@ -3250,7 +3292,7 @@ function autoCheckQuestion(q){
       const lo=parseUserNum(LS.get('my_q7lo'));
       const hi=parseUserNum(LS.get('my_q7hi'));
       const intervalOk=near(lo,0,0.05,0.2) && near(hi,data.Amax,0.08,0.3);
-      const choiceOk=(LS.get('my_q7bchoice')||'')===getQ7BExercise().correct;
+      const choiceOk=getCanonicalMcqChoice('my_q7bchoice',getQ7BExercise())===getExerciseRawCorrect(getQ7BExercise());
       return intervalOk && choiceOk;
     }
     case 8:
@@ -3261,7 +3303,7 @@ function autoCheckQuestion(q){
           near(parseUserNum(LS.get('my_q8r3')),data.Rin2/1000,0.08,0.25)
         : false;
     case 9:
-      return (LS.get('my_q9choice')||'')===getQ9Exercise().correct;
+      return getCanonicalMcqChoice('my_q9choice',getQ9Exercise())===getExerciseRawCorrect(getQ9Exercise());
     case 10:
       return (LS.get('my_q10')||'')==='flyback';
     case 11:
@@ -3292,7 +3334,7 @@ function autoCheckQuestion(q){
     case 18:
       return data?near(parseUserNum(LS.get('my_q18')),data.Vout,0.08,0.08):false;
     case 19:
-      return (LS.get('my_q19choice')||'')===getQ19Exercise().correct;
+      return getCanonicalMcqChoice('my_q19choice',getQ19Exercise())===getExerciseRawCorrect(getQ19Exercise());
     default:
       return false;
   }
@@ -3464,8 +3506,10 @@ function makeCard(q,qi){
   };
   ar.appendChild(autoBtn);
   ar.appendChild(autoMsg);
-  if(QUESTION_ENGINES[dq.n]){
-    const randBtn=mk('button','btn-s','🎲 Ny variant');
+  if(hasQuestionRandomizer(dq.n)){
+    const randBtn=mk('button','btn-s','🎲');
+    randBtn.title=tr('Ny variant');
+    randBtn.setAttribute('aria-label',tr('Ny variant'));
     randBtn.onclick=()=>randomizeQuestion(dq.n);
     ar.appendChild(randBtn);
   }
@@ -3559,24 +3603,7 @@ function buildCopyExercise(key,label,text){
 }
 
 function buildQ9TextPanel(){
-  const ex=getQ9Exercise();
-  const current=LS.get('my_q9choice')||'';
-  const panel=mk('div','textpanel');
-  const head=mk('div','textpanel-head');
-  head.appendChild(mk('div','textpanel-title','Välj ett svar'));
-  const body=mk('div','textpanel-body','Välj det alternativ som bäst beskriver hur ESD-risken förändras mellan vinter och sommar.');
-  const options=mk('div','mcq-wrap');
-  ex.options.forEach(opt=>{
-    const btn=mk('button','mcq-option',opt);
-    if(current===opt)btn.classList.add('on');
-    btn.onclick=()=>{
-      LS.set('my_q9choice',opt);
-      buildQuiz();
-    };
-    options.appendChild(btn);
-  });
-  panel.append(head,body,options);
-  return panel;
+  return buildMcqTextPanel('Välj ett svar','Välj det alternativ som bäst beskriver hur ESD-risken förändras mellan vinter och sommar.',getQ9Exercise(),'my_q9choice');
 }
 
 function buildQ19TextPanel(){
@@ -3600,18 +3627,48 @@ function buildQ19TextPanel(){
   return panel;
 }
 
-function buildMcqTextPanel(title,body,exercise,storeKey){
+function getExerciseRawOptions(exercise){
+  if(exercise && Array.isArray(exercise.rawOptions) && exercise.rawOptions.length)return exercise.rawOptions.slice();
+  return exercise && Array.isArray(exercise.options) ? exercise.options.slice() : [];
+}
+function getExerciseRawCorrect(exercise){
+  return exercise && exercise.rawCorrect ? exercise.rawCorrect : (exercise && exercise.correct ? exercise.correct : '');
+}
+function getCanonicalMcqChoice(storeKey,exercise){
   const current=LS.get(storeKey)||'';
+  if(!current)return '';
+  const rawOptions=getExerciseRawOptions(exercise);
+  if(rawOptions.includes(current))return current;
+  const labels=exercise && Array.isArray(exercise.options) ? exercise.options : [];
+  const idx=labels.indexOf(current);
+  if(idx>=0){
+    const canonical=rawOptions[idx]||current;
+    if(canonical!==current)LS.set(storeKey,canonical);
+    return canonical;
+  }
+  const translatedIdx=rawOptions.findIndex(opt=>translateToEnglish(opt)===current);
+  if(translatedIdx>=0){
+    const canonical=rawOptions[translatedIdx]||current;
+    if(canonical!==current)LS.set(storeKey,canonical);
+    return canonical;
+  }
+  return current;
+}
+function buildMcqTextPanel(title,body,exercise,storeKey){
+  const current=getCanonicalMcqChoice(storeKey,exercise);
+  const rawOptions=getExerciseRawOptions(exercise);
+  const displayOptions=exercise && Array.isArray(exercise.options) ? exercise.options : rawOptions;
   const panel=mk('div','textpanel');
   const head=mk('div','textpanel-head');
   head.appendChild(mk('div','textpanel-title',title));
   const bodyEl=mk('div','textpanel-body',body);
   const options=mk('div','mcq-wrap');
-  (exercise.options||[]).forEach(opt=>{
+  displayOptions.forEach((opt,index)=>{
+    const rawValue=rawOptions[index]||opt;
     const btn=mk('button','mcq-option',opt);
-    if(current===opt)btn.classList.add('on');
+    if(current===rawValue)btn.classList.add('on');
     btn.onclick=()=>{
-      LS.set(storeKey,opt);
+      LS.set(storeKey,rawValue);
       buildQuiz();
     };
     options.appendChild(btn);
@@ -3630,8 +3687,8 @@ function buildQ7BPanel(){
 
 function mkSel(key,opts){
   const s=document.createElement('select');s.className='ans-sel';
-  s.appendChild(Object.assign(document.createElement('option'),{value:'',textContent:'- välj -'}));
-  opts.forEach(([v,l])=>{const o=document.createElement('option');o.value=v;o.textContent=l;s.appendChild(o);});
+  s.appendChild(Object.assign(document.createElement('option'),{value:'',textContent:tr('- välj -')}));
+  opts.forEach(([v,l])=>{const o=document.createElement('option');o.value=v;o.textContent=tr(l);s.appendChild(o);});
   s.value=LS.get(key)||'';s.onchange=()=>LS.set(key,s.value);return s;
 }
 function mkLetBtns(key,letters,multi){
@@ -3848,12 +3905,12 @@ const q12TouchSelection={};
 
 function setQ12SlotValue(storeKey,drop,val){
   if(val){
-    drop.textContent=val;
+    drop.textContent=tr(val);
     drop.classList.add('filled');
     LS.set(storeKey,val);
   }else{
     LS.del(storeKey);
-    drop.textContent='Dra hit...';
+    drop.textContent=tr('Dra hit...');
     drop.classList.remove('filled');
   }
 }
@@ -3869,16 +3926,16 @@ function refreshQ12TouchUi(key,wrap){
   const help=wrap.querySelector('.lego-help');
   if(help){
     help.textContent=selected
-      ? 'Vald komponent: '+selected+'. Tryck pa R1 eller R2 for att placera.'
-      : 'Mobil: tryck pa en komponent och tryck sedan pa R1 eller R2.';
+      ? tr('Vald komponent:')+' '+tr(selected)+'. '+tr('Tryck på R1 eller R2 för att placera.')
+      : tr('Mobil: tryck på en komponent och tryck sedan på R1 eller R2.');
   }
 }
 
 function buildQ12Dual(key){
   const wrap=mk('div','lego-wrap');
   const pool=mk('div','lego-pool');
-  ['Kondensator (C)','Induktor (L)','Motstand (R)','Diod (D)'].forEach(c=>{
-    const chip=mk('div','lego-chip',c);
+  ['Kondensator (C)','Induktor (L)','Motstånd (R)','Diod (D)'].forEach(c=>{
+    const chip=mk('div','lego-chip',tr(c));
     chip.dataset.val=c;
     chip.draggable=true;
     chip.addEventListener('dragstart',e=>e.dataTransfer.setData('text',c));
@@ -3893,7 +3950,7 @@ function buildQ12Dual(key){
     const row=mk('div','lego-row');
     const tag=mk('div','lego-tag',label+':');
     const storeKey=key+'_'+slot;
-    const drop=mk('div','lego-drop',LS.get(storeKey)||'Dra hit...');
+    const drop=mk('div','lego-drop',LS.get(storeKey)?tr(LS.get(storeKey)):tr('Dra hit...'));
     if(LS.get(storeKey))drop.classList.add('filled');
     drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('over');});
     drop.addEventListener('dragleave',()=>drop.classList.remove('over'));
@@ -3915,7 +3972,7 @@ function buildQ12Dual(key){
     return row;
   };
 
-  const help=mk('div','lego-help','Mobil: tryck pa en komponent och tryck sedan pa R1 eller R2.');
+  const help=mk('div','lego-help',tr('Mobil: tryck på en komponent och tryck sedan på R1 eller R2.'));
   wrap.append(pool,help,makeDropRow('r1','R1'),makeDropRow('r2','R2'));
   refreshQ12TouchUi(key,wrap);
   return wrap;
@@ -4930,6 +4987,15 @@ function renderStudySummary(summary){
   root.classList.add('show');
 }
 
+function formatPracticePreview(indices,limit=4){
+  const list=(indices||[]).slice(0,limit);
+  const prefix=getUiLanguage()==='en'?'Q':'F';
+  const preview=list.map(qi=>`${prefix}${Q[qi].n}`).join(', ');
+  const extra=Math.max(0,(indices||[]).length-list.length);
+  const suffix=extra ? (getUiLanguage()==='en' ? ` and ${extra} more.` : ` och ${extra} till.`) : '.';
+  return `${preview}${suffix}`;
+}
+
 function updatePracticeModeUI(){
   const banner=el('practice-banner');
   if(!banner)return;
@@ -5011,7 +5077,7 @@ function updateTestModeUI(){
   if(profileImportBtn)profileImportBtn.hidden=testModeActive;
   if(weakPracticeBtn)weakPracticeBtn.hidden=testModeActive;
   if(submitBtn)submitBtn.hidden=!testModeActive;
-  if(testBtn)testBtn.textContent=testModeActive?'Avbryt testläge':'Starta testläge';
+  if(testBtn)testBtn.textContent=testModeActive?tr('Avbryt testläge'):tr('Starta testläge');
   if(editorTab)editorTab.classList.toggle('locked',testModeActive);
   if(banner){
     if(!testModeActive){
@@ -5162,11 +5228,12 @@ function updatePracticeModeUI(){
   if(testModeActive)return;
   if(isPracticeModeActive()){
     const activeIndices=getActiveQuestionIndices();
-    const preview=activeIndices.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
-    const more=activeIndices.length>4?` och ${activeIndices.length-4} till.`:'.';
+    const previewText=formatPracticePreview(activeIndices);
     const main=mk('div','practice-banner-main');
-    main.appendChild(mk('div','practice-banner-title','Anpassat \u00f6vningspass'));
-    main.appendChild(mk('div','practice-banner-text',`Visar ${activeIndices.length} fr\u00e5gor du beh\u00f6vt \u00f6va mer p\u00e5, eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
+    main.appendChild(mk('div','practice-banner-title','Anpassat övningspass'));
+    main.appendChild(mk('div','practice-banner-text',getUiLanguage()==='en'
+      ? `Showing ${activeIndices.length} questions you needed more practice on, or have not answered yet: ${previewText}`
+      : `Visar ${activeIndices.length} frågor du behövt öva mer på, eller inte svarat på än: ${previewText}`));
     const showAllBtn=mk('button','btn-s','Visa alla fr\u00e5gor igen');
     showAllBtn.onclick=()=>clearPracticeMode();
     banner.append(main,showAllBtn);
@@ -5175,12 +5242,13 @@ function updatePracticeModeUI(){
   }
   const weak=rankWeakQuestionIndices(6);
   if(!weak.length)return;
-  const preview=weak.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
-  const more=weak.length>4?` och ${weak.length-4} till.`:'.';
+  const previewText=formatPracticePreview(weak);
   const main=mk('div','practice-banner-main');
-  main.appendChild(mk('div','practice-banner-title','\u00d6va vidare'));
-  main.appendChild(mk('div','practice-banner-text',`Jag har hittat fr\u00e5gor du ofta missar eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
-  const startBtn=mk('button','btn-s','\u00d6va p\u00e5 svaga fr\u00e5gor');
+  main.appendChild(mk('div','practice-banner-title','Öva vidare'));
+  main.appendChild(mk('div','practice-banner-text',getUiLanguage()==='en'
+    ? `I found questions you often miss or have not answered yet: ${previewText}`
+    : `Jag har hittat frågor du ofta missar eller inte svarat på än: ${previewText}`));
+  const startBtn=mk('button','btn-s','Öva på svaga frågor');
   startBtn.onclick=()=>startWeakPracticeSession();
   banner.append(main,startBtn);
   banner.classList.add('show');
@@ -5280,22 +5348,7 @@ function getStoredMcqExercise(key,correctOptions,wrongOptions,signature){
 }
 
 function getQ9Exercise(){
-  const raw=LS.get('q9_variant');
-  if(raw){
-    try{
-      const data=JSON.parse(raw);
-      if(data && data.correct && Array.isArray(data.options)){
-        const fixed={correct:normalizeExerciseText(data.correct),options:data.options.map(normalizeExerciseText)};
-        LS.set('q9_variant',JSON.stringify(fixed));
-        return fixed;
-      }
-    }catch(e){}
-  }
-  const correct=pick(Q9_CORRECT_OPTIONS);
-  const wrongs=shuffle(Q9_WRONG_OPTIONS).slice(0,3);
-  const data={correct,options:shuffle([correct,...wrongs])};
-  LS.set('q9_variant',JSON.stringify(data));
-  return data;
+  return getStoredMcqExercise('q9_variant',Q9_CORRECT_OPTIONS,Q9_WRONG_OPTIONS,'q9_mcq_v2');
 }
 
 function getQ19Exercise(){
@@ -5327,7 +5380,10 @@ function getQ19Exercise(){
     'Större på sommaren eftersom varm luft alltid ger mer ESD än torr vinterluft.',
     'Samma hela året; ESD påverkas inte av luftfuktighet.',
     'Mindre på vintern eftersom elektronik blir kallare och då tål urladdningar bättre.',
-    'Större på sommaren eftersom solen laddar upp kretsarna elektriskt.'
+    'Större på sommaren eftersom solen laddar upp kretsarna elektriskt.',
+    'Mindre på vintern eftersom snö och kyla neutraliserar statisk elektricitet.',
+    'Större på sommaren eftersom högre temperatur alltid innebär mer statisk laddning.',
+    'ESD-risken beror bara på batterispänningen i kretsen, inte på årstid eller luftfuktighet.'
   );
   Q19_CORRECT_OPTIONS.splice(0,Q19_CORRECT_OPTIONS.length,
     'En NPN-transistor leder så länge den får basström, medan en tyristor kan triggas med gate-ström och sedan fortsätta leda tills strömmen bryts eller sjunker under hållströmmen.',
@@ -5376,7 +5432,15 @@ Tre godkända svar
 3) ${Q2_CORRECT_OPTIONS[2]}`;
   }
   if(q9){
+    q9.type='Välj svar';
     q9.qtext='ESD-urladdningar kan skada elektronik. Är risken för problem på grund av ESD större eller mindre på vintern jämfört med sommaren? Motivera ert svar.';
+    q9.facit=`Regel
+Risken för ESD är större när luften är torrare, och det är den ofta på vintern.
+
+Tre godkända svar
+1) ${Q9_CORRECT_OPTIONS[0]}
+2) ${Q9_CORRECT_OPTIONS[1]}
+3) ${Q9_CORRECT_OPTIONS[2]}`;
   }
   if(q12){
     q12.facit=`a) Lågpass
@@ -5525,44 +5589,44 @@ function buildQ7BPanel(){
 
 function mkSel(key,opts){
   const s=document.createElement('select');s.className='ans-sel';
-  s.appendChild(Object.assign(document.createElement('option'),{value:'',textContent:'- välj -'}));
-  opts.forEach(([v,l])=>{const o=document.createElement('option');o.value=v;o.textContent=l;s.appendChild(o);});
+  s.appendChild(Object.assign(document.createElement('option'),{value:'',textContent:tr('- välj -')}));
+  opts.forEach(([v,l])=>{const o=document.createElement('option');o.value=v;o.textContent=tr(l);s.appendChild(o);});
   s.value=LS.get(key)||'';s.onchange=()=>LS.set(key,s.value);return s;
 }
 
 const buildAnswerUIBase=buildAnswerUI;
 buildAnswerUI=function(q,qi,ab){
   if(q.n===12){
-    mkAlbl(ab,'a) Lågpass - dra komponent till R1 eller R2:');
+    mkAlbl(ab,tr('a) Lågpass - dra komponent till R1 eller R2:'));
     ab.appendChild(buildQ12Dual('q12a'));
-    mkAlbl(ab,'b) Högpass - dra komponent till R1 eller R2:');
+    mkAlbl(ab,tr('b) Högpass - dra komponent till R1 eller R2:'));
     ab.appendChild(buildQ12Dual('q12b'));
     return;
   }
   if(q.n===14){
-    mkAlbl(ab,'Ersättningsresistans mellan A och B:');
+    mkAlbl(ab,tr('Ersättningsresistans mellan A och B:'));
     ab.appendChild(mkSubrow(mkNum('my_q14','100','105px'),'ohm'));
     return;
   }
   if(q.n===15){
-    mkAlbl(ab,'Ström genom lysdioden:');
+    mkAlbl(ab,tr('Ström genom lysdioden:'));
     ab.appendChild(mkSubrow(mkNum('my_q15','6.1','105px'),'mA'));
     return;
   }
   if(q.n===16){
-    mkAlbl(ab,'a) Vilket motstånd får högst effekt?');
+    mkAlbl(ab,tr('a) Vilket motstånd får högst effekt?'));
     ab.appendChild(mkChoiceBtns('my_q16a',[
       ['100','100 ohm'],
       ['200','200 ohm'],
       ['300','300 ohm'],
       ['450','450 ohm'],
     ]));
-    mkAlbl(ab,'b) Effekt i detta motstånd:');
+    mkAlbl(ab,tr('b) Effekt i detta motstånd:'));
     ab.appendChild(mkSubrow(mkNum('my_q16b','0.18','105px'),'W'));
     return;
   }
   if(q.n===17){
-    mkAlbl(ab,'Minsta Iin för full ljusstyrka:');
+    mkAlbl(ab,tr('Minsta Iin för full ljusstyrka:'));
     ab.appendChild(mkSubrow(mkNum('my_q17','3.3','105px'),'uA'));
     return;
   }
@@ -5572,7 +5636,7 @@ buildAnswerUI=function(q,qi,ab){
     return;
   }
   if(q.n===19){
-    mkAlbl(ab,'Välj ett av svarsalternativen ovan.');
+    mkAlbl(ab,tr('Välj ett av svarsalternativen ovan.'));
     return;
   }
   return buildAnswerUIBase(q,qi,ab);
@@ -6007,11 +6071,12 @@ function updatePracticeModeUI(){
   if(testModeActive)return;
   if(isPracticeModeActive()){
     const activeIndices=getActiveQuestionIndices();
-    const preview=activeIndices.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
-    const more=activeIndices.length>4?` och ${activeIndices.length-4} till.`:'.';
+    const previewText=formatPracticePreview(activeIndices);
     const main=mk('div','practice-banner-main');
-    main.appendChild(mk('div','practice-banner-title','Anpassat \u00f6vningspass'));
-    main.appendChild(mk('div','practice-banner-text',`Visar ${activeIndices.length} fr\u00e5gor du beh\u00f6vt \u00f6va mer p\u00e5, eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
+    main.appendChild(mk('div','practice-banner-title','Anpassat övningspass'));
+    main.appendChild(mk('div','practice-banner-text',getUiLanguage()==='en'
+      ? `Showing ${activeIndices.length} questions you needed more practice on, or have not answered yet: ${previewText}`
+      : `Visar ${activeIndices.length} frågor du behövt öva mer på, eller inte svarat på än: ${previewText}`));
     const showAllBtn=mk('button','btn-s','Visa alla fr\u00e5gor igen');
     showAllBtn.onclick=()=>clearPracticeMode();
     banner.append(main,showAllBtn);
@@ -6020,12 +6085,13 @@ function updatePracticeModeUI(){
   }
   const weak=rankWeakQuestionIndices(6);
   if(!weak.length)return;
-  const preview=weak.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
-  const more=weak.length>4?` och ${weak.length-4} till.`:'.';
+  const previewText=formatPracticePreview(weak);
   const main=mk('div','practice-banner-main');
-  main.appendChild(mk('div','practice-banner-title','\u00d6va vidare'));
-  main.appendChild(mk('div','practice-banner-text',`Jag har hittat fr\u00e5gor du ofta missar eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
-  const startBtn=mk('button','btn-s','\u00d6va p\u00e5 svaga fr\u00e5gor');
+  main.appendChild(mk('div','practice-banner-title','Öva vidare'));
+  main.appendChild(mk('div','practice-banner-text',getUiLanguage()==='en'
+    ? `I found questions you often miss or have not answered yet: ${previewText}`
+    : `Jag har hittat frågor du ofta missar eller inte svarat på än: ${previewText}`));
+  const startBtn=mk('button','btn-s','Öva på svaga frågor');
   startBtn.onclick=()=>startWeakPracticeSession();
   banner.append(main,startBtn);
   banner.classList.add('show');
@@ -7899,8 +7965,8 @@ function syncCalculatorInsertModeUi(){
   if(!btn)return;
   const numeric=!!answerCalculatorState.insertNumbers;
   btn.classList.toggle('on',numeric);
-  btn.textContent=numeric?'Visa namn':'Visa nummer';
-  btn.title=numeric?'Infogning sker nu som tal. Tryck for att ga tillbaka till namn/symboler.':'Infogning sker nu som namn/symboler. Tryck for att byta till tal.';
+  btn.textContent=tr(numeric?'Visa namn':'Visa nummer');
+  btn.title=tr(numeric?'Infogning sker nu som tal. Tryck för att gå tillbaka till namn/symboler.':'Infogning sker nu som namn/symboler. Tryck för att byta till tal.');
   btn.setAttribute('aria-pressed',numeric?'true':'false');
 }
 function toggleCalculatorInsertNumbers(force){
@@ -8136,7 +8202,7 @@ function getCalculatorLineFormulaParts(lineText){
 function evaluateCalculatorEditorLine(lineIndex){
   const lines=getCalculatorNoteLines(answerCalculatorState.note);
   const parts=getCalculatorLineFormulaParts(lines[lineIndex]||'');
-  if(!parts)return {ok:false,error:'Skriv en formel forst.'};
+  if(!parts)return {ok:false,error:tr('Skriv en formel först.')};
   const previousNote=lines.slice(0,lineIndex).join('\n');
   const previousAnalysis=analyzeCalculatorNotes(previousNote,answerCalculatorState.availableValues);
   const out=evaluateCalculatorExpression(parts.expr,previousAnalysis.known||{});
@@ -8220,7 +8286,7 @@ function renderCalculatorNotesEditor(){
     }else{
       input.textContent=line;
     }
-    input.setAttribute('data-placeholder',index===0?'Skriv en formel och avsluta med =':'');
+    input.setAttribute('data-placeholder',index===0?tr('Skriv en formel och avsluta med ='):'');
     if(mobileInputSuppressed){
       input.setAttribute('aria-readonly','true');
       input.setAttribute('tabindex','0');
@@ -8632,9 +8698,9 @@ calculatorEvaluate=function(){
   if(noteAnalysis.target && (noteAnalysis.target.type==='solved' || noteAnalysis.target.type==='given') && Number.isFinite(noteAnalysis.target.value)){
     answerCalculatorState.result=formatCalculatorNumber(noteAnalysis.target.value);
   }else if(noteAnalysis.target && noteAnalysis.target.missing && noteAnalysis.target.missing.length){
-    answerCalculatorState.result='saknar '+noteAnalysis.target.missing.join(', ');
+    answerCalculatorState.result='missing '+noteAnalysis.target.missing.join(', ');
   }else{
-    answerCalculatorState.result='Skriv en formel forst.';
+    answerCalculatorState.result=tr('Skriv en formel först.');
   }
   renderAnswerCalculator();
 };
@@ -8689,8 +8755,561 @@ normalizeCalculatorFormulaSource=function(text){
     .replace(/(?<=[0-9A-Za-z_)])\s*[xX]\s*(?=[0-9A-Za-z_(])/g,'*');
 };
 
+const UI_LANG_KEY='ui_lang';
+let uiLanguage=(LS.get(UI_LANG_KEY)==='en')?'en':'sv';
+let languageApplyQueued=false;
+let languageObserver=null;
+
+const I18N_EXACT_EN={
+  'Quiz':'Quiz',
+  'Overlay-Editor':'Overlay Editor',
+  'Visa resultat':'Show results',
+  'Börja om':'Start over',
+  'Nya övningsvärden':'New practice values',
+  '🎲 Nya övningsvärden':'🎲 New practice values',
+  'Vanilla alla':'Default all',
+  'Vanilla värden':'Default values',
+  'Ladda ner profil (.json)':'Download profile (.json)',
+  'Ladda upp profil (.json)':'Upload profile (.json)',
+  'Öva på svaga frågor':'Practice weak questions',
+  'Testläge':'Test mode',
+  'Starta testläge':'Start test mode',
+  'Avbryt testläge':'Cancel test mode',
+  'Rätta test':'Check test',
+  'Föregående':'Previous',
+  'Nästa':'Next',
+  'Kryss i ruta':'Tick the box',
+  'Välj ett svar':'Choose one answer',
+  'Valj ett svar':'Choose one answer',
+  'Del b':'Part b',
+  'Vilka transistorer leder? (T1=R2, T2=R5, T3=R7, T4=R10)':'Which transistors conduct? (T1=R2, T2=R5, T3=R7, T4=R10)',
+  'a) Spänningsintervall:':'a) Voltage range:',
+  'b) Välj rätt lösning:':'b) Choose the correct solution:',
+  'b) Valj ratt losning:':'b) Choose the correct solution:',
+  'Välj det alternativ som bäst beskriver temperaturens inverkan bäst.':'Choose the option that best describes the effect of temperature.',
+  'Välj det alternativ som beskriver temperaturens inverkan bast.':'Choose the option that best describes the effect of temperature.',
+  'Välj den lösning som bäst uppfyller kravet för punkt B.':'Choose the solution that best satisfies the requirement for point B.',
+  'Valj den losning som bast uppfyller kravet for punkt B.':'Choose the solution that best satisfies the requirement for point B.',
+  'Välj det alternativ som är korrekt formulerat.':'Choose the option that is correctly phrased.',
+  'Valj det alternativ som ar korrekt formulerat.':'Choose the option that is correctly phrased.',
+  'Välj det alternativ som bäst beskriver hur ESD-risken förändras mellan vinter och sommar.':'Choose the option that best describes how ESD risk changes between winter and summer.',
+  'Rätta direkt':'Check now',
+  'Visa facit / formel':'Show answer / formula',
+  '✓ Rätt':'✓ Correct',
+  '✗ Fel':'✗ Wrong',
+  'Ny variant':'New variant',
+  'Svar':'Answer',
+  'Välj ett av svarsalternativen ovan.':'Choose one of the answer options above.',
+  'Valj ett av svarsalternativen ovan.':'Choose one of the answer options above.',
+  'Ström i högra grenen I':'Current in the right branch I',
+  'Mobil: tryck på en komponent och tryck sedan på R1 eller R2.':'Mobile: tap a component, then tap R1 or R2.',
+  'Mobil: tryck pa en komponent och tryck sedan pa R1 eller R2.':'Mobile: tap a component, then tap R1 or R2.',
+  'Byt ut:':'Replace:',
+  'Mot:':'With:',
+  'Byt:':'Replace:',
+  'Dra hit...':'Drop here...',
+  'Dra hit…':'Drop here...',
+  'Anpassat övningspass':'Custom practice set',
+  'Öva vidare':'Keep practicing',
+  'Skapa anpassat övningspass':'Create custom practice set',
+  'Visa alla frågor igen':'Show all questions again',
+  'Testläge aktivt':'Test mode active',
+  'Facit, självrättning och nya varianter är låsta tills du lämnar in.':'Answer sheet, self-checking and new variants are locked until you submit.',
+  'Testläge aktivt: facit och rättning visas när du lämnar in.':'Test mode active: answers and checking appear when you submit.',
+  'Rätt svar.':'Correct answer.',
+  'Inte rätt ännu.':'Not correct yet.',
+  'Ingen markerad':'Nothing selected',
+  'Inte markerad ännu':'Not marked yet',
+  'Markerad som rätt':'Marked correct',
+  'Markerad som fel':'Marked wrong',
+  'Inte svarad än':'Not answered yet',
+  'Senast fel':'Last time wrong',
+  'Utmärkt! VG-nivå':'Excellent! Top grade level',
+  'Godkänt!':'Passed!',
+  'Fortsätt öva!':'Keep practicing!',
+  'Skriv ditt svar...':'Write your answer...',
+  'Skriv av texten exakt...':'Copy the text exactly...',
+  'Formel / lösning':'Formula / solution',
+  'Visa nummer':'Show numbers',
+  'Visa namn':'Show names',
+  'Backa':'Backspace',
+  'Tom steg':'Clear steps',
+  'Använd resultat':'Use result',
+  'Skriv en formel och avsluta med =':'Write a formula and end with =',
+  'Skriv en formel först.':'Write a formula first.',
+  'Skriv en formel forst.':'Write a formula first.',
+  'Klicka eller dra en ruta in i skrivytan. Avsluta en rad med = och tryck Enter så visas resultatet i en blå ruta.':'Click or drag a chip into the writing area. End a line with = and press Enter to show the result in a blue box.',
+  'Klicka eller dra en ruta in i skrivytan. Avsluta en rad med = och tryck Enter sa visas resultatet i en bla ruta.':'Click or drag a chip into the writing area. End a line with = and press Enter to show the result in a blue box.',
+  'Klicka på ett siffersvar':'Tap a numeric answer',
+  'Klicka pa ett siffersvar':'Tap a numeric answer',
+  'Här kan du skriva upp stegen och använda resultatet i svaret.':'Here you can write down the steps and use the result in the answer.',
+  'Har kan du skriva upp stegen och anvanda resultatet i svaret.':'Here you can write down the steps and use the result in the answer.',
+  'Visa fråga':'Show question',
+  'Visa fraga':'Show question',
+  'Rensa':'Clear',
+  'Stäng':'Close',
+  'Stang':'Close',
+  'Infogning sker nu som tal. Tryck för att gå tillbaka till namn/symboler.':'Numbers are inserted now. Tap to switch back to names/symbols.',
+  'Infogning sker nu som tal. Tryck for att ga tillbaka till namn/symboler.':'Numbers are inserted now. Tap to switch back to names/symbols.',
+  'Infogning sker nu som namn/symboler. Tryck för att byta till tal.':'Names/symbols are inserted now. Tap to switch to numbers.',
+  'Infogning sker nu som namn/symboler. Tryck for att byta till tal.':'Names/symbols are inserted now. Tap to switch to numbers.',
+  'Miniräknare':'Calculator',
+  'Formler':'Formulas',
+  'Med aktuella värden':'With current values',
+  'Tre godkända svar till b)':'Three accepted answers for b)',
+  'Tre godkanda svar till b)':'Three accepted answers for b)',
+  'Se facit.':'See answer sheet.',
+  'Öppen':'Open',
+  'Beräkning':'Calculation',
+  'Del a-b - Transistor':'Part a-b - transistor',
+  'Del a-b - RC':'Part a-b - RC',
+  'Del a-c - Switchad omvandling':'Part a-c - switching converter',
+  'Lysdioder':'LEDs',
+  'Transistorer':'Transistors',
+  'Filter':'Filter',
+  'Effekt i motstånd':'Power in resistor',
+  'Tvåstegstransistor för lampa':'Two-stage transistor for lamp',
+  'Beräkning - Zener/LED':'Calculation - Zener/LED',
+  'Vilken ar ersattningsresistansen mellan A och B nedan?':'What is the equivalent resistance between A and B below?',
+  'Hur stor är strömmen i högra grenen I nedan?':'How large is the current in the right branch I below?',
+  'Hur stor ar strommen i hogra grenen I nedan?':'How large is the current in the right branch I below?',
+  'Antag att vi mäter spänningen över ett motstånd som det går en konstant ström igenom, samt en kiseldiod (med spänning i framriktningen) som det också går en konstant ström igenom. Båda komponenterna värms upp rejält. Hur kan vi förvänta oss att spänningen över respektive komponent påverkas?':'Assume we measure the voltage across a resistor carrying a constant current, and also across a silicon diode (forward-biased) carrying a constant current. Both components are heated significantly. How can we expect the voltage across each component to change?',
+  'Beakta figuren och besvara frågorna nedan.':'Study the figure and answer the questions below.',
+  'Vilken spänning ligger över R1?':'What voltage is across R1?',
+  'Vilken ström går genom D1?':'What current flows through D1?',
+  'En lysdiod behöver väldigt lite ström för att lysa (antag 1 mA). Samtliga lysdioder är röda. Besvara frågorna med bokstäver A-G.':'An LED needs very little current to light up (assume 1 mA). All LEDs are red. Answer the questions using the letters A-G.',
+  'I vilken/vilka kretsar lyser lysdioderna?':'In which circuit(s) do the LEDs light up?',
+  'I vilken/vilka* kretsar lyser dioden/dioderna starkast?':'In which circuit(s) does the diode / do the diodes glow brightest?',
+  'Markera med ett kryss i rutan intill respektive transistor om denna leder (dvs om ström går genom R2, R5, R7 respektive R10).':'Mark each transistor with a cross if it conducts (i.e. if current flows through R2, R5, R7 and R10, respectively).',
+  'I kretsen nedan har man glömt en komponent som bör kopplas in för att undvika att transistorn går sönder. Vilken komponent saknas och hur ska den kopplas in?':'In the circuit below, one component has been omitted that should be connected to prevent the transistor from being damaged. Which component is missing and how should it be connected?',
+  'Skriv namnet på typen av switchande spänningsomvandlare under respektive figur. Ange även om Vo är större eller lägre än Vs.':'Write the name of the switching converter type below each figure. Also state whether Vo is greater or lower than Vs.',
+  'Hur kan man modifiera kretsen (byta en komponent, antingen R1 eller R2, mot något annat) nedan så att det fungerar som:':'How can the circuit below be modified (replace one component, either R1 or R2, with another component) so that it works as:',
+  'Lågpass filter - dämpar signaler med hög frekvens.':'Low-pass filter - attenuates high-frequency signals.',
+  'Högpass filter - dämpar signaler med låg frekvens.':'High-pass filter - attenuates low-frequency signals.',
+  'Bör man vara mer försiktig när man tar i elektronik på vintern eller på sommaren? Motivera kort.':'Should you be more careful when touching electronics in winter or in summer? Explain briefly.',
+  'ESD-urladdningar kan skada elektronik. Är risken för problem på grund av ESD större eller mindre på vintern jämfört med sommaren? Motivera ert svar.':'ESD discharges can damage electronics. Is the risk of ESD-related problems greater or smaller in winter compared with summer? Explain your answer.',
+  'Studera kretsen nedan och besvara frågorna.':'Study the circuit below and answer the questions.',
+  'Vilket motstånd utsätts för högst effekt?':'Which resistor is subjected to the highest power?',
+  'Vilken effekt utsätts detta motstånd för?':'What power does that resistor dissipate?',
+  'Bestäm utspänning Uut i kretsen nedan. OP-förstärkaren matas med +/-15 V.':'Determine the output voltage Uout in the circuit below. The op-amp is powered by +/-15 V.',
+  'Vilket alternativ beskriver bäst den främsta skillnaden mellan en NPN-transistor och en tyristor?':'Which option best describes the main difference between an NPN transistor and a thyristor?',
+  'Del a-b · PNP':'Part a-b · PNP',
+  'Del a-b · OP':'Part a-b · OP',
+  'Del a-b · RC':'Part a-b · RC',
+  'Del a-c · Switchad omvandling':'Part a-c · switching converter',
+  'Del a-b':'Part a-b',
+  'Välj svar':'Choose answer',
+  'Välj rätt svar - Begrepp':'Choose correct answer - concept',
+  'Valj ratt svar - Begrepp':'Choose correct answer - concept',
+  'Skyddskomponent':'Protection component',
+  '- välj -':'- choose -',
+  'Frischöppsdiod / flyback-diod':'Flyback diode',
+  'Zenerdiod':'Zener diode',
+  'Kondensator':'Capacitor',
+  'Motstånd':'Resistor',
+  'Buck (steg-ned)':'Buck (step-down)',
+  'Boost (steg-upp)':'Boost (step-up)',
+  'Vo variabel/negativ':'Vo variable/negative',
+  'Kondensator (C)':'Capacitor (C)',
+  'Induktor (L)':'Inductor (L)',
+  'Motstånd (R)':'Resistor (R)',
+  'Diod (D)':'Diode (D)',
+  'Vald komponent:':'Selected component:',
+  'Tryck på R1 eller R2 för att placera.':'Tap R1 or R2 to place it.',
+  'Välj det alternativ som beskriver temperaturens inverkan bäst.':'Choose the option that best describes the effect of temperature.',
+  'a) Vilken/vilka kretsar lyser?':'a) Which circuit(s) light up?',
+  'b) Vilken/vilka lyser starkast?':'b) Which light up brightest?',
+  'A) VILKEN/VILKA KRETSAR LYSER?':'A) WHICH CIRCUIT(S) LIGHT UP?',
+  'B) VILKEN/VILKA LYSER STARKAST?':'B) WHICH LIGHT UP BRIGHTEST?',
+  'Vilket spänningsintervall på punkt A krävs för att glödlampan ska lysa fullständigt?':'What voltage range is required at point A for the lamp to light fully?',
+  'Beräkna Uut.':'Calculate Uout.',
+  'Hur kan man välja R1, R2 och R3 om man istället vill att utspänningen ska bli hälften så hög, men fortfarande styras lika mycket av V1 och V2 som nu?':'How can R1, R2 and R3 be chosen if you instead want the output voltage to be half as large, while still be affected equally by V1 and V2 as now?',
+  'a) Lågpass - dra komponent till R1 eller R2:':'a) Low-pass - drag a component to R1 or R2:',
+  'b) Högpass - dra komponent till R1 eller R2:':'b) High-pass - drag a component to R1 or R2:',
+  'a) Tid tills fullt uppladdad:':'a) Time until fully charged:',
+  'b) Maximala strömmen:':'b) Maximum current:',
+  'Ersättningsresistans mellan A och B:':'Equivalent resistance between A and B:',
+  'Ström genom lysdioden:':'Current through the LED:',
+  'a) Vilket motstånd får högst effekt?':'a) Which resistor dissipates the highest power?',
+  'b) Effekt i detta motstånd:':'b) Power in this resistor:',
+  'Minsta Iin för full ljusstyrka:':'Minimum Iin for full brightness:',
+  'A) TID TILLS FULLT UPPLADDAD:':'A) TIME UNTIL FULLY CHARGED:',
+  'B) MAXIMALA STRÖMMEN:':'B) MAXIMUM CURRENT:',
+  'ERSÄTTNINGSRESISTANS MELLAN A OCH B:':'EQUIVALENT RESISTANCE BETWEEN A AND B:',
+  'STRÖM GENOM LYSDIODEN:':'CURRENT THROUGH THE LED:',
+  'A) VILKET MOTSTÅND FÅR HÖGST EFFEKT?':'A) WHICH RESISTOR DISSIPATES THE HIGHEST POWER?',
+  'B) EFFEKT I DETTA MOTSTÅND:':'B) POWER IN THIS RESISTOR:',
+  'MINSTA IIN FÖR FULL LJUSSTYRKA:':'MINIMUM IIN FOR FULL BRIGHTNESS:',
+  'Regel / formel':'Rule / formula',
+  'För konstant ström gäller:':'For constant current:',
+  'När temperaturen ökar:':'When temperature increases:',
+  '- motstånd: R ökar ofta lite, alltså ökar V_R':'- resistor: R often increases slightly, so V_R increases',
+  '- kiseldiod: framspänning minskar ungefär 2 mV/grad C':'- silicon diode: forward voltage decreases by about 2 mV/°C',
+  'Tre godkända svar':'Three accepted answers',
+  'Tre godkanda svar':'Three accepted answers',
+  'Tydliga namn':'Defined names',
+  'Antagande':'Assumption',
+  'Formler':'Formulas',
+  'Med aktuella värden':'With current values',
+  'Regelmodell':'Rule model',
+  'Om alla dioder i slingan ligger rättvända:':'If all diodes in the loop are forward-biased:',
+  'Anta ungefär:':'Assume approximately:',
+  'Aktuella strömmar':'Current values',
+  'ingen av kretsarna':'none of the circuits',
+  'ingen':'none',
+  'Vs = matningsspänning':'Vs = supply voltage',
+  'R1 = seriemotstånd':'R1 = series resistor',
+  'R2 = parallellmotstånd':'R2 = parallel resistor',
+  'R2 = motstånd parallellt med dioden':'R2 = resistor in parallel with the diode',
+  'Vd = diodens framspänning':'Vd = diode forward voltage',
+  'Vs = spänningskälla':'Vs = voltage source',
+  'Rs = seriemotståndet före förgreningen':'Rs = series resistor before the branch',
+  'Rp1 = vänstra parallellmotståndet':'Rp1 = left parallel resistor',
+  'Rp2 = högra parallellmotståndet':'Rp2 = right parallel resistor',
+  'Röd LED ≈ 2.0 V, vanlig diod ≈ 0.7 V, synlig LED om I ≥ 1 mA.':'Red LED ≈ 2.0 V, ordinary diode ≈ 0.7 V, visible LED if I ≥ 1 mA.',
+  'Formel':'Formula',
+  'Med originalvärden':'With original values',
+  'Beräkning med aktuella värden':'Calculation with current values',
+  'Kontroll':'Check',
+  'Generalformel för inverterande summerare':'General formula for inverting summing amplifier',
+  'För halva utspänningen men samma proportion':'For half the output voltage with the same proportion',
+  'Alla gain ska halveras.':'All gains should be halved.',
+  'En enkel lösning är:':'A simple solution is:',
+  'Man bör vara mer försiktig på vintern.':'You should be more careful in winter.',
+  'Regel':'Rule',
+  'Risken för ESD är större när luften är torrare, och det är den ofta på vintern.':'The risk of ESD is greater when the air is drier, which it often is in winter.',
+  'Lägg en diod parallellt med reläspolen i backriktning:':'Add a diode in parallel with the relay coil in reverse bias:',
+  'katod mot plus':'cathode to positive',
+  'anod mot transistorsidan':'anode to the transistor side',
+  'a) Lågpass':'a) Low-pass',
+  'b) Högpass':'b) High-pass',
+  'Godkända svar:':'Accepted answers:',
+  'RC-variant:':'RC variant:',
+  'RL-variant:':'RL variant:',
+  'Spolen placeras på motsatt plats mot kondensatorn men ger samma filtertyp.':'The inductor is placed in the opposite position from the capacitor but gives the same filter type.',
+  'Lösning':'Solution',
+  'Node-spänningen hålls till cirka 5 V av zenerdioden.':'The node voltage is held at about 5 V by the Zener diode.',
+  'Lysdioden antas ha 3 V spänningsfall.':'The LED is assumed to have a 3 V voltage drop.',
+  'Då får motståndet 330 ohm:':'Then the 330 ohm resistor gets:',
+  'Zenern kan fortfarande reglera.':'The Zener can still regulate.',
+  'Steg':'Steps',
+  'Effekt i varje resistor':'Power in each resistor',
+  'Tre godkända rätta svar':'Three accepted correct answers',
+  'I_right = strömmen genom högra grenen':'I_right = current through the right branch',
+  'Lampan lyser fullt när:':'The lamp is fully lit when:',
+  'Dimensionering av logikbasmotstånd:':'Logic base resistor sizing:',
+  'Obs: V1 och R10 visas i bilden men den minsta styrströmmen bestäms här av lampströmmen och de två hFE-värdena.':'Note: V1 and R10 are shown in the image, but the minimum control current here is determined by the lamp current and the two hFE values.',
+  'Om dioden leder':'If the diode conducts',
+  'Villkor':'Condition',
+  'Dioden leder om ID1 ≥ 0.':'The diode conducts if ID1 ≥ 0.',
+  'Grundformler':'Basic formulas',
+  'Praktiskt "fulladdad"':'Practically "fully charged"',
+  'Maxström vid start':'Maximum current at start',
+  'Regler':'Rules',
+  'Originalsvar':'Original answers',
+  'Fall a) Rb = 5 kΩ':'Case a) Rb = 5 kΩ',
+  'Fall b) Rb = 15 kΩ':'Case b) Rb = 15 kΩ',
+  };
+const I18N_REGEX_EN=[
+  [/^Fråga (\d+) av (\d+)$/,'Question $1 of $2'],
+  [/^Fråga (\d+)$/,'Question $1'],
+  [/^Tid kvar:\s*(.+)$/,'Time left: $1'],
+  [/^(\d+)\s*\/\s*(\d+) markerade$/,'$1 / $2 marked'],
+  [/^(\d+) frågor ligger nu i anpassat övningspass\.$/,'$1 questions are now in the custom practice set.'],
+  [/^Visar (\d+) frågor du behövt öva mer på: (.+)$/,'Showing $1 questions you needed more practice on: $2'],
+  [/^Visar (\d+) frågor du behövt öva mer på, eller inte svarat på än: (.+)$/,'Showing $1 questions you needed more practice on, or have not answered yet: $2'],
+  [/^Jag har hittat frågor du ofta missar: (.+)$/,'I found questions you often miss: $1'],
+  [/^Jag har hittat frågor du ofta missar eller inte svarat på än: (.+)$/,'I found questions you often miss or have not answered yet: $1'],
+  [/^Kontroll:\s*a\)\s*rätt\s*b\)\s*rätt\s*(.*)$/,'Check: a) correct  b) correct $1'],
+  [/^Kontroll:\s*a\)\s*rätt\s*b\)\s*fel\s*(.*)$/,'Check: a) correct  b) wrong $1'],
+  [/^Kontroll:\s*a\)\s*fel\s*b\)\s*rätt\s*(.*)$/,'Check: a) wrong  b) correct $1'],
+  [/^Kontroll:\s*a\)\s*fel\s*b\)\s*fel\s*(.*)$/,'Check: a) wrong  b) wrong $1'],
+  [/^Ville ha:\s*(.+)$/,'Expected: $1'],
+  [/^Ville ha ungefär\s+(.+)\.$/,'Expected about $1.'],
+  [/^Ville ha ungefar\s+(.+)\.$/,'Expected about $1.'],
+  [/^Svar a\)$/,'Answer a)'],
+  [/^Svar b\)$/,'Answer b)'],
+  [/^Vi låter Rb i nedan figur vara (.+) respektive (.+)\.$/,'Let Rb in the figure below be $1 and $2, respectively.'],
+  [/^Vilken ström går det genom Rc om Rb = (.+)\?$/,'What current flows through Rc if Rb = $1?'],
+  [/^I kretsen nedan antas att glödlampan drar (.+) då den är fullt tänd, att transistorns beta-värde är (.+) samt att R2 = (.+)\.$/,'In the circuit below, assume the lamp draws $1 when fully lit, the transistor beta value is $2, and R2 = $3.'],
+  [/^Hur kan man modifiera kretsen så att glödlampan tänds då (.+)V kopplas till punkt B och släcks då 0V kopplas till punkt B, samtidigt som vi inte vill att strömmen från punkt B ska bli högre än (.+) mA\?$/,'How can the circuit be modified so the lamp turns on when $1V is applied to point B and turns off when 0V is applied to point B, while keeping the current from point B below $2 mA?'],
+  [/^Vad blir utspänningen Uut i kretsen nedan om V1 = (.+) V och V2 = (.+) V\?$/,'What is the output voltage Uout in the circuit below if V1 = $1 V and V2 = $2 V?'],
+  [/^Nedan visas en testuppställning med en kondensator som från början är urladdad\.\s*\((.+)\)$/,'Below is a test setup with a capacitor that is initially uncharged. ($1)'],
+  [/^Hur lång tid tar det från att S1 sluts tills att kondensatorn är fullt uppladdad \(dvs\. till (.+) V\)\?$/,'How long does it take from when S1 is closed until the capacitor is fully charged (i.e. to $1 V)?'],
+  [/^Vad blir maximala strömmen \[A\] som går i kretsen\?$/,'What is the maximum current [A] in the circuit?'],
+  [/^Nedanstående koppling är skapad för att lysdioden ska lysa med ungefär konstant ljusstyrka även om batterispänningen varierar lite\. Antag (.+) V över den gröna lysdioden och (.+) V över zenerdioden\.$/,'The circuit below is designed so the LED shines with roughly constant brightness even if the battery voltage varies slightly. Assume $1 V across the green LED and $2 V across the Zener diode.'],
+  [/^Vilken ström går det genom lysdioden\?$/,'What current flows through the LED?'],
+  [/^Nedanstående koppling syftar till att vi ska kunna tända en lampa med väldigt lite ström\. Lampan drar (.+) mA vid (.+) V\.$/,'The circuit below is intended to let us switch on a lamp using very little current. The lamp draws $1 mA at $2 V.'],
+  [/^Antag att Q1 har hFE = (.+) och att Q2 har hFE = (.+)\. Vilken är den minsta ström Iin som behövs för att lampan ska lysa maximalt\?$/,'Assume Q1 has hFE = $1 and Q2 has hFE = $2. What is the minimum input current Iin required for the lamp to shine at maximum brightness?'],
+  [/^Större på vintern eftersom luften ofta är torrare och ESD lättare byggs upp\.$/,'Greater in winter because the air is often drier and ESD builds up more easily.'],
+  [/^Risken är större på vintern; torr luft gör att statisk elektricitet och ESD blir vanligare\.$/,'The risk is greater in winter; dry air makes static electricity and ESD more common.'],
+  [/^På vintern är ESD-problem oftast större eftersom den torra luften ökar risken för statiska urladdningar\.$/,'In winter, ESD problems are usually greater because the dry air increases the risk of static discharges.'],
+  [/^Mindre på vintern eftersom kall luft automatiskt leder bort statisk laddning bättre\.$/,'Smaller in winter because cold air automatically conducts static charge away better.'],
+  [/^Större på sommaren eftersom varm luft alltid ger mer ESD än torr vinterluft\.$/,'Greater in summer because warm air always causes more ESD than dry winter air.'],
+  [/^Samma hela året; ESD påverkas inte av luftfuktighet\.$/,'The same all year; ESD is not affected by humidity.'],
+  [/^Mindre på vintern eftersom elektronik blir kallare och då tål urladdningar bättre\.$/,'Smaller in winter because electronics get colder and then tolerate discharges better.'],
+  [/^Större på sommaren eftersom solen laddar upp kretsarna elektriskt\.$/,'Greater in summer because the sun electrically charges the circuits.'],
+  [/^Mindre på vintern eftersom snö och kyla neutraliserar statisk elektricitet\.$/,'Smaller in winter because snow and cold neutralize static electricity.'],
+  [/^Större på sommaren eftersom högre temperatur alltid innebär mer statisk laddning\.$/,'Greater in summer because a higher temperature always means more static charge.'],
+  [/^ESD-risken beror bara på batterispänningen i kretsen, inte på årstid eller luftfuktighet\.$/,'ESD risk depends only on the battery voltage in the circuit, not on season or humidity.'],
+  [/^Motståndets spänning ökar, medan diodens framspänning minskar\.$/,'The resistor voltage increases, while the diode forward voltage decreases.'],
+  [/^Vid konstant ström blir spänningen över motståndet större när det värms upp, men framspänningen över kiseldioden blir mindre\.$/,'At constant current, the voltage across the resistor increases as it heats up, while the forward voltage across the silicon diode decreases.'],
+  [/^Motståndet får högre spänning eftersom resistansen ofta stiger lite med temperaturen, medan diodens framspänning sjunker\.$/,'The resistor gets a higher voltage because its resistance often rises slightly with temperature, while the diode forward voltage drops.'],
+  [/^Både motståndets spänning och diodens framspänning ökar när de blir varmare\.$/,'Both the resistor voltage and the diode forward voltage increase as they get warmer.'],
+  [/^Både motståndets spänning och diodens framspänning minskar när temperaturen stiger\.$/,'Both the resistor voltage and the diode forward voltage decrease as temperature rises.'],
+  [/^Motståndets spänning minskar, medan diodens framspänning ökar\.$/,'The resistor voltage decreases, while the diode forward voltage increases.'],
+  [/^Motståndets spänning är oförändrad, men diodens framspänning ökar\.$/,'The resistor voltage is unchanged, but the diode forward voltage increases.'],
+  [/^Motståndets spänning ökar, och diodens framspänning ökar också\.$/,'The resistor voltage increases, and the diode forward voltage also increases.'],
+  [/^Motståndets spänning minskar lite, medan diodens framspänning är i princip oförändrad\.$/,'The resistor voltage decreases slightly, while the diode forward voltage is essentially unchanged.'],
+  [/^Ingen av spänningarna påverkas eftersom strömmen är konstant genom båda komponenterna\.$/,'Neither voltage is affected because the current is constant through both components.'],
+  [/^Motståndets spänning minskar på grund av uppvärmning, medan dioden får högre framspänning\.$/,'The resistor voltage decreases because of heating, while the diode gets a higher forward voltage.'],
+  [/^En NPN-transistor leder så länge den får basström, medan en tyristor kan triggas med gate-ström och sedan fortsätta leda tills strömmen bryts eller sjunker under hållströmmen\.$/,'An NPN transistor conducts as long as it receives base current, while a thyristor can be triggered with gate current and then continue conducting until the current is interrupted or drops below the holding current.'],
+  [/^NPN-transistorn behöver kontinuerlig styrning i basen för att leda, men en tyristor latchar efter gate-pulsen och stängs inte av förrän anodströmmen blir för liten\.$/,'An NPN transistor needs continuous base drive to conduct, but a thyristor latches after the gate pulse and does not turn off until the anode current becomes too small.'],
+  [/^Skillnaden är att en NPN-transistor styrs löpande av basström, medan en tyristor fortsätter leda efter trigging och slutar inte förrän strömmen genom den sjunker under hållströmmen\.$/,'The difference is that an NPN transistor is continuously controlled by base current, while a thyristor keeps conducting after triggering and does not stop until the current through it drops below the holding current.'],
+  [/^En NPN-transistor och en tyristor fungerar i princip likadant; den stora skillnaden är bara kapslingen\.$/,'An NPN transistor and a thyristor work essentially the same way; the only major difference is the package.'],
+  [/^Tyristorn behöver mer gate-ström än en transistor, men båda slutar leda direkt när styrströmmen försvinner\.$/,'A thyristor needs more gate current than a transistor, but both stop conducting immediately when the control current disappears.'],
+  [/^En NPN-transistor kan bara användas med AC medan en tyristor bara fungerar med DC\.$/,'An NPN transistor can only be used with AC, while a thyristor only works with DC.'],
+  [/^Tyristorn leder bara så länge det går ström i gaten, precis som en vanlig NPN-transistor\.$/,'A thyristor conducts only as long as current flows in the gate, just like a normal NPN transistor.'],
+  [/^En NPN-transistor har högre resistans än en tyristor och därför är de i praktiken samma komponenttyp\.$/,'An NPN transistor has higher resistance than a thyristor, so in practice they are the same component type.'],
+  [/^Tyristorn stängs av genom att öka gate-strömmen ytterligare, medan transistorn stängs av med högre basspänning\.$/,'A thyristor is turned off by increasing the gate current further, while a transistor is turned off with a higher base voltage.'],
+  [/^En NPN-transistor kan inte förstärka ström, medan en tyristor alltid reglerar strömmen linjärt\.$/,'An NPN transistor cannot amplify current, while a thyristor always regulates current linearly.'],
+  [/^Skillnaden är att tyristorn alltid är snabbare och att transistorn alltid är digital; i övrigt arbetar de på samma sätt\.$/,'The difference is that a thyristor is always faster and a transistor is always digital; otherwise they work the same way.'],
+  [/^Lägg till en NPN-transistor som drar ner PNP-basnoden\. Logikbasmotståndet bör vara minst cirka (.+) ohm, till exempel (.+)\.$/,'Add an NPN transistor that pulls down the PNP base node. The logic base resistor should be at least about $1 ohm, for example $2.'],
+  [/^Använd en NPN-transistor som mellanled mellan punkt B och PNP-basen\. Basmotståndet från logiken ska vara minst ungefär (.+) ohm; ett bra val är (.+)\.$/,'Use an NPN transistor as an intermediate stage between point B and the PNP base. The base resistor from the logic output should be at least about $1 ohm; a good choice is $2.'],
+  [/^Lös det med en NPN-transistor som sinkar ström från PNP-basnoden\. Dimensionera logikens basmotstånd till minst cirka (.+) ohm, exempelvis (.+)\.$/,'Solve it with an NPN transistor that sinks current from the PNP base node. Dimension the logic base resistor to at least about $1 ohm, for example $2.'],
+  [/^Koppla punkt B direkt till PNP-basnoden utan extra transistor eller motstånd\.$/,'Connect point B directly to the PNP base node without any extra transistor or resistor.'],
+  [/^Lägg till en extra PNP-transistor som matar mer ström till PNP-basnoden när B blir hög\.$/,'Add an extra PNP transistor that feeds more current into the PNP base node when B goes high.'],
+  [/^Använd en NPN-transistor men välj ett basmotstånd på bara cirka (.+) ohm från logiken så att mer ström kommer ut från punkt B\.$/,'Use an NPN transistor, but choose a base resistor of only about $1 ohm from the logic output so that more current can come from point B.'],
+  [/^Koppla 5 V till punkt A när lampan ska tändas och 0 V till punkt A när den ska slockna, utan någon extra komponent\.$/,'Connect 5 V to point A when the lamp should turn on and 0 V to point A when it should turn off, without any extra component.'],
+  [/^Byt ut PNP-transistorn mot en diod och koppla punkt B direkt till lampan\.$/,'Replace the PNP transistor with a diode and connect point B directly to the lamp.'],
+  [/^Lägg en resistor från punkt B upp till matningsspänning så att PNP-basen alltid pressas högt när logiken är 5 V\.$/,'Add a resistor from point B up to the supply voltage so that the PNP base is always forced high when the logic is 5 V.'],
+  [/^Använd en NPN-transistor men låt dess kollektor gå till plusmatningen och emittern till PNP-basen så att den fungerar som en emitterföljare\.$/,'Use an NPN transistor, but let its collector go to the positive supply and its emitter go to the PNP base so that it works as an emitter follower.'],
+  [/^Lösningen är att bara minska R2 kraftigt; då behövs ingen extra transistor och logiken kan driva basen direkt\.$/,'The solution is simply to reduce R2 a lot; then no extra transistor is needed and the logic can drive the base directly.'],
+  [/^Svar a\) LED lyser i: (.+)$/,'Answer a) LEDs light in: $1'],
+  [/^Svar b\) Starkast i: (.+)$/,'Answer b) Brightest in: $1'],
+  [/^Totalströmmen i kretsen blir (.+)\.$/,'The total current in the circuit is $1.'],
+  [/^Lampan lyser fullt när A ligger mellan (.+)\.$/,'The lamp is fully lit when A is between $1.'],
+  [/^Lampan lyser fullt nar A ligger mellan (.+)\.$/,'The lamp is fully lit when A is between $1.'],
+  [/^Det gäller oavsett exakt basmotstånd \((.+)\)\.$/,'This applies regardless of the exact base resistor ($1).'],
+  [/^katod mot plus \((.+)\)$/,'cathode to positive ($1)'],
+  [/^Högst effekt får (.+)\.$/,'The highest power is dissipated by $1.'],
+  [/^Effekten blir (.+)\.$/,'The power is $1.'],
+  [/\(spärrad riktning\)/,'(reverse-biased)']
+  ];
+
+function getUiLanguage(){
+  return uiLanguage==='en'?'en':'sv';
+}
+function normalizeLanguageSource(text){
+  if(text==null)return '';
+  const raw=String(text);
+  return typeof normalizeExerciseText==='function' ? normalizeExerciseText(raw) : raw;
+}
+function translateEnglishChunk(text){
+  let out=normalizeLanguageSource(text);
+  if(!out)return out;
+  if(Object.prototype.hasOwnProperty.call(I18N_EXACT_EN,out))return I18N_EXACT_EN[out];
+  const numbered=out.match(/^(\s*\d+\)\s+)([\s\S]+)$/);
+  if(numbered){
+    const translatedRest=translateEnglishChunk(numbered[2]);
+    if(translatedRest!==numbered[2])return numbered[1]+translatedRest;
+  }
+  const bulleted=out.match(/^(\s*[•-]\s+)([\s\S]+)$/);
+  if(bulleted){
+    const translatedRest=translateEnglishChunk(bulleted[2]);
+    if(translatedRest!==bulleted[2])return bulleted[1]+translatedRest;
+  }
+  I18N_REGEX_EN.forEach(([pattern,replacement])=>{
+    out=out.replace(pattern,replacement);
+  });
+  return out;
+}
+function translateToEnglish(text){
+  const normalized=normalizeLanguageSource(text);
+  if(!normalized)return normalized;
+  const whole=translateEnglishChunk(normalized);
+  if(!whole.includes('\n'))return whole;
+  return whole.split('\n').map(line=>translateEnglishChunk(line)).join('\n');
+}
+function tr(text){
+  const raw=text==null?'':String(text);
+  return getUiLanguage()==='en' ? translateToEnglish(raw) : raw;
+}
+function translatePreservingWhitespace(text){
+  const raw=String(text||'');
+  const m=raw.match(/^(\s*)([\s\S]*?)(\s*)$/);
+  if(!m)return tr(raw);
+  return m[1]+tr(m[2])+m[3];
+}
+function shouldSkipLanguageElement(el){
+  return !!(el && el.closest('.kv-box,.ed-kv,.calc-line-input,.calc-notes-editor,.formula-code,.ed-ta,.ed-inp,.ed-sz,textarea,input,script,style,option'));
+}
+function applyLanguageToNodeText(root){
+  if(getUiLanguage()!=='en' || !root)return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const textNodes=[];
+  let node=walker.nextNode();
+  while(node){
+    textNodes.push(node);
+    node=walker.nextNode();
+  }
+  textNodes.forEach(textNode=>{
+    const parent=textNode.parentElement;
+    if(!parent || shouldSkipLanguageElement(parent))return;
+    const current=textNode.nodeValue;
+    if(!current || !current.trim())return;
+    const translated=translatePreservingWhitespace(current);
+    if(translated!==current)textNode.nodeValue=translated;
+  });
+}
+function applyLanguageToAttributes(root){
+  const scope=root&&root.querySelectorAll?root:document;
+  scope.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(elm=>{
+    const source=elm.getAttribute('placeholder')||'';
+    const translated=tr(source);
+    if(translated!==source)elm.setAttribute('placeholder',translated);
+  });
+  scope.querySelectorAll('.calc-line-input[data-placeholder]').forEach(elm=>{
+    const lineIndex=Number(elm.dataset.lineIndex)||0;
+    const source=lineIndex===0?'Skriv en formel och avsluta med =':'';
+    elm.setAttribute('data-placeholder',tr(source));
+  });
+}
+function updateLanguageButtons(){
+  const svBtn=el('lang-btn-sv');
+  const enBtn=el('lang-btn-en');
+  if(svBtn)svBtn.classList.toggle('on',getUiLanguage()==='sv');
+  if(enBtn)enBtn.classList.toggle('on',getUiLanguage()==='en');
+}
+function updateStaticLanguageUi(){
+  document.documentElement.lang=getUiLanguage();
+  document.title=getUiLanguage()==='en'?'Analog Technology - Exam':'Analog Teknik - Tenta';
+  const quizTab=el('tab-quiz');
+  const editorTab=el('tab-editor');
+  if(quizTab)quizTab.textContent='📋 Quiz';
+  if(editorTab)editorTab.textContent=getUiLanguage()==='en'?'✏️ Overlay Editor':'✏️ Overlay-Editor';
+  updateLanguageButtons();
+}
+function applyPageLanguage(root){
+  updateStaticLanguageUi();
+  if(getUiLanguage()!=='en')return;
+  const scope=root&&root.nodeType===1?root:document.body;
+  if(!scope)return;
+  applyLanguageToAttributes(scope);
+  applyLanguageToNodeText(scope);
+}
+function queueApplyPageLanguage(){
+  if(languageApplyQueued)return;
+  languageApplyQueued=true;
+  requestAnimationFrame(()=>{
+    languageApplyQueued=false;
+    applyPageLanguage(document.body);
+  });
+}
+function ensureLanguageObserver(){
+  if(languageObserver || !document.body)return;
+  languageObserver=new MutationObserver(()=>{ if(getUiLanguage()==='en')queueApplyPageLanguage(); });
+  languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
+}
+function localizeQuestionObject(q){
+  if(getUiLanguage()!=='en' || !q)return q;
+  const copy=Object.assign({},q);
+  ['qtext','qtextA','qtextB','qtextC','facit','type'].forEach(key=>{
+    if(copy[key])copy[key]=translateToEnglish(copy[key]);
+  });
+  return copy;
+}
+function localizeExercise(exercise){
+  if(!exercise)return exercise;
+  const rawCorrect=exercise.rawCorrect || exercise.correct || '';
+  const rawOptions=Array.isArray(exercise.rawOptions) ? exercise.rawOptions.slice() : (Array.isArray(exercise.options) ? exercise.options.slice() : []);
+  if(getUiLanguage()!=='en'){
+    return Object.assign({},exercise,{
+      rawCorrect,
+      rawOptions,
+      correct:rawCorrect,
+      options:rawOptions.slice(),
+    });
+  }
+  return Object.assign({},exercise,{
+    rawCorrect,
+    rawOptions,
+    correct:translateToEnglish(rawCorrect),
+    options:rawOptions.map(opt=>translateToEnglish(opt)),
+  });
+}
+function setUiLanguage(lang){
+  uiLanguage=lang==='en'?'en':'sv';
+  LS.set(UI_LANG_KEY,uiLanguage);
+  buildQuiz();
+  const editorView=document.getElementById('v-editor');
+  if(editorView && editorView.classList.contains('on'))initEditor();
+  if(answerCalculatorState.open)renderAnswerCalculator();
+  applyPageLanguage(document.body);
+}
+
+const mkLanguageBase=mk;
+mk=function(tag,cls,txt){
+  return mkLanguageBase(tag,cls,txt==null?txt:tr(txt));
+};
+const getDynamicQuestionLanguageBase=getDynamicQuestion;
+getDynamicQuestion=function(q){
+  return localizeQuestionObject(getDynamicQuestionLanguageBase(q));
+};
+const getQ2ExerciseLanguageBase=getQ2Exercise;
+getQ2Exercise=function(){
+  return localizeExercise(getQ2ExerciseLanguageBase());
+};
+const getQ7BExerciseLanguageBase=getQ7BExercise;
+getQ7BExercise=function(){
+  return localizeExercise(getQ7BExerciseLanguageBase());
+};
+const getQ9ExerciseLanguageBase=getQ9Exercise;
+getQ9Exercise=function(){
+  return localizeExercise(getQ9ExerciseLanguageBase());
+};
+const getQ19ExerciseLanguageBase=getQ19Exercise;
+getQ19Exercise=function(){
+  return localizeExercise(getQ19ExerciseLanguageBase());
+};
+const expectedAnswerTextLanguageBase=expectedAnswerText;
+expectedAnswerText=function(q){
+  return tr(expectedAnswerTextLanguageBase(q));
+};
+const getQuestionMarkLabelLanguageBase=getQuestionMarkLabel;
+getQuestionMarkLabel=function(qi){
+  return tr(getQuestionMarkLabelLanguageBase(qi));
+};
+const buildQuizLanguageBase=buildQuiz;
+buildQuiz=function(){
+  buildQuizLanguageBase();
+  applyPageLanguage(document.body);
+};
+const initEditorLanguageBase=initEditor;
+initEditor=function(){
+  initEditorLanguageBase();
+  applyPageLanguage(document.body);
+};
+const renderAnswerCalculatorLanguageBase=renderAnswerCalculator;
+renderAnswerCalculator=function(){
+  renderAnswerCalculatorLanguageBase();
+  applyPageLanguage(document.body);
+};
+const showResultsLanguageBase=showResults;
+showResults=function(){
+  showResultsLanguageBase();
+  applyPageLanguage(document.body);
+};
+const showTabLanguageBase=showTab;
+showTab=function(id){
+  showTabLanguageBase(id);
+  applyPageLanguage(document.body);
+};
+
 syncOverlayProfileUiText();
 seedBundledProfileMapStorage();
+ensureLanguageObserver();
+updateStaticLanguageUi();
 window.addEventListener('resize',handleQuizViewportResize);
 testModeActive=TM.get('active')==='1';
 buildQuiz();
