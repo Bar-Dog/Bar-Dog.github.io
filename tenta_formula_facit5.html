@@ -310,12 +310,12 @@ body.mobile-quiz-mode .test-banner{flex-direction:column;align-items:flex-start}
           <div id="ed-vanilla-msg" class="ed-transfer-msg"></div>
         </div>
         <div class="rand-box">
-          <div class="rand-title">Overlay backup</div>
+          <div class="rand-title">Overlay-profil</div>
           <div class="rand-out">Exportera eller importera overlay-data och sparade vanilla-lägen mellan olika browsers och enheter.</div>
           <div class="ed-row" style="flex-wrap:wrap">
-            <button class="btn-ed-mini" onclick="exportOverlayText()">Exportera text</button>
-            <button class="btn-ed-mini" onclick="downloadOverlaySnapshot()">Spara fil</button>
-            <button class="btn-ed-mini" onclick="openOverlayImportPicker()">Las fil</button>
+            <button class="btn-ed-mini" onclick="exportOverlayText()">Exportera profil</button>
+            <button class="btn-ed-mini" onclick="downloadOverlaySnapshot()">Spara profil</button>
+            <button class="btn-ed-mini" onclick="openOverlayImportPicker()">Läs profil</button>
             <button class="btn-ed-mini" onclick="importOverlayText()">Importera text</button>
           </div>
           <textarea id="ed-transfer" class="ed-ta" placeholder="Klistra in overlay-data har"></textarea>
@@ -917,6 +917,94 @@ const PV_VANILLA_DEFAULTS={
   13:{vs:9,r:220,cuF:470},
 };
 
+const PROFILE_MAP_DEFAULT_SOURCE='study-profile-2026-03-15-14-02-53.json';
+const PROFILE_MAP_DEFAULT_VERSION='2026-03-15-14-02-53';
+function applyBundledProfileMapDefaults(){
+  { const d=(KV_DEFS[1]||[]).find(x=>x.id==='v1'); if(d){ d.val='10V'; d.x=0; d.y=38.24; d.sz=40; } }
+  { const d=(KV_DEFS[1]||[]).find(x=>x.id==='r1'); if(d){ d.val='300 ohm'; d.x=30.32; d.y=3.16; d.sz=18; } }
+  { const d=(KV_DEFS[1]||[]).find(x=>x.id==='r2'); if(d){ d.val='400 ohm'; d.x=54.22; d.y=50.71; d.sz=18; } }
+  { const d=(KV_DEFS[1]||[]).find(x=>x.id==='r3'); if(d){ d.val='400 ohm'; d.x=86.34; d.y=51.64; d.sz=18; } }
+  { const d=(KV_DEFS[3]||[]).find(x=>x.id==='v1'); if(d){ d.val='3V'; d.x=13.27; d.y=59.69; d.sz=50; } }
+  { const d=(KV_DEFS[3]||[]).find(x=>x.id==='r1'); if(d){ d.val='100 ohm'; d.x=60.5; d.y=37.67; d.sz=34; } }
+  { const d=(KV_DEFS[3]||[]).find(x=>x.id==='r2'); if(d){ d.val='100 ohm'; d.x=82.66; d.y=76.77; d.sz=34; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='av'); if(d){ d.val='3V'; d.x=0; d.y=21.08; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='ar'); if(d){ d.val='330 ohm'; d.x=17.68; d.y=20.57; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='bv'); if(d){ d.val='1V'; d.x=25.65; d.y=20.82; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='br'); if(d){ d.val='330 ohm'; d.x=42.18; d.y=20.05; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='cv'); if(d){ d.val='3V'; d.x=50.01; d.y=20.3; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='cr'); if(d){ d.val='330 ohm'; d.x=67.53; d.y=20.57; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='dv'); if(d){ d.val='3V'; d.x=75.51; d.y=20.56; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='dr'); if(d){ d.val='330 ohm'; d.x=91.97; d.y=20.83; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='ev'); if(d){ d.val='5V'; d.x=0; d.y=74.52; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='er'); if(d){ d.val='330 ohm'; d.x=17.53; d.y=74.79; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='fv'); if(d){ d.val='5V'; d.x=25.07; d.y=74.78; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='fr'); if(d){ d.val='330 ohm'; d.x=42.75; d.y=75.31; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='gv'); if(d){ d.val='5V'; d.x=50.52; d.y=75.31; d.sz=30; } }
+  { const d=(KV_DEFS[4]||[]).find(x=>x.id==='gr'); if(d){ d.val='330 ohm'; d.x=68.66; d.y=75.05; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='vcc'); if(d){ d.val='10V'; d.x=5.87; d.y=39.33; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r1'); if(d){ d.val='1 kOhm'; d.x=15.07; d.y=24.4; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r2'); if(d){ d.val='1 kOhm'; d.x=25.01; d.y=24.82; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r3'); if(d){ d.val='9 kOhm'; d.x=38.62; d.y=23.98; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r4'); if(d){ d.val='1 kOhm'; d.x=38.86; d.y=66.92; d.sz=31; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r5'); if(d){ d.val='1 kOhm'; d.x=49.05; d.y=24.4; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r6'); if(d){ d.val='1 kOhm'; d.x=62.36; d.y=23.99; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r7'); if(d){ d.val='1 kOhm'; d.x=72.66; d.y=23.16; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r8'); if(d){ d.val='9 kOhm'; d.x=86.27; d.y=23.57; d.sz=26; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r9'); if(d){ d.val='1 kOhm'; d.x=86.67; d.y=67.75; d.sz=30; } }
+  { const d=(KV_DEFS[5]||[]).find(x=>x.id==='r10'); if(d){ d.val='1 kOhm'; d.x=94.38; d.y=23.57; d.sz=26; } }
+  { const d=(KV_DEFS[6]||[]).find(x=>x.id==='vcc'); if(d){ d.val='3V'; d.x=5.26; d.y=38.27; d.sz=35; } }
+  { const d=(KV_DEFS[6]||[]).find(x=>x.id==='rc'); if(d){ d.val='100 ohm'; d.x=82.1; d.y=37.81; d.sz=18; } }
+  { const d=(KV_DEFS[7]||[]).find(x=>x.id==='vcc'); if(d){ d.val='12V'; d.x=3.13; d.y=33.42; d.sz=34; } }
+  { const d=(KV_DEFS[7]||[]).find(x=>x.id==='r2'); if(d){ d.val='3.3 kOhm'; d.x=74.41; d.y=22.16; d.sz=17; } }
+  { const d=(KV_DEFS[8]||[]).find(x=>x.id==='v1'); if(d){ d.val='1V'; d.x=4.11; d.y=34.21; d.sz=30; } }
+  { const d=(KV_DEFS[8]||[]).find(x=>x.id==='r2'); if(d){ d.val='10 kOhm'; d.x=32.77; d.y=14.31; d.sz=16; } }
+  { const d=(KV_DEFS[8]||[]).find(x=>x.id==='r3'); if(d){ d.val='20 kOhm'; d.x=32.49; d.y=43.15; d.sz=16; } }
+  { const d=(KV_DEFS[8]||[]).find(x=>x.id==='v2'); if(d){ d.val='2V'; d.x=27; d.y=56.84; d.sz=30; } }
+  { const d=(KV_DEFS[8]||[]).find(x=>x.id==='r1'); if(d){ d.val='30 kOhm'; d.x=57.8; d.y=13.99; d.sz=16; } }
+  { const d=(KV_DEFS[10]||[]).find(x=>x.id==='v1'); if(d){ d.val='12 V'; d.x=3.22; d.y=44.22; d.sz=18; } }
+  { const d=(KV_DEFS[10]||[]).find(x=>x.id==='r1'); if(d){ d.val='4.7 kOhm'; d.x=42.71; d.y=72; d.sz=20; } }
+  { const d=(KV_DEFS[13]||[]).find(x=>x.id==='v1'); if(d){ d.val='9 V'; d.x=15.33; d.y=51.4; d.sz=40; } }
+  { const d=(KV_DEFS[13]||[]).find(x=>x.id==='r1'); if(d){ d.val='220 ohm'; d.x=38.22; d.y=37.61; d.sz=40; } }
+  { const d=(KV_DEFS[13]||[]).find(x=>x.id==='c1'); if(d){ d.val='470 uF'; d.x=39.89; d.y=71.4; d.sz=40; } }
+  { const d=(KV_DEFS[14]||[]).find(x=>x.id==='r1'); if(d){ d.val='300 ohm'; d.x=36.95; d.y=50.03; d.sz=60; } }
+  { const d=(KV_DEFS[14]||[]).find(x=>x.id==='r2'); if(d){ d.val='300 ohm'; d.x=53.85; d.y=50.03; d.sz=60; } }
+  { const d=(KV_DEFS[14]||[]).find(x=>x.id==='r3'); if(d){ d.val='100 ohm'; d.x=57.46; d.y=3.57; d.sz=60; } }
+  { const d=(KV_DEFS[14]||[]).find(x=>x.id==='r4'); if(d){ d.val='200 ohm'; d.x=77.3; d.y=49.57; d.sz=60; } }
+  { const d=(KV_DEFS[15]||[]).find(x=>x.id==='v1'); if(d){ d.val='9 V'; d.x=9.69; d.y=35.45; d.sz=72; } }
+  { const d=(KV_DEFS[15]||[]).find(x=>x.id==='r1'); if(d){ d.val='100 ohm'; d.x=49.2; d.y=28.64; d.sz=60; } }
+  { const d=(KV_DEFS[15]||[]).find(x=>x.id==='r2'); if(d){ d.val='330 ohm'; d.x=55.47; d.y=39.91; d.sz=60; } }
+  { const d=(KV_DEFS[15]||[]).find(x=>x.id==='vz'); if(d){ d.val='5 V'; d.x=49.8; d.y=66.24; d.sz=55; } }
+  { const d=(KV_DEFS[15]||[]).find(x=>x.id==='uled'); if(d){ d.val='3 V'; d.x=79.3; d.y=65.41; d.sz=72; } }
+  { const d=(KV_DEFS[16]||[]).find(x=>x.id==='v1'); if(d){ d.val='12 V'; d.x=11.89; d.y=44.82; d.sz=72; } }
+  { const d=(KV_DEFS[16]||[]).find(x=>x.id==='r1'); if(d){ d.val='450 ohm'; d.x=35.62; d.y=2.01; d.sz=70; } }
+  { const d=(KV_DEFS[16]||[]).find(x=>x.id==='r2'); if(d){ d.val='300 ohm'; d.x=56.28; d.y=51.61; d.sz=70; } }
+  { const d=(KV_DEFS[16]||[]).find(x=>x.id==='r3'); if(d){ d.val='100 ohm'; d.x=61.08; d.y=2.61; d.sz=70; } }
+  { const d=(KV_DEFS[16]||[]).find(x=>x.id==='r4'); if(d){ d.val='200 ohm'; d.x=83.13; d.y=50.81; d.sz=70; } }
+  { const d=(KV_DEFS[17]||[]).find(x=>x.id==='v1'); if(d){ d.val='12 V'; d.x=9.78; d.y=23.84; d.sz=72; } }
+  { const d=(KV_DEFS[17]||[]).find(x=>x.id==='r10'); if(d){ d.val='1 kOhm'; d.x=54.45; d.y=22.59; d.sz=68; } }
+  { const d=(KV_DEFS[17]||[]).find(x=>x.id==='hfe1'); if(d){ d.val='hFE=300'; d.x=36.07; d.y=53.25; d.sz=40; } }
+  { const d=(KV_DEFS[17]||[]).find(x=>x.id==='hfe2'); if(d){ d.val='hFE=60'; d.x=60.12; d.y=72.16; d.sz=34; } }
+  { const d=(KV_DEFS[17]||[]).find(x=>x.id==='ilamp'); if(d){ d.val='60 mA'; d.x=80.92; d.y=31.38; d.sz=63; } }
+  { const d=(KV_DEFS[18]||[]).find(x=>x.id==='v1'); if(d){ d.val='-1 V'; d.x=7.73; d.y=41.58; d.sz=72; } }
+  { const d=(KV_DEFS[18]||[]).find(x=>x.id==='v2'); if(d){ d.val='2 V'; d.x=31.1; d.y=60.63; d.sz=72; } }
+  { const d=(KV_DEFS[18]||[]).find(x=>x.id==='r2'); if(d){ d.val='10 kOhm'; d.x=35.93; d.y=13.75; d.sz=67; } }
+  { const d=(KV_DEFS[18]||[]).find(x=>x.id==='r3'); if(d){ d.val='20 kOhm'; d.x=35.12; d.y=44.5; d.sz=66; } }
+  { const d=(KV_DEFS[18]||[]).find(x=>x.id==='r1'); if(d){ d.val='30 kOhm'; d.x=56.92; d.y=13.85; d.sz=67; } }
+  if(!PV_VANILLA_DEFAULTS[6])PV_VANILLA_DEFAULTS[6]={};
+  PV_VANILLA_DEFAULTS[6].rbA='5000';
+  PV_VANILLA_DEFAULTS[6].rbB='15000';
+  if(!PV_VANILLA_DEFAULTS[7])PV_VANILLA_DEFAULTS[7]={};
+  PV_VANILLA_DEFAULTS[7].iloadmA='100';
+  PV_VANILLA_DEFAULTS[7].beta='330';
+  PV_VANILLA_DEFAULTS[7].logicV='5';
+  PV_VANILLA_DEFAULTS[7].logicImaxmA='10';
+  if(!PV_VANILLA_DEFAULTS[13])PV_VANILLA_DEFAULTS[13]={};
+  PV_VANILLA_DEFAULTS[13].vs='9';
+  PV_VANILLA_DEFAULTS[13].r='220';
+  PV_VANILLA_DEFAULTS[13].cuF='470';
+}
+applyBundledProfileMapDefaults();
+
 function getVanillaStoreKey(qn){return VV_PRE+'q'+qn;}
 function hasCustomQuestionVanilla(qn){return localStorage.getItem(getVanillaStoreKey(qn))!==null;}
 function normalizeVanillaPvValue(val,fallback){
@@ -1027,6 +1115,32 @@ function applyQuestionVanilla(qn,opts){
 function resetQuestionToVanilla(qn,opts){
   applyQuestionVanilla(qn,opts);
   clearStoredAnswersForQuestion(qn);
+}
+function seedBundledProfileMapStorage(){
+  const markerKey=LS_PRE+'profile_map_default_version';
+  if(localStorage.getItem(markerKey)===PROFILE_MAP_DEFAULT_VERSION)return false;
+  const qns=[...new Set([
+    ...Object.keys(KV_DEFS).map(v=>Number(v)),
+    ...Object.keys(PV_VANILLA_DEFAULTS).map(v=>Number(v))
+  ].filter(Number.isFinite))];
+  qns.forEach(qn=>{
+    const snap=buildBaseQuestionVanilla(qn);
+    Object.entries(snap.overlays).forEach(([id,data])=>{
+      kvSet(qn,id,'v',data.v);
+      kvSet(qn,id,'x',data.x);
+      kvSet(qn,id,'y',data.y);
+      kvSet(qn,id,'z',data.z);
+      kvSet(qn,id,'w',data.w);
+      kvSet(qn,id,'name',data.name);
+      kvSet(qn,id,'sym',data.sym);
+    });
+    Object.entries(snap.pvs).forEach(([key,val])=>pvSet(qn,key,val));
+    if(Object.keys(snap.overlays).length || Object.keys(snap.pvs).length){
+      storeQuestionVanilla(qn,snap);
+    }
+  });
+  localStorage.setItem(markerKey,PROFILE_MAP_DEFAULT_VERSION);
+  return true;
 }
 
 const OVERLAY_META={
@@ -2349,11 +2463,15 @@ function clearStoredAnswersForQuestion(qn){
   };
   const idx=Q.findIndex(x=>x.n===qn);
   if(idx>=0)LS.del('mark_'+idx);
+  LS.del('facit_seen_q'+qn);
   (keysByQn[qn]||[]).forEach(k=>LS.del(k));
 }
 function clearAllStoredAnswers(){
   Object.keys(localStorage).filter(k=>k.startsWith(LS_PRE)).forEach(k=>localStorage.removeItem(k));
   marked={};
+}
+function hasSeenFacitForQuestion(qn){
+  return LS.get('facit_seen_q'+qn)==='1';
 }
 function rerenderAfterValueChange(qn){
   if(document.getElementById('qcon'))buildQuiz();
@@ -2985,12 +3103,34 @@ function makeCard(q,qi){
   const autoMsg=mk('span','cmpmsg','');
   autoBtn.onclick=()=>{
     const ok=autoCheckQuestion(dq);
+    const facitSeen=!testModeActive && hasSeenFacitForQuestion(dq.n);
     if(dq.n===12)compareQ12(autoMsg);
     else{
       autoMsg.className='cmpmsg '+(ok?'ok':'err');
       autoMsg.textContent=ok?'Rätt svar.':'Inte rätt ännu. '+expectedAnswerText(dq);
     }
     if(dq.n===12 && !ok)autoMsg.textContent+=' '+expectedAnswerText(dq);
+    if(facitSeen && ok){
+      autoMsg.className='cmpmsg err';
+      autoMsg.textContent=dq.n===12
+        ? 'Du satte bÃ¥da delarna rÃ¤tt, men frÃ¥gan rÃ¤knas inte som klarad eftersom facit redan Ã¶ppnats.'
+        : 'Du svarade rÃ¤tt, men frÃ¥gan rÃ¤knas inte som klarad eftersom facit redan Ã¶ppnats.';
+    }
+    if(dq.n===12 && !facitSeen){
+      const aOk=isQ12PartCorrect('q12a');
+      const bOk=isQ12PartCorrect('q12b');
+      autoMsg.textContent=ok
+        ? 'R\u00e4tt: b\u00e5da delarna i fr\u00e5ga 12 \u00e4r godk\u00e4nda.'
+        : `Kontroll: a) ${aOk?'r\u00e4tt':'fel'}  b) ${bOk?'r\u00e4tt':'fel'} ${expectedAnswerText(dq)}`;
+    }
+    if(dq.n!==12 && !facitSeen){
+      autoMsg.textContent=ok?'R\u00e4tt svar.':'Inte r\u00e4tt \u00e4nnu. '+expectedAnswerText(dq);
+    }
+    if(facitSeen && ok){
+      autoMsg.textContent=dq.n===12
+        ? 'Du satte b\u00e5da delarna r\u00e4tt, men fr\u00e5gan r\u00e4knas inte som klarad eftersom facit redan \u00f6ppnats.'
+        : 'Du svarade r\u00e4tt, men fr\u00e5gan r\u00e4knas inte som klarad eftersom facit redan \u00f6ppnats.';
+    }
     forceMark(qi,card,okBtn,errBtn,ok);
   };
   ar.appendChild(autoBtn);
@@ -3002,7 +3142,10 @@ function makeCard(q,qi){
   }
   const facitBtn=mk('button','btn-cmp','Visa facit / formel');
   const facitBox=mk('div','facit-box',dq.facit||'—');
-  facitBtn.onclick=()=>facitBox.classList.toggle('show');
+  facitBtn.onclick=()=>{
+    facitBox.classList.toggle('show');
+    if(facitBox.classList.contains('show'))LS.set('facit_seen_q'+dq.n,'1');
+  };
   ar.appendChild(facitBtn);
   const okBtn=mk('button','btn-ok','✓ Rätt');
   okBtn.onclick=()=>setMark(qi,card,okBtn,errBtn,true);
@@ -3018,6 +3161,14 @@ function makeCard(q,qi){
 }
 
 function setMark(qi,card,okBtn,errBtn,isOk){
+  if(!testModeActive && isOk && hasSeenFacitForQuestion(Q[qi].n)){
+    marked[qi]=false;LS.set('mark_'+qi,'0');
+    card.classList.remove('ok');card.classList.add('err');
+    okBtn.classList.remove('on');errBtn.classList.add('on');
+    updateProg();
+    refreshMobileNavState();
+    return;
+  }
   if(marked[qi]===isOk){
     delete marked[qi];LS.del('mark_'+qi);
     card.classList.remove('ok','err');okBtn.classList.remove('on');errBtn.classList.remove('on');
@@ -3031,13 +3182,15 @@ function setMark(qi,card,okBtn,errBtn,isOk){
 }
 
 function forceMark(qi,card,okBtn,errBtn,isOk){
-  marked[qi]=isOk;
-  LS.set('mark_'+qi,isOk?'1':'0');
-  card.classList.toggle('ok',isOk);
-  card.classList.toggle('err',!isOk);
-  okBtn.classList.toggle('on',isOk);
-  errBtn.classList.toggle('on',!isOk);
-  if(!testModeActive)recordSingleQuestionAttempt(qi,isOk);
+  const facitSeen=!testModeActive && hasSeenFacitForQuestion(Q[qi].n);
+  const passedWithoutFacit=!!isOk && !facitSeen;
+  marked[qi]=passedWithoutFacit;
+  LS.set('mark_'+qi,passedWithoutFacit?'1':'0');
+  card.classList.toggle('ok',passedWithoutFacit);
+  card.classList.toggle('err',!passedWithoutFacit);
+  okBtn.classList.toggle('on',passedWithoutFacit);
+  errBtn.classList.toggle('on',!passedWithoutFacit);
+  if(!testModeActive)recordSingleQuestionAttempt(qi,passedWithoutFacit);
   updateProg();
   refreshMobileNavState();
   updatePracticeModeUI();
@@ -3647,59 +3800,96 @@ function setOverlayTransferMessage(msg,isOk){
   if(msg)out.classList.add(isOk?'ok':'err');
 }
 
-function buildOverlaySnapshot(){
+function buildOverlaySnapshot(mode){
+  const useBase=mode==='base';
   const overlays={};
   const vanillas={};
   Object.keys(KV_DEFS).forEach(qn=>{
+    const qnNum=Number(qn);
+    const baseQuestionVanilla=buildBaseQuestionVanilla(qnNum);
     overlays[qn]={};
     KV_DEFS[qn].forEach(d=>{
-      const meta=getOverlayMeta(Number(qn),d.id);
+      const meta=useBase?getDefaultOverlayMeta(qnNum,d.id):getOverlayMeta(qnNum,d.id);
+      const baseOverlay=baseQuestionVanilla.overlays[d.id];
       overlays[qn][d.id]={
-        v:kvGet(Number(qn),d.id,'v',d.val),
-        x:kvGet(Number(qn),d.id,'x',d.x),
-        y:kvGet(Number(qn),d.id,'y',d.y),
-        z:kvGet(Number(qn),d.id,'z',d.sz),
-        w:kvGet(Number(qn),d.id,'w','1'),
+        v:useBase?baseOverlay.v:kvGet(qnNum,d.id,'v',d.val),
+        x:useBase?baseOverlay.x:kvGet(qnNum,d.id,'x',d.x),
+        y:useBase?baseOverlay.y:kvGet(qnNum,d.id,'y',d.y),
+        z:useBase?baseOverlay.z:kvGet(qnNum,d.id,'z',d.sz),
+        w:useBase?baseOverlay.w:kvGet(qnNum,d.id,'w','1'),
         name:meta.name,
         sym:meta.sym
       };
     });
-    if(hasCustomQuestionVanilla(Number(qn)))vanillas[qn]=getQuestionVanilla(Number(qn));
+    if(useBase){
+      if(Object.keys(baseQuestionVanilla.pvs).length)vanillas[qn]=baseQuestionVanilla;
+    }else if(hasCustomQuestionVanilla(qnNum)){
+      vanillas[qn]=getQuestionVanilla(qnNum);
+    }
   });
   return {
     version:2,
-    app:'tenta_formula_facit3',
+    app:'tenta_formula_facit5',
     exportedAt:new Date().toISOString(),
     overlays,
     vanillas
   };
 }
 
+function buildOverlayProfilePayload(mode){
+  return {
+    version:1,
+    exportType:'study-profile',
+    exportScope:'overlay-only',
+    app:'tenta_formula_facit5',
+    exportedAt:new Date().toISOString(),
+    profile:{
+      strongestQuestions:[],
+      weakestQuestions:[],
+      questionStats:[]
+    },
+    stats:{
+      practiceModeActive:false,
+      activeQuestionNumbers:[],
+      currentVisibleSummary:{
+        totalQuestions:0,
+        totalPoints:0,
+        points:0,
+        practiceMode:false,
+        correctQuestionNumbers:[],
+        wrongQuestionNumbers:[]
+      },
+      lastTestSummary:null
+    },
+    overlaySnapshot:buildOverlaySnapshot(mode)
+  };
+}
+
 function exportOverlayText(){
   const ta=el('ed-transfer');
   if(!ta)return;
-  ta.value=JSON.stringify(buildOverlaySnapshot(),null,2);
+  ta.value=JSON.stringify(buildOverlayProfilePayload('current'),null,2);
   ta.focus();
   ta.select();
   if(ta.setSelectionRange)ta.setSelectionRange(0,ta.value.length);
-  setOverlayTransferMessage('Backup-data skapad. Kopiera texten eller spara den som fil.',true);
+  setOverlayTransferMessage('Overlay-profil skapad. Samma JSON kan läsas av både editorn och vanlig profilimport.',true);
 }
 
 function downloadOverlaySnapshot(){
-  const data=JSON.stringify(buildOverlaySnapshot(),null,2);
+  const data=JSON.stringify(buildOverlayProfilePayload('current'),null,2);
   const blob=new Blob([data],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   const stamp=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
   a.href=url;
-  a.download='overlay-backup-'+stamp+'.json';
+  a.download='overlay-profile-'+stamp+'.json';
   document.body.appendChild(a);
   a.click();
   a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),500);
   const ta=el('ed-transfer');
   if(ta&&!ta.value)ta.value=data;
-  setOverlayTransferMessage('Backup-fil sparad. Du kan lasa in den i en annan browser eller enhet.',true);
+  setOverlayTransferMessage('Overlay-profil sparad. Den använder samma JSON-format som vanlig profil-export.',true);
 }
 
 function openOverlayImportPicker(){
@@ -3732,8 +3922,18 @@ function normalizeOverlayImportMeta(val,fallback){
   return txt||String(fallback);
 }
 
+function resolveOverlaySnapshotInput(raw){
+  if(raw&&typeof raw==='object'&&raw.exportType==='study-profile'&&raw.overlaySnapshot&&typeof raw.overlaySnapshot==='object'){
+    return raw.overlaySnapshot;
+  }
+  if(raw&&typeof raw==='object'&&raw.overlays&&typeof raw.overlays==='object'){
+    return raw;
+  }
+  return null;
+}
+
 function applyOverlaySnapshot(raw){
-  const data=raw&&typeof raw==='object'&&raw.overlays&&typeof raw.overlays==='object'?raw:null;
+  const data=resolveOverlaySnapshotInput(raw);
   if(!data)throw new Error('Ingen giltig overlay-data hittades.');
   let count=0;
   Object.keys(data.overlays).forEach(qnKey=>{
@@ -3772,7 +3972,7 @@ function importOverlayText(){
   if(!ta)return;
   const raw=ta.value.trim();
   if(!raw){
-    setOverlayTransferMessage('Klistra in backup-data forst, eller las in en fil.',false);
+    setOverlayTransferMessage('Klistra in profil-JSON först, eller läs in en fil.',false);
     return;
   }
   try{
@@ -3961,12 +4161,17 @@ function getProfileRows(){
 }
 
 function rankWeakQuestionIndices(limit){
-  const rows=getProfileRows().filter(row=>row.wrong>0);
+  const rows=getProfileRows().filter(row=>row.wrong>0 || row.seen===0);
   rows.sort((a,b)=>{
+    const aBucket=a.wrong>0?0:1;
+    const bBucket=b.wrong>0?0:1;
+    if(aBucket!==bBucket)return aBucket-bBucket;
     if(b.wrong!==a.wrong)return b.wrong-a.wrong;
     const aLast=a.lastResult==='wrong'?1:0;
     const bLast=b.lastResult==='wrong'?1:0;
     if(bLast!==aLast)return bLast-aLast;
+    if(a.seen===0 && b.seen!==0)return 1;
+    if(b.seen===0 && a.seen!==0)return -1;
     if(a.acc!==b.acc)return a.acc-b.acc;
     if(b.seen!==a.seen)return b.seen-a.seen;
     return Q[a.qi].n-Q[b.qi].n;
@@ -3992,6 +4197,7 @@ function rankStrongQuestionIndices(limit){
 function formatProfileRowText(row){
   if(!row)return '';
   const parts=[];
+  if(row.seen===0)parts.push('Inte svarad \u00e4n');
   if(row.seen>0)parts.push(`Rätt ${row.correct}/${row.seen}`);
   if(row.wrong>0)parts.push(`Fel ${row.wrong}`);
   if(row.lastResult==='wrong')parts.push('Senast fel');
@@ -4075,7 +4281,7 @@ function buildStudyProfileSnapshot(){
   return {
     version:1,
     exportType:'study-profile',
-    app:'tenta_formula_facit3',
+    app:'tenta_formula_facit5',
     exportedAt:new Date().toISOString(),
     platform:{
       note:'Overlay-koordinaterna nedan ar de sparade koordinaterna for den har browsern/plattformen just nu.',
@@ -4216,6 +4422,14 @@ function applyStudyProfileSnapshot(raw){
   if(!raw || typeof raw!=='object' || raw.exportType!=='study-profile'){
     throw new Error('Ingen giltig studieprofil hittades i filen.');
   }
+  if(raw.exportScope==='overlay-only'){
+    const overlayCount=applyOverlaySnapshot(raw);
+    clearStoredTestState();
+    activeQIndex=0;
+    buildQuiz();
+    if(el('v-editor')&&el('v-editor').classList.contains('on'))renderEdQ();
+    return {profileCount:0,overlayCount,practiceCount:isPracticeModeActive()?getActiveQuestionCount():0,overlayOnly:true};
+  }
   const profile=buildImportedPerformanceProfile(raw);
   savePerformanceProfile(profile);
   saveLastTestSummary(buildImportedLastTestSummary(raw));
@@ -4245,12 +4459,20 @@ function handleStudyProfileImportFile(ev){
   reader.onload=()=>{
     try{
       const result=applyStudyProfileSnapshot(JSON.parse(String(reader.result||'')));
-      alert(
-        'Profil uppladdad. '+
-        result.profileCount+' fragor med statistik laddades in, '+
-        result.overlayCount+' overlays uppdaterades och '+
-        result.practiceCount+' fragor ligger nu i anpassat ovningspass.'
-      );
+      if(result.overlayOnly){
+        alert(
+          'Overlay-profil uppladdad. '+
+          result.overlayCount+' overlays uppdaterades. '+
+          'Statistik och övningsprofil lämnades orörda.'
+        );
+      }else{
+        alert(
+          'Profil uppladdad. '+
+          result.profileCount+' frågor med statistik laddades in, '+
+          result.overlayCount+' overlays uppdaterades och '+
+          result.practiceCount+' frågor ligger nu i anpassat övningspass.'
+        );
+      }
     }catch(err){
       alert((err&&err.message)||'Kunde inte ladda profilen.');
     }
@@ -4344,6 +4566,10 @@ function renderStudySummary(summary){
   );
   appendStudyItems(weakCard,weak,rowMap,'Ingen svag lista än.');
 
+  const weakIntro=weakCard.querySelector('p');
+  if(weakIntro && weak.length){
+    weakIntro.textContent='De h\u00e4r fr\u00e5gorna har du oftast svarat fel p\u00e5, eller inte hunnit svara p\u00e5 \u00e4n. De b\u00f6r prioriteras i n\u00e4sta pass.';
+  }
   const grid=mk('div','study-grid');
   grid.append(latestCard,strongCard,weakCard);
   root.appendChild(grid);
@@ -4383,6 +4609,8 @@ function updatePracticeModeUI(){
     main.appendChild(mk('div','practice-banner-title','Anpassat ovningspass'));
     main.appendChild(mk('div','practice-banner-text',`Visar ${activeIndices.length} frågor du behövt öva mer på: ${preview}${more}`));
     const showAllBtn=mk('button','btn-s','Visa alla frågor igen');
+    const activePracticeText=main.querySelector('.practice-banner-text');
+    if(activePracticeText)activePracticeText.textContent=`Visar ${activeIndices.length} fr\u00e5gor du beh\u00f6vt \u00f6va mer p\u00e5, eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`;
     showAllBtn.onclick=()=>clearPracticeMode();
     banner.append(main,showAllBtn);
     banner.classList.add('show');
@@ -4396,6 +4624,8 @@ function updatePracticeModeUI(){
   main.appendChild(mk('div','practice-banner-title','Öva vidare'));
   main.appendChild(mk('div','practice-banner-text',`Jag har hittat frågor du ofta missar: ${preview}${more}`));
   const startBtn=mk('button','btn-s','Öva på svaga frågor');
+  const suggestionText=main.querySelector('.practice-banner-text');
+  if(suggestionText)suggestionText.textContent=`Jag har hittat fr\u00e5gor du ofta missar eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`;
   startBtn.onclick=()=>startWeakPracticeSession();
   banner.append(main,startBtn);
   banner.classList.add('show');
@@ -4526,6 +4756,116 @@ function submitTestMode(forceTimeout){
   showResults();
   const smsg=el('smsg');
   if(smsg)smsg.textContent+=' '+(forceTimeout?'Tiden tog slut och testet rättades automatiskt.':'Testet är rättat och facit är nu upplåst.');
+}
+
+function renderStudySummary(summary){
+  const root=el('study-summary');
+  if(!root)return;
+  root.innerHTML='';
+  const rowMap={};
+  getProfileRows().forEach(row=>{rowMap[row.qi]=row;});
+  const strong=rankStrongQuestionIndices(6);
+  const weak=rankWeakQuestionIndices(6);
+
+  const latestCard=makeStudyCard(
+    summary.practiceMode?'Senaste \u00f6vningspasset':'Senaste testet',
+    `Du fick ${summary.points} av ${summary.totalPoints} po\u00e4ng p\u00e5 ${summary.totalQuestions} fr\u00e5gor.`
+  );
+  if(summary.wrongIndices.length){
+    latestCard.appendChild(mk('div','study-item','De h\u00e4r fr\u00e5gorna missade du senast och \u00e4r bra att ta direkt igen:'));
+    appendStudyItems(latestCard,summary.wrongIndices,rowMap,'');
+  }else{
+    latestCard.appendChild(mk('div','study-item','Du satte alla fr\u00e5gor i den h\u00e4r omg\u00e5ngen.'));
+  }
+
+  const strongCard=makeStudyCard(
+    'Klarar bra',
+    strong.length
+      ? 'De h\u00e4r fr\u00e5gorna ser stabila ut utifr\u00e5n dina senaste r\u00e4ttade test.'
+      : 'Fler r\u00e4ttade test ger en tydligare lista p\u00e5 vad du verkligen kan.'
+  );
+  appendStudyItems(strongCard,strong,rowMap,'Ingen tydlig stark lista \u00e4n.');
+
+  const weakCard=makeStudyCard(
+    'Forts\u00e4tt \u00f6va p\u00e5',
+    weak.length
+      ? 'De h\u00e4r fr\u00e5gorna har du oftast svarat fel p\u00e5, eller inte hunnit svara p\u00e5 \u00e4n. De b\u00f6r prioriteras i n\u00e4sta pass.'
+      : 'Ingen svag lista \u00e4n. Bra jobbat.'
+  );
+  appendStudyItems(weakCard,weak,rowMap,'Ingen svag lista \u00e4n.');
+
+  const grid=mk('div','study-grid');
+  grid.append(latestCard,strongCard,weakCard);
+  root.appendChild(grid);
+
+  const actions=mk('div','study-actions');
+  if(weak.length){
+    const practiceBtn=mk('button','btn-p','Skapa anpassat \u00f6vningspass');
+    practiceBtn.onclick=()=>startWeakPracticeSession();
+    actions.appendChild(practiceBtn);
+  }
+  const exportBtn=mk('button','btn-s','Ladda ner profil (.json)');
+  exportBtn.onclick=()=>downloadStudyProfileSnapshot();
+  actions.appendChild(exportBtn);
+  const importBtn=mk('button','btn-s','Ladda upp profil (.json)');
+  importBtn.onclick=()=>openStudyProfileImportPicker();
+  actions.appendChild(importBtn);
+  if(isPracticeModeActive()){
+    const allBtn=mk('button','btn-s','Visa alla fr\u00e5gor igen');
+    allBtn.onclick=()=>clearPracticeMode();
+    actions.appendChild(allBtn);
+  }
+  if(actions.children.length)root.appendChild(actions);
+  root.classList.add('show');
+}
+
+function updatePracticeModeUI(){
+  const banner=el('practice-banner');
+  if(!banner)return;
+  banner.classList.remove('show');
+  banner.innerHTML='';
+  if(testModeActive)return;
+  if(isPracticeModeActive()){
+    const activeIndices=getActiveQuestionIndices();
+    const preview=activeIndices.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
+    const more=activeIndices.length>4?` och ${activeIndices.length-4} till.`:'.';
+    const main=mk('div','practice-banner-main');
+    main.appendChild(mk('div','practice-banner-title','Anpassat \u00f6vningspass'));
+    main.appendChild(mk('div','practice-banner-text',`Visar ${activeIndices.length} fr\u00e5gor du beh\u00f6vt \u00f6va mer p\u00e5, eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
+    const showAllBtn=mk('button','btn-s','Visa alla fr\u00e5gor igen');
+    showAllBtn.onclick=()=>clearPracticeMode();
+    banner.append(main,showAllBtn);
+    banner.classList.add('show');
+    return;
+  }
+  const weak=rankWeakQuestionIndices(6);
+  if(!weak.length)return;
+  const preview=weak.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
+  const more=weak.length>4?` och ${weak.length-4} till.`:'.';
+  const main=mk('div','practice-banner-main');
+  main.appendChild(mk('div','practice-banner-title','\u00d6va vidare'));
+  main.appendChild(mk('div','practice-banner-text',`Jag har hittat fr\u00e5gor du ofta missar eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
+  const startBtn=mk('button','btn-s','\u00d6va p\u00e5 svaga fr\u00e5gor');
+  startBtn.onclick=()=>startWeakPracticeSession();
+  banner.append(main,startBtn);
+  banner.classList.add('show');
+}
+
+function startWeakPracticeSession(){
+  const indices=rankWeakQuestionIndices();
+  if(!indices.length){
+    alert('Ingen svaghetsprofil finns \u00e4n. Anv\u00e4nd R\u00e4tta direkt n\u00e4r du \u00f6var eller ladda upp en profil, s\u00e5 kan jag bygga ett \u00f6vningspass av fr\u00e5gorna du missar eller inte svarat p\u00e5 \u00e4n.');
+    return;
+  }
+  if(!confirm('Skapa ett anpassat \u00f6vningspass med de fr\u00e5gor du oftast svarat fel p\u00e5 eller inte svarat p\u00e5 \u00e4n?'))return;
+  clearAllStoredAnswers();
+  clearStoredTestState();
+  savePracticeQuestionIndices(indices);
+  activeQIndex=0;
+  randomizeAllSupportedCore();
+  showTab('quiz');
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function showResults(){
@@ -4743,6 +5083,7 @@ Spolen placeras på motsatt plats mot kondensatorn men ger samma filtertyp.`;
     q17.qtext='Nedanstående koppling syftar till att vi ska kunna tända en lampa med väldigt lite ström. Lampan drar 60 mA vid 12 V.';
     q17.qtextA='Antag att Q1 har hFE = 300 och att Q2 har hFE = 200. Vilken är den minsta ström Iin som behövs för att lampan ska lysa maximalt?';
   }
+  if(q17)q17.qtextA='Antag att Q1 har hFE = 300 och att Q2 har hFE = 60. Vilken ar den minsta strom Iin som behovs for att lampan ska lysa maximalt?';
   if(q18){
     q18.type='Beräkning - OP';
     q18.qtext='Bestäm utspänning Uut i kretsen nedan. OP-förstärkaren matas med +/-15 V.';
@@ -5240,6 +5581,139 @@ function submitTestMode(forceTimeout){
   if(smsg)smsg.textContent+=' '+(forceTimeout?'Tiden tog slut och testet rättades automatiskt.':'Testet är rättat och facit är nu upplåst.');
 }
 
+function syncOverlayProfileUiText(){
+  const transfer=el('ed-transfer');
+  if(!transfer)return;
+  transfer.placeholder='Klistra in overlay-profil eller vanlig profil-JSON här';
+  const msg=el('ed-transfer-msg');
+  if(msg)msg.textContent='Editorn kan nu läsa samma profil-JSON som vanlig profilimport. Overlay-profilen uppdaterar bara overlays och vanilla-data.';
+  const box=transfer.closest('.rand-box');
+  if(!box)return;
+  const title=box.querySelector('.rand-title');
+  if(title)title.textContent='Overlay-profil';
+  const out=box.querySelector('.rand-out');
+  if(out)out.innerHTML='Samma JSON-format som vanlig profil-export, men bara overlay-koordinater, overlay-värden och vanilla-data. Standardfil finns i <code>profil_map/default_overlay_profile.json</code>.';
+  const btns=[...box.querySelectorAll('.btn-ed-mini')];
+  if(btns[0])btns[0].textContent='Exportera profil';
+  if(btns[1])btns[1].textContent='Spara profil';
+  if(btns[2])btns[2].textContent='Läs profil';
+  if(btns[3])btns[3].textContent='Importera text';
+}
+
+function renderStudySummary(summary){
+  const root=el('study-summary');
+  if(!root)return;
+  root.innerHTML='';
+  root.classList.remove('show');
+  if(!summary || !summary.totalQuestions)return;
+  const rowMap={};
+  getProfileRows().forEach(row=>{rowMap[row.qi]=row;});
+  const strong=rankStrongQuestionIndices(6);
+  const weak=rankWeakQuestionIndices(6);
+
+  const latestCard=makeStudyCard(
+    summary.practiceMode?'Senaste \u00f6vningspasset':'Senaste testet',
+    `Du fick ${summary.points} av ${summary.totalPoints} po\u00e4ng p\u00e5 ${summary.totalQuestions} fr\u00e5gor.`
+  );
+  if(summary.wrongIndices.length){
+    latestCard.appendChild(mk('div','study-item','De h\u00e4r fr\u00e5gorna missade du senast och \u00e4r bra att ta direkt igen:'));
+    appendStudyItems(latestCard,summary.wrongIndices,rowMap,'');
+  }else{
+    latestCard.appendChild(mk('div','study-item','Du satte alla fr\u00e5gor i den h\u00e4r omg\u00e5ngen.'));
+  }
+
+  const strongCard=makeStudyCard(
+    'Klarar bra',
+    strong.length
+      ? 'De h\u00e4r fr\u00e5gorna ser stabila ut utifr\u00e5n dina senaste r\u00e4ttade test.'
+      : 'Fler r\u00e4ttade test ger en tydligare lista p\u00e5 vad du verkligen kan.'
+  );
+  appendStudyItems(strongCard,strong,rowMap,'Ingen tydlig stark lista \u00e4n.');
+
+  const weakCard=makeStudyCard(
+    'Forts\u00e4tt \u00f6va p\u00e5',
+    weak.length
+      ? 'De h\u00e4r fr\u00e5gorna har du oftast svarat fel p\u00e5, eller inte hunnit svara p\u00e5 \u00e4n. De b\u00f6r prioriteras i n\u00e4sta pass.'
+      : 'Ingen svag lista \u00e4n. Bra jobbat.'
+  );
+  appendStudyItems(weakCard,weak,rowMap,'Ingen svag lista \u00e4n.');
+
+  const grid=mk('div','study-grid');
+  grid.append(latestCard,strongCard,weakCard);
+  root.appendChild(grid);
+
+  const actions=mk('div','study-actions');
+  if(weak.length){
+    const practiceBtn=mk('button','btn-p','Skapa anpassat \u00f6vningspass');
+    practiceBtn.onclick=()=>startWeakPracticeSession();
+    actions.appendChild(practiceBtn);
+  }
+  const exportBtn=mk('button','btn-s','Ladda ner profil (.json)');
+  exportBtn.onclick=()=>downloadStudyProfileSnapshot();
+  actions.appendChild(exportBtn);
+  const importBtn=mk('button','btn-s','Ladda upp profil (.json)');
+  importBtn.onclick=()=>openStudyProfileImportPicker();
+  actions.appendChild(importBtn);
+  if(isPracticeModeActive()){
+    const allBtn=mk('button','btn-s','Visa alla fr\u00e5gor igen');
+    allBtn.onclick=()=>clearPracticeMode();
+    actions.appendChild(allBtn);
+  }
+  if(actions.children.length)root.appendChild(actions);
+  root.classList.add('show');
+}
+
+function updatePracticeModeUI(){
+  const banner=el('practice-banner');
+  if(!banner)return;
+  banner.classList.remove('show');
+  banner.innerHTML='';
+  if(testModeActive)return;
+  if(isPracticeModeActive()){
+    const activeIndices=getActiveQuestionIndices();
+    const preview=activeIndices.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
+    const more=activeIndices.length>4?` och ${activeIndices.length-4} till.`:'.';
+    const main=mk('div','practice-banner-main');
+    main.appendChild(mk('div','practice-banner-title','Anpassat \u00f6vningspass'));
+    main.appendChild(mk('div','practice-banner-text',`Visar ${activeIndices.length} fr\u00e5gor du beh\u00f6vt \u00f6va mer p\u00e5, eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
+    const showAllBtn=mk('button','btn-s','Visa alla fr\u00e5gor igen');
+    showAllBtn.onclick=()=>clearPracticeMode();
+    banner.append(main,showAllBtn);
+    banner.classList.add('show');
+    return;
+  }
+  const weak=rankWeakQuestionIndices(6);
+  if(!weak.length)return;
+  const preview=weak.slice(0,4).map(qi=>`F${Q[qi].n}`).join(', ');
+  const more=weak.length>4?` och ${weak.length-4} till.`:'.';
+  const main=mk('div','practice-banner-main');
+  main.appendChild(mk('div','practice-banner-title','\u00d6va vidare'));
+  main.appendChild(mk('div','practice-banner-text',`Jag har hittat fr\u00e5gor du ofta missar eller inte svarat p\u00e5 \u00e4n: ${preview}${more}`));
+  const startBtn=mk('button','btn-s','\u00d6va p\u00e5 svaga fr\u00e5gor');
+  startBtn.onclick=()=>startWeakPracticeSession();
+  banner.append(main,startBtn);
+  banner.classList.add('show');
+}
+
+function startWeakPracticeSession(){
+  const indices=rankWeakQuestionIndices();
+  if(!indices.length){
+    alert('Ingen svaghetsprofil finns \u00e4n. Anv\u00e4nd R\u00e4tta direkt n\u00e4r du \u00f6var eller ladda upp en profil, s\u00e5 kan jag bygga ett \u00f6vningspass av fr\u00e5gorna du missar eller inte svarat p\u00e5 \u00e4n.');
+    return;
+  }
+  if(!confirm('Skapa ett anpassat \u00f6vningspass med de fr\u00e5gor du oftast svarat fel p\u00e5 eller inte svarat p\u00e5 \u00e4n?'))return;
+  clearAllStoredAnswers();
+  clearStoredTestState();
+  savePracticeQuestionIndices(indices);
+  activeQIndex=0;
+  randomizeAllSupportedCore();
+  showTab('quiz');
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+syncOverlayProfileUiText();
+seedBundledProfileMapStorage();
 window.addEventListener('resize',handleQuizViewportResize);
 testModeActive=TM.get('active')==='1';
 buildQuiz();
