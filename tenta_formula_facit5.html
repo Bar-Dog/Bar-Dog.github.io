@@ -3127,13 +3127,29 @@ function getQuizViewportMetrics(){
   const doc=document.documentElement||{};
   const w=window.innerWidth||doc.clientWidth||0;
   const h=window.innerHeight||doc.clientHeight||0;
-  return {w,h,aspect:h>0?w/h:1};
+  return {w,h,aspect:h>0?w/h:1,shortest:Math.min(w,h),longest:Math.max(w,h)};
+}
+
+function isLikelyPhoneViewport(){
+  const {w,h,shortest,longest}=getQuizViewportMetrics();
+  const coarsePointer=window.matchMedia?(
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(any-pointer: coarse)').matches
+  ):false;
+  const touchPoints=(navigator.maxTouchPoints||0)>0;
+  const ua=navigator.userAgent||'';
+  const phoneUa=/iPhone|Android.+Mobile|Windows Phone|Mobile\b|Opera Mini|IEMobile/i.test(ua);
+  const phoneSized=shortest<=600 && longest<=1400;
+  const portraitPhone=h>=w && shortest<=600;
+  const landscapePhone=w>h && h<=500 && shortest<=500;
+  return (coarsePointer || touchPoints || phoneUa) && phoneSized && (portraitPhone || landscapePhone);
 }
 
 function isMobileQuizMode(){
   const {w,h,aspect}=getQuizViewportMetrics();
+  if(isLikelyPhoneViewport())return true;
   const portraitLike=h>w && aspect<0.95;
-  return w<=QUIZ_MOBILE_BREAKPOINT || (w<=QUIZ_MOBILE_MAX_WIDTH && portraitLike);
+  return w<=640 || (w<=QUIZ_MOBILE_BREAKPOINT && portraitLike);
 }
 
 function clampActiveQuestionIndex(){
