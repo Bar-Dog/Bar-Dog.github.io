@@ -432,6 +432,7 @@ body.mobile-quiz-mode .calc-bottom .btn-p{flex-basis:100%}
     </div>
     <div class="ctrl">
       <button id="btn-show-results" class="btn-p" onclick="showResults()">Visa resultat</button>
+      <button id="btn-answer-entry-mode" class="btn-s" onclick="toggleAnswerEntryMode()">Läge: miniräknare</button>
       <button class="btn-s" onclick="resetAll()">Börja om</button>
       <button class="btn-s" onclick="randomizeAllSupported()">🎲 Nya övningsvärden</button>
       <button class="btn-s" onclick="resetAllSupportedValues()">Vanilla alla</button>
@@ -1075,6 +1076,7 @@ const VV_PRE='vv2_';
 const PERF_KEY='atq2_perf_profile';
 const LAST_TEST_KEY='atq2_last_test';
 const PRACTICE_KEY='atq2_practice_indices';
+const ANSWER_ENTRY_MODE_KEY='atq2_answer_entry_mode';
 let marked={};
 const QUIZ_MOBILE_BREAKPOINT=820;
 const QUIZ_MOBILE_MAX_WIDTH=1100;
@@ -2982,6 +2984,7 @@ function clearStoredTestState(){
 function updateTestModeUI(){
   const banner=el('test-banner');
   const showResBtn=el('btn-show-results');
+  updateAnswerEntryModeUI();
   const testBtn=el('btn-test-mode');
   const submitBtn=el('btn-test-submit');
   const resetBtns=[...document.querySelectorAll('button[onclick="resetAll()"]')];
@@ -3600,6 +3603,42 @@ function forceMark(qi,card,okBtn,errBtn,isOk){
 /* ═══════════════════════════════════════════════════
    ANSWER UI PER QUESTION
 ═══════════════════════════════════════════════════ */
+function getAnswerEntryMode(){
+  return LS.get(ANSWER_ENTRY_MODE_KEY)==='direct'?'direct':'calc';
+}
+function isAnswerCalculatorMode(){
+  return getAnswerEntryMode()==='calc';
+}
+function updateAnswerEntryModeUI(){
+  const btn=el('btn-answer-entry-mode');
+  if(!btn)return;
+  const calcMode=isAnswerCalculatorMode();
+  btn.textContent=tr(calcMode?'Läge: miniräknare':'Läge: skriv direkt');
+  btn.title=tr(calcMode
+    ? 'Tryck för att skriva direkt i svarsfälten utan miniräknaren.'
+    : 'Tryck för att öppna miniräknaren när du markerar ett sifferfält.');
+  btn.setAttribute('aria-pressed',calcMode?'true':'false');
+}
+function setAnswerEntryMode(mode){
+  const next=mode==='direct'?'direct':'calc';
+  LS.set(ANSWER_ENTRY_MODE_KEY,next);
+  if(next!=='calc' && answerCalculatorState.open){
+    closeAnswerCalculator({clearTarget:true});
+  }
+  updateAnswerEntryModeUI();
+}
+function toggleAnswerEntryMode(){
+  setAnswerEntryMode(isAnswerCalculatorMode()?'direct':'calc');
+}
+function handleAnswerFieldActivation(input){
+  if(isAnswerCalculatorMode()){
+    openAnswerCalculator(input);
+    return;
+  }
+  if(answerCalculatorState.open){
+    closeAnswerCalculator({clearTarget:true});
+  }
+}
 function mkNum(key,ph,w){
   const i=document.createElement('input');i.type='text';i.inputMode='decimal';
   i.className='ans-num';i.placeholder=ph||'...';if(w)i.style.width=w;
@@ -3607,8 +3646,8 @@ function mkNum(key,ph,w){
   i.autocomplete='off';
   i.value=LS.get(key)||'';
   i.oninput=()=>LS.set(key,i.value);
-  i.addEventListener('focus',()=>openAnswerCalculator(i));
-  i.addEventListener('click',()=>openAnswerCalculator(i));
+  i.addEventListener('focus',()=>handleAnswerFieldActivation(i));
+  i.addEventListener('click',()=>handleAnswerFieldActivation(i));
   return i;
 }
 function mkTA(key,rows){
@@ -5088,6 +5127,7 @@ function startWeakPracticeSession(){
 function updateTestModeUI(){
   const banner=el('test-banner');
   const showResBtn=el('btn-show-results');
+  updateAnswerEntryModeUI();
   const testBtn=el('btn-test-mode');
   const submitBtn=el('btn-test-submit');
   const resetBtns=[...document.querySelectorAll('button[onclick="resetAll()"]')];
@@ -6307,10 +6347,12 @@ function getCalculatorAnswerPart(input){
 function buildCalculatorValueItem(def){
   if(!def)return null;
   const rawValue=normalizeOhmText(String(def.rawValue||'').trim());
+  const presetLineText=String(def.lineText||'').trim();
   const symbol=String(def.symbol||def.id||def.label||'').trim();
   const label=String(def.label||symbol||def.id||'Varde').trim();
-  if(!rawValue || !symbol)return null;
-  const numericValue=Number.isFinite(def.numericValue)?def.numericValue:parseMetricValue(rawValue);
+  if((!rawValue && !presetLineText) || !symbol)return null;
+  const numericSeed=rawValue || presetLineText;
+  const numericValue=Number.isFinite(def.numericValue)?def.numericValue:parseMetricValue(numericSeed);
   return {
     id:def.id||symbol,
     symbol,
@@ -6318,7 +6360,7 @@ function buildCalculatorValueItem(def){
     rawValue,
     numericValue,
     numericText:Number.isFinite(numericValue)?formatCalculatorNumber(numericValue):'',
-    lineText:String(def.lineText||`${symbol} = ${rawValue}`).trim(),
+    lineText:presetLineText || `${symbol} = ${rawValue}`,
   };
 }
 function pushCalculatorValueItem(list,def){
@@ -6355,6 +6397,25 @@ function extractCalculatorPromptValues(text){
   }
   return items;
 }
+function extractCalculatorSymbolDefinitions(text){
+  const items=[];
+  String(text||'').replace(/\r/g,'').split('\n').forEach(lineRaw=>{
+    const line=String(lineRaw||'').trim();
+    if(!line || !line.includes('='))return;
+    const eq=line.indexOf('=');
+    const lhs=sanitizeCalculatorPromptSymbol(line.slice(0,eq));
+    const rhs=normalizeOhmText(line.slice(eq+1).trim());
+    if(!lhs || !rhs || isCalculatorAnswerLabel(lhs))return;
+    if(Number.isFinite(parseMetricValue(rhs)) && isCalculatorPlainValue(rhs))return;
+    pushCalculatorValueItem(items,{
+      id:`symbol_${lhs}`,
+      symbol:lhs,
+      label:lhs,
+      lineText:`${lhs} = ${rhs}`,
+    });
+  });
+  return items;
+}
 function collectCalculatorOverlayValues(qn){
   if(!Number.isFinite(Number(qn)) || !KV_DEFS[qn])return [];
   return (KV_DEFS[qn]||[]).map(def=>{
@@ -6383,6 +6444,13 @@ function collectCalculatorPromptValues(qn,input){
     extractCalculatorPromptValues(text).forEach(item=>pushCalculatorValueItem(values,item));
   });
   const engine=QUESTION_ENGINES[qn];
+  [engine&&engine.formula, activeQuestion&&activeQuestion.facit].filter(Boolean).forEach(text=>{
+    extractCalculatorSymbolDefinitions(text).forEach(item=>{
+      const key=String(item.symbol||item.id||'').toLowerCase();
+      if(values.some(entry=>String(entry.symbol||entry.id||'').toLowerCase()===key))return;
+      pushCalculatorValueItem(values,item);
+    });
+  });
   const data=engine&&typeof engine.compute==='function'?engine.compute(qn):null;
   if(data && Number(qn)===6){
     const branch=part==='b'?data.b:data.a;
@@ -8033,16 +8101,22 @@ function renderCalculatorScratchPalette(){
     chip.title=answerCalculatorState.insertNumbers?'Klicka eller dra in talet i skrivytan. Andrar du talet senare ar det bara vanlig text.':'Klicka eller dra in namnet/symbolen i skrivytan.';
     chip.dataset.insertText=getCalculatorInsertTextForItem(item);
     chip.dataset.linkSymbol=answerCalculatorState.insertNumbers?getCalculatorLinkSymbolForItem(item):'';
+    const chipSymbolText=String(item.symbol||item.name||`V${index+1}`);
+    const valueText=item.rawValue || (String(item.lineText||'').includes('=') ? String(item.lineText).split('=').slice(1).join('=').trim() : (item.numericText||''));
+    const hasNumericChipValue=!!getCalculatorNumericTextForItem(item);
     const symbol=document.createElement('span');
     symbol.className='calc-scratch-chip-symbol';
-    symbol.textContent=answerCalculatorState.insertNumbers?normalizeOhmText(item.rawValue||item.numericText||''):String(item.symbol||item.name||`V${index+1}`);
+    symbol.textContent=answerCalculatorState.insertNumbers
+      ? normalizeOhmText(hasNumericChipValue?(item.rawValue||item.numericText||''):chipSymbolText)
+      : chipSymbolText;
     const sep=document.createElement('span');
     sep.className='calc-scratch-chip-sep';
     sep.textContent='=';
     const value=document.createElement('span');
     value.className='calc-scratch-chip-value';
-    const valueText=item.rawValue || (String(item.lineText||'').includes('=') ? String(item.lineText).split('=').slice(1).join('=').trim() : (item.numericText||''));
-    value.textContent=answerCalculatorState.insertNumbers?String(item.symbol||item.name||`V${index+1}`):normalizeOhmText(valueText);
+    value.textContent=answerCalculatorState.insertNumbers
+      ? (hasNumericChipValue ? chipSymbolText : normalizeOhmText(valueText))
+      : normalizeOhmText(valueText);
     chip.append(symbol,sep,value);
     chip.addEventListener('click',()=>{
       calculatorInsertText(chip.dataset.insertText||'',{linkSymbol:chip.dataset.linkSymbol||''});
@@ -8709,6 +8783,11 @@ calculatorEvaluate=function(){
   const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
   const current=(lines[lineIndex]||'').trim();
   if(current){
+    if(current.endsWith('=')){
+      answerCalculatorState.activeLineIndex=lineIndex;
+      commitCalculatorEditorLine(lineIndex,{insertNextLine:true});
+      return;
+    }
     const evaluated=evaluateCalculatorEditorLine(lineIndex);
     if(!evaluated.ok){
       answerCalculatorState.result=evaluated.error;
@@ -8800,6 +8879,10 @@ const I18N_EXACT_EN={
   'Ladda ner profil (.json)':'Download profile (.json)',
   'Ladda upp profil (.json)':'Upload profile (.json)',
   'Öva på svaga frågor':'Practice weak questions',
+  'Läge: miniräknare':'Mode: calculator',
+  'Läge: skriv direkt':'Mode: type directly',
+  'Tryck för att skriva direkt i svarsfälten utan miniräknaren.':'Press to type directly in the answer fields without the calculator.',
+  'Tryck för att öppna miniräknaren när du markerar ett sifferfält.':'Press to open the calculator when you select a numeric answer field.',
   'Testläge':'Test mode',
   'Starta testläge':'Start test mode',
   'Avbryt testläge':'Cancel test mode',
