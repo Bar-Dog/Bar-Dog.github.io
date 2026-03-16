@@ -13,11 +13,22 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:var(--dar
 #tabs{display:flex;align-items:center;border-bottom:2px solid var(--border);background:#fff;position:sticky;top:0;z-index:900;box-shadow:0 1px 6px rgba(0,0,0,.08)}
 .tab{padding:.7rem 1.6rem;font-weight:700;font-size:.9rem;cursor:pointer;border-bottom:3px solid transparent;color:var(--muted);transition:color .15s,border-color .15s;user-select:none}
 .tab.on{color:var(--dark);border-bottom-color:var(--dark)}
-.lang-switch{margin-left:auto;display:flex;align-items:center;gap:.35rem;padding:.35rem .55rem .35rem .35rem}
+.lang-switch{margin-left:auto;display:flex;align-items:center;gap:.35rem;padding:.35rem .55rem .35rem .35rem;position:relative}
 .lang-btn{border:1.5px solid var(--border);background:#fff;border-radius:999px;padding:.22rem .34rem;line-height:1;cursor:pointer;transition:background .15s,border-color .15s,transform .08s ease;display:inline-flex;align-items:center;justify-content:center;min-width:42px;min-height:32px}
 .lang-btn:hover{background:var(--bg)}
 .lang-btn:active{transform:translateY(1px)}
 .lang-btn.on{background:var(--dark);border-color:var(--dark);box-shadow:0 2px 8px rgba(15,23,42,.12)}
+.lang-mode-btn{min-width:48px;padding:.22rem .5rem;font-size:.82rem;font-weight:900;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+#score-sec + .ctrl > #btn-answer-entry-mode{display:none !important}
+.answer-entry-coach{position:absolute;right:0;top:calc(100% + 10px);width:min(320px,calc(100vw - 24px));padding:.78rem .84rem .74rem;border:1.5px solid #93c5fd;border-radius:16px;background:#eff6ff;box-shadow:0 18px 32px rgba(15,23,42,.18);z-index:980;display:flex;flex-direction:column;gap:.45rem}
+.answer-entry-coach[hidden]{display:none !important}
+.answer-entry-coach::before{content:"";position:absolute;right:22px;top:-8px;width:14px;height:14px;background:#eff6ff;border-left:1.5px solid #93c5fd;border-top:1.5px solid #93c5fd;transform:rotate(45deg)}
+.answer-entry-coach-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem}
+.answer-entry-coach-title{font-size:.78rem;font-weight:900;line-height:1.2;color:#1d4ed8;text-transform:uppercase;letter-spacing:.04em}
+.answer-entry-coach-close{border:none;background:transparent;color:#1e3a8a;font-size:1rem;font-weight:900;line-height:1;cursor:pointer;padding:.05rem}
+.answer-entry-coach-copy{font-size:.82rem;line-height:1.45;color:#1e3a8a}
+.answer-entry-coach-actions{display:flex;justify-content:flex-end}
+.answer-entry-coach-ok{padding:.36rem .7rem;border-radius:999px;border:1px solid #93c5fd;background:#fff;color:#1d4ed8;font-size:.76rem;font-weight:800;cursor:pointer}
 .lang-flag{display:inline-block;width:24px;height:16px;border-radius:3px;background-position:center;background-repeat:no-repeat;background-size:cover;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 0 0 1px rgba(15,23,42,.12)}
 .lang-flag-sv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Crect width='24' height='16' fill='%23006AA7'/%3E%3Crect x='7' width='4' height='16' fill='%23FECC00'/%3E%3Crect y='6' width='24' height='4' fill='%23FECC00'/%3E%3C/svg%3E")}
 .lang-flag-gb{background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 16%22%3E%3Crect width=%2224%22 height=%2216%22 fill=%22%23012169%22/%3E%3Cpath d=%22M0 0L24 16M24 0L0 16%22 stroke=%22%23FFFFFF%22 stroke-width=%224%22/%3E%3Cpath d=%22M0 0L24 16M24 0L0 16%22 stroke=%22%23C8102E%22 stroke-width=%222%22/%3E%3Crect x=%229%22 width=%226%22 height=%2216%22 fill=%22%23FFFFFF%22/%3E%3Crect y=%225%22 width=%2224%22 height=%226%22 fill=%22%23FFFFFF%22/%3E%3Crect x=%2210%22 width=%224%22 height=%2216%22 fill=%22%23C8102E%22/%3E%3Crect y=%226%22 width=%2224%22 height=%224%22 fill=%22%23C8102E%22/%3E%3C/svg%3E')}
@@ -248,6 +259,7 @@ body.mobile-quiz-mode .test-banner{flex-direction:column;align-items:flex-start}
 .calc-mini-btn:hover{background:#3a4443}
 .calc-mobile-toggle{display:none;background:#365871;border-color:#4d7a99;color:#f7fbff}
 .calc-mobile-toggle:hover{background:#416987}
+#calc-mobile-keyboard-btn{display:none}
 .calc-screen{order:2;border:1px solid #394241;border-radius:14px;background:#202726;padding:.72rem .82rem;display:flex;flex-direction:column;gap:.35rem}
 .calc-screen{display:none}
 .calc-entry{display:flex;align-items:stretch;overflow:hidden;border-radius:12px;background:#2b3231;border:1px solid #3c4645}
@@ -353,14 +365,15 @@ body.mobile-quiz-mode .calc-tape-wrap{display:none !important}
 body.mobile-quiz-mode .calc-notes-wrap{order:1;gap:.26rem;flex:1 1 auto;min-height:0}
 body.mobile-quiz-mode .calc-notes-wrap .calc-label{display:none}
 body.mobile-quiz-mode .calc-notes-editor{min-height:212px;padding:.5rem .58rem;flex:1 1 auto}
-body.mobile-quiz-mode .calc-line-input{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;caret-color:transparent}
+body.mobile-quiz-mode.calc-mobile-keyboard-off .calc-line-input{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;caret-color:transparent}
+body.mobile-quiz-mode.calc-mobile-keyboard-on .calc-line-input{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;caret-color:#eef4f3}
 body.mobile-quiz-mode .calc-line-input{min-height:1.25rem}
 body.mobile-quiz-mode .calc-note-hint{font-size:.66rem;line-height:1.3}
 body.mobile-quiz-mode .calc-note-palette{gap:.22rem}
 body.mobile-quiz-mode .calc-scratch-chip{padding:.2rem .42rem;font-size:.68rem;border-radius:.62rem}
 body.mobile-quiz-mode .calc-note-actions{justify-content:flex-start;gap:.22rem}
 body.mobile-quiz-mode .calc-note-actions .calc-mini-btn{flex:none;padding:.24rem .68rem;font-size:.7rem;border-radius:999px}
-body.mobile-quiz-mode .calc-note-actions .calc-mini-btn:not(#calc-insert-mode-btn):not(#calc-answer-line-btn){display:none}
+body.mobile-quiz-mode .calc-note-actions .calc-mini-btn:not(#calc-insert-mode-btn):not(#calc-answer-line-btn):not(#calc-mobile-keyboard-btn){display:none}
 body.mobile-quiz-mode .calc-shell.sheet-half .calc-notes-wrap{flex:1 1 auto;min-height:0;gap:.18rem}
 body.mobile-quiz-mode .calc-shell.sheet-half{padding:0 .14rem calc(.24rem + env(safe-area-inset-bottom,0px));gap:.1rem}
 body.mobile-quiz-mode .calc-shell.sheet-half .calc-notes-wrap{gap:.08rem}
@@ -400,6 +413,7 @@ body.mobile-quiz-mode .calc-bottom .btn-s,
 body.mobile-quiz-mode .calc-bottom .btn-p{flex:1 1 0;width:auto;min-height:40px;padding:.42rem .58rem}
 body.mobile-quiz-mode .calc-bottom .btn-p{flex-basis:100%}
 @media (max-width:960px){
+  .answer-entry-coach{right:-6px;width:min(300px,calc(100vw - 18px))}
   .calc-shell{right:12px;bottom:12px;width:min(390px,calc(100vw - 24px))}
 }
 </style>
@@ -412,6 +426,17 @@ body.mobile-quiz-mode .calc-bottom .btn-p{flex-basis:100%}
   <div id="lang-switch" class="lang-switch">
     <button id="lang-btn-sv" type="button" class="lang-btn on" onclick="setUiLanguage('sv')" aria-label="Svenska" title="Svenska"><span class="lang-flag lang-flag-sv" aria-hidden="true"></span></button>
     <button id="lang-btn-en" type="button" class="lang-btn" onclick="setUiLanguage('en')" aria-label="English" title="English"><span class="lang-flag lang-flag-gb" aria-hidden="true"></span></button>
+    <button id="btn-answer-entry-mode" type="button" class="lang-btn lang-mode-btn" onclick="toggleAnswerEntryMode()" aria-label="Miniräknare på" title="Miniräknare på">🧮</button>
+    <div id="answer-entry-coach" class="answer-entry-coach" hidden>
+      <div class="answer-entry-coach-head">
+        <div id="answer-entry-coach-title" class="answer-entry-coach-title">Tips</div>
+        <button type="button" class="answer-entry-coach-close" aria-label="Stäng tips" title="Stäng tips" onclick="dismissAnswerEntryCoach()">×</button>
+      </div>
+      <div id="answer-entry-coach-copy" class="answer-entry-coach-copy"></div>
+      <div class="answer-entry-coach-actions">
+        <button type="button" class="answer-entry-coach-ok" onclick="dismissAnswerEntryCoach()">OK</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -503,6 +528,7 @@ body.mobile-quiz-mode .calc-bottom .btn-p{flex-basis:100%}
         <div id="calc-note-palette" class="calc-note-palette"></div>
         <div class="calc-note-actions">
           <button id="calc-insert-mode-btn" type="button" class="calc-mini-btn" onclick="toggleCalculatorInsertNumbers()">Visa nummer</button>
+          <button id="calc-mobile-keyboard-btn" type="button" class="calc-mini-btn" onclick="toggleCalculatorMobileKeyboard()">⌨️ Av</button>
           <button id="calc-answer-line-btn" type="button" class="calc-mini-btn calc-answer-btn" onclick="calculatorInsertAnswerLine()">Svar</button>
           <button type="button" class="calc-mini-btn" onclick="calculatorSaveResultLine()">Lagg till steg</button>
           <button type="button" class="calc-mini-btn" onclick="calculatorClearNotes()">Tom formel</button>
@@ -1077,6 +1103,8 @@ const PERF_KEY='atq2_perf_profile';
 const LAST_TEST_KEY='atq2_last_test';
 const PRACTICE_KEY='atq2_practice_indices';
 const ANSWER_ENTRY_MODE_KEY='atq2_answer_entry_mode';
+const ANSWER_ENTRY_COACH_KEY='atq2_answer_entry_coach_seen';
+const CALC_MOBILE_KEYBOARD_KEY='atq2_calc_mobile_keyboard_mode';
 let marked={};
 const QUIZ_MOBILE_BREAKPOINT=820;
 const QUIZ_MOBILE_MAX_WIDTH=1100;
@@ -3610,13 +3638,16 @@ function isAnswerCalculatorMode(){
   return getAnswerEntryMode()==='calc';
 }
 function updateAnswerEntryModeUI(){
-  const btn=el('btn-answer-entry-mode');
+  const btn=document.querySelector('#lang-switch #btn-answer-entry-mode')||el('btn-answer-entry-mode');
   if(!btn)return;
   const calcMode=isAnswerCalculatorMode();
-  btn.textContent=tr(calcMode?'Läge: miniräknare':'Läge: skriv direkt');
-  btn.title=tr(calcMode
-    ? 'Tryck för att skriva direkt i svarsfälten utan miniräknaren.'
-    : 'Tryck för att öppna miniräknaren när du markerar ett sifferfält.');
+  btn.textContent=calcMode?'ƒ':'Ab';
+  btn.classList.toggle('on',calcMode);
+  const hint=tr(calcMode
+    ? 'Miniräknare öppnas när du går in i svarsfält. Tryck för att stänga av.'
+    : 'Skriv direkt i svarsfält. Tryck för att slå på miniräknaren.');
+  btn.title=hint;
+  btn.setAttribute('aria-label',hint);
   btn.setAttribute('aria-pressed',calcMode?'true':'false');
 }
 function setAnswerEntryMode(mode){
@@ -8883,6 +8914,17 @@ const I18N_EXACT_EN={
   'Läge: skriv direkt':'Mode: type directly',
   'Tryck för att skriva direkt i svarsfälten utan miniräknaren.':'Press to type directly in the answer fields without the calculator.',
   'Tryck för att öppna miniräknaren när du markerar ett sifferfält.':'Press to open the calculator when you select a numeric answer field.',
+  'Miniräknare öppnas när du går in i svarsfält. Tryck för att stänga av.':'Calculator opens when you enter an answer field. Press to turn it off.',
+  'Skriv direkt i svarsfält. Tryck för att slå på miniräknaren.':'Type directly in the answer field. Press to turn the calculator on.',
+  'Tips: miniräknare är på':'Tip: calculator mode is on',
+  'Tips: skriv direkt är på':'Tip: direct typing is on',
+  'Tryck på 🧮-knappen här om du vill stänga av miniräknaren och skriva direkt med tangentbordet i svarsfältet. Inne i miniräknaren kan du också slå på iOS/Android-tangentbordet.':'Press the 🧮 button here if you want to turn off the calculator and type directly in the answer field with the keyboard. Inside the calculator you can also turn on the iOS/Android keyboard.',
+  'Nu skriver du direkt i svarsfälten med tangentbordet. Tryck på Ab igen om du vill att miniräknaren ska öppnas automatiskt.':'You are now typing directly in the answer fields with the keyboard. Press Ab again if you want the calculator to open automatically.',
+  'Stäng tips':'Close tip',
+  '⌨️ På':'⌨️ On',
+  '⌨️ Av':'⌨️ Off',
+  'Mobilens tangentbord är på. Tryck för att använda miniräknarens knappar i stället.':'The mobile keyboard is on. Press to use the calculator buttons instead.',
+  'Mobilens tangentbord är av. Tryck för att slå på iOS/Android-tangentbordet i miniräknaren.':'The mobile keyboard is off. Press to turn on the iOS/Android keyboard inside the calculator.',
   'Testläge':'Test mode',
   'Starta testläge':'Start test mode',
   'Avbryt testläge':'Cancel test mode',
@@ -9416,11 +9458,119 @@ showTab=function(id){
   showTabLanguageBase(id);
   applyPageLanguage(document.body);
 };
+const updateAnswerEntryModeUiBase=updateAnswerEntryModeUI;
+updateAnswerEntryModeUI=function(){
+  updateAnswerEntryModeUiBase();
+  const btn=document.querySelector('#lang-switch #btn-answer-entry-mode')||el('btn-answer-entry-mode');
+  if(btn)btn.textContent=isAnswerCalculatorMode()?'🧮':'Ab';
+};
+function getCalculatorMobileKeyboardMode(){
+  return LS.get(CALC_MOBILE_KEYBOARD_KEY)==='system'?'system':'builtin';
+}
+function isCalculatorMobileKeyboardEnabled(){
+  return getCalculatorMobileKeyboardMode()==='system';
+}
+isCalculatorMobileInputSuppressed=function(){
+  const mobile=document.body.classList.contains('mobile-quiz-mode') || isMobileQuizMode();
+  return mobile && !isCalculatorMobileKeyboardEnabled();
+};
+function syncCalculatorMobileKeyboardUi(){
+  const mobile=document.body.classList.contains('mobile-quiz-mode') || isMobileQuizMode();
+  const enabled=isCalculatorMobileKeyboardEnabled();
+  document.body.classList.toggle('calc-mobile-keyboard-on',mobile && enabled);
+  document.body.classList.toggle('calc-mobile-keyboard-off',mobile && !enabled);
+  const btn=el('calc-mobile-keyboard-btn');
+  if(!btn)return;
+  btn.hidden=!mobile;
+  btn.style.display=mobile?'inline-flex':'none';
+  btn.classList.toggle('on',enabled);
+  btn.textContent=tr(enabled?'⌨️ På':'⌨️ Av');
+  const hint=tr(enabled
+    ? 'Mobilens tangentbord är på. Tryck för att använda miniräknarens knappar i stället.'
+    : 'Mobilens tangentbord är av. Tryck för att slå på iOS/Android-tangentbordet i miniräknaren.');
+  btn.title=hint;
+  btn.setAttribute('aria-label',hint);
+  btn.setAttribute('aria-pressed',enabled?'true':'false');
+}
+function toggleCalculatorMobileKeyboard(){
+  const next=isCalculatorMobileKeyboardEnabled()?'builtin':'system';
+  LS.set(CALC_MOBILE_KEYBOARD_KEY,next);
+  dismissAnswerEntryCoach();
+  if(answerCalculatorState.open){
+    const lines=getCalculatorNoteLines(answerCalculatorState.note);
+    const lineIndex=Math.max(0,Math.min(getCalculatorActiveLineIndex(),lines.length-1));
+    queueCalculatorEditorFocus(lineIndex,(lines[lineIndex]||'').length);
+  }
+  renderAnswerCalculator();
+}
+function hasSeenAnswerEntryCoach(){
+  return LS.get(ANSWER_ENTRY_COACH_KEY)==='1';
+}
+function dismissAnswerEntryCoach(){
+  LS.set(ANSWER_ENTRY_COACH_KEY,'1');
+  syncAnswerEntryCoach();
+}
+function syncAnswerEntryCoach(){
+  const coach=el('answer-entry-coach');
+  const titleEl=el('answer-entry-coach-title');
+  const copyEl=el('answer-entry-coach-copy');
+  const closeBtn=coach?coach.querySelector('.answer-entry-coach-close'):null;
+  const okBtn=coach?coach.querySelector('.answer-entry-coach-ok'):null;
+  if(!coach || !titleEl || !copyEl)return;
+  if(hasSeenAnswerEntryCoach()){
+    coach.hidden=true;
+    return;
+  }
+  const calcMode=isAnswerCalculatorMode();
+  titleEl.textContent=tr(calcMode?'Tips: miniräknare är på':'Tips: skriv direkt är på');
+  copyEl.textContent=tr(calcMode
+    ? 'Tryck på 🧮-knappen här om du vill stänga av miniräknaren och skriva direkt med tangentbordet i svarsfältet. Inne i miniräknaren kan du också slå på iOS/Android-tangentbordet.'
+    : 'Nu skriver du direkt i svarsfälten med tangentbordet. Tryck på Ab igen om du vill att miniräknaren ska öppnas automatiskt.');
+  if(closeBtn){
+    const closeText=tr('Stäng tips');
+    closeBtn.title=closeText;
+    closeBtn.setAttribute('aria-label',closeText);
+  }
+  if(okBtn)okBtn.textContent=tr('OK');
+  coach.hidden=false;
+}
+const updateStaticLanguageUiBase2=updateStaticLanguageUi;
+updateStaticLanguageUi=function(){
+  updateStaticLanguageUiBase2();
+  syncCalculatorMobileKeyboardUi();
+  syncAnswerEntryCoach();
+};
+const renderAnswerCalculatorLanguageBase2=renderAnswerCalculator;
+renderAnswerCalculator=function(){
+  renderAnswerCalculatorLanguageBase2();
+  syncCalculatorMobileKeyboardUi();
+  syncAnswerEntryCoach();
+};
+const updateAnswerEntryModeUiBase2=updateAnswerEntryModeUI;
+updateAnswerEntryModeUI=function(){
+  updateAnswerEntryModeUiBase2();
+  const btn=document.querySelector('#lang-switch #btn-answer-entry-mode')||el('btn-answer-entry-mode');
+  if(btn)btn.textContent=isAnswerCalculatorMode()?'🧮':'Ab';
+  syncAnswerEntryCoach();
+};
+const toggleAnswerEntryModeBase=toggleAnswerEntryMode;
+toggleAnswerEntryMode=function(){
+  dismissAnswerEntryCoach();
+  toggleAnswerEntryModeBase();
+};
+const handleQuizViewportResizeBase2=handleQuizViewportResize;
+handleQuizViewportResize=function(){
+  handleQuizViewportResizeBase2();
+  syncCalculatorMobileKeyboardUi();
+  syncAnswerEntryCoach();
+};
 
 syncOverlayProfileUiText();
 seedBundledProfileMapStorage();
 ensureLanguageObserver();
 updateStaticLanguageUi();
+updateAnswerEntryModeUI();
+syncCalculatorMobileKeyboardUi();
 window.addEventListener('resize',handleQuizViewportResize);
 testModeActive=TM.get('active')==='1';
 buildQuiz();
